@@ -3,7 +3,10 @@ import {User} from "./entities/user.entity";
 
 const options:ConnectionOptions = {
     type:"sqlite",
-    database:"./index.db",
+    database:"cyberian",
+    driver:{
+        storage:"./index.db"
+    },
     autoSchemaSync:true,
     entities:[
         User
