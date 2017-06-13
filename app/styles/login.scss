@@ -1,0 +1,181 @@
+body.page-login {
+    background-image: url("https://scontent-cdg2-1.xx.fbcdn.net/v/t1.0-9/17990680_1299392930109258_3457878154051037142_n.jpg?oh=fceba9bb78d51e08659a34f22b354235&oe=59DF0C1E");
+    background-size: cover;
+    background-attachment: fixed;
+    background-color: #111;
+    .overlay{
+        top:0;
+        left:0;
+        bottom:0;
+        right: 0;
+        position: fixed;
+        z-index: 1;
+        height:100%;
+        background-color: rgba(0,0,0,0.8);
+    }
+    .col-center {
+        padding-top: 60px;
+        float: none;
+        margin: 0 auto;
+        height: 100vh;
+        z-index: 2;
+    }
+    .pos-vert {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    .login {
+        max-width: 450px;
+        position: relative;
+        margin: 0 auto;
+        .avatar{
+            .avatar-inner{
+                position: absolute;
+                left:0;
+                right:0;
+                top:0;
+                bottom:0;
+                transition: opacity .3s;
+                opacity: 0;
+                border-radius:9999em;
+                background-size:cover;
+                box-shadow: inset 0 1px rgba(255,255,255,0.6);
+                &.show{
+                    opacity: 1;
+                }
+            }
+        }
+    }
+    .login .avatar {
+        margin-right: 20px;
+        width: 100px;
+        height: 100px;
+        background-color:rgba(255,255,255,.5);
+        border-radius: 9999em;
+        background-size: contain;
+        background-position: center;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+    .login .avatar:after {
+        content: "\e008";
+        font-family: 'Glyphicons Halflings';
+        color: #fff;
+        display: block;
+        width: 25px;
+        height: 25px;
+        border-radius: 9999em;
+        box-shadow: inset 0 1px rgba(255,255,255,0.36);
+        position: absolute;
+        bottom: 2px;
+        right: 2px;
+        background-color: #999999;
+        font-size:12px;
+        line-height: 1.8;
+        text-align: center;
+        padding-top: 2px;
+        text-indent: -1px;
+    }
+    .login .avatar.found:after {
+        content: "\e013";
+        font-family: 'Glyphicons Halflings';
+        color: #fff;
+        box-shadow: inset 0 1px rgba(255,255,255,0.36);
+        background-color: #2196f3;
+    }
+    .login .avatar+.form-group {
+        margin-left: 120px;
+    }
+    .login .avatar+.form-group .user-name {
+        color: #fff;
+        font-family: 'Raleway', sans-serif;
+        margin-top: 0;
+        margin-bottom: 26px;
+        width: 100%;
+        vertical-align: middle;
+        font-weight: 100;
+        text-shadow: 0px 2px 4px rgba(0,0,0,0.5);
+    }
+    .login .avatar+.form-group .user-name small {
+        color: #999;
+        text-shadow: initial;
+        font-size: 0.5em;
+        margin-top: 0.5em;
+        padding-right: 8px;
+    }
+    .login .avatar+.form-group .input-group .input-group-addon,
+    .form-group .input-group .input-group-addon {
+        background-color: #fff;
+        box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    }
+    .login .avatar+.form-group .input-group .input-group-addon span[class^='glyph'],
+    .form-group .input-group .input-group-addon span[class^='glyph'] {
+        color: #999;
+    }
+    .login .avatar+.form-group .input-group input,
+    .form-group .input-group input {
+        border-left: 0;
+        border-right: 0;
+    }
+
+    .input-group{
+        padding-bottom:30px;
+        &:last-child{
+            padding-bottom: 0;
+        }
+    }
+
+    .toggle-group{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .user-name:empty{
+        display:none;
+    }
+
+    [type="text"]{
+        height:35px;
+    }
+
+    textarea{
+         resize: vertical;
+         margin-bottom:30px;
+    }
+
+    #returning-user-name-cancel{
+        position: absolute;
+        top:0;
+        right: 0;
+        color:#fff;
+        opacity: 1;
+        outline:0;
+    }
+
+    .wrapper-register{
+        p,
+        small,
+        h1{
+            color:#fff;
+        }
+        h4{
+            color:#999999;
+        }
+        small{
+            display:block;
+        }
+        h1{
+            margin-top:0;
+        }
+    }
+    .control-group{
+        .btn{
+            top: 20px;
+            position: relative;
+        }
+    }
+
+}

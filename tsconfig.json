@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "files": [
+    "./webpack.config.ts",
+    "./server/entities/user.entity.ts",
+    "./server/entities/photo.entity.ts"
+  ],
+  "include": [
+    "./server/entities/*"
+  ]
+}
