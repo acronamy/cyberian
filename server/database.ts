@@ -1,11 +1,16 @@
+import * as path from "path";
 import {createConnection, ConnectionOptions} from "typeorm";
 import {User} from "./entities/user.entity";
 
 const options:ConnectionOptions = {
-    type:"sqlite",
-    database:"cyberian",
+    type:"mysql",
     driver:{
-        storage:"./index.db"
+        type:"mysql",
+        host: "localhost",
+        port: 3306,
+        username:"root",
+        password:"moocow000",
+        database:"cyberian",
     },
     autoSchemaSync:true,
     entities:[

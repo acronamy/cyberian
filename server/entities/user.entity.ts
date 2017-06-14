@@ -14,7 +14,7 @@ export class User {
     @Column()
     last_name: string;
     
-    @Column()
+    @Column({type:"text"})
     avatar:string;
     
     @Column()

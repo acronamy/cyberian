@@ -10,10 +10,14 @@ $(function () {
              * If password is in place allow submit on enter.
             */
             if ($("#username").val() !== "") {
-                $("#username").parent().removeClass("error");
-                $.post("/user/login", function(userData) {
-                    if(userData){
-                        localStorage.setItem("user",JSON.stringify(userData))
+                //$("#username").parent().removeClass("error");
+                $.post("/user/login", {username:$("#username").val(), password:$("#password").val()}, function(userInstance) {
+                    if(userInstance){
+                        rememberMe(userInstance)
+                        window.location = "/"
+                    }
+                    else{
+                        console.log("user or password wrong")
                     }
                 })
             }
@@ -23,52 +27,79 @@ $(function () {
 
         })
 
+        function isSVGAvatar(str) {
+            //we need a really really basic and fast way to determine the avatar type
+            return [
+                str[0]==="<",
+                str[1]==="s",
+                str[2]==="v",
+                str[3]==="g"
+            ]
+            .every(test=>test===true);
+        }
 
-        function setAvatar(avatar){
-            if(avatar){
+        function setAvatar(userInstance){
+            if(userInstance){
                 $(".avatar").addClass("found")
             }
             else{
                 $(".avatar").removeClass("found")
             }
-            if(avatar.type === "identicon"){
+            if(isSVGAvatar(userInstance.avatar)){
+                //inline svg
                 $(".avatar-inner").css({
-                    backgroundImage:"url('data:image/svg+xml;utf8,"+avatar.data+"')"
+                    backgroundImage:"url('data:image/svg+xml;utf8,"+userInstance.avatar+"')"
                 })
                 .addClass("show");
             }
-            else if(avatar.type === "image"){
+            else{
+                //image
                 $(".avatar-inner").css({
-                    backgroundImage:"url('"+avatar.data+"')"
+                    backgroundImage:"url('"+userInstance.avatar+"')"
                 })
                 .addClass("show");
             }
         }
+        function rememberMe(userInstance){
+            localStorage.setItem("user",JSON.stringify(userInstance))
+        }
+        function forgetMe(){
+            localStorage.removeItem("user");
+        }
+        function getMe(){
+            return JSON.parse(localStorage.getItem("user"));
+        }
+
         function unsetAvatar(){
             $(".avatar").removeClass("found")
             $(".avatar-inner").removeClass("show");
         }
 
         /**
-         * Regaurless of if user has local strorage set, set the event listener to load user image
+         * Regardless of if user has local storage set, set the event listener to load user image
         */
         $("#username").on("blur", function(){
             /**
              * Find a username
             */
-            $.post("/user/login/check-user", {username:$(this).val()}, function (avatar) {
-                setAvatar(avatar)
+            $.post("/user/login/check-user", {username: $(this).val()}, function (userInstance) {
+                if(userInstance){
+                    setAvatar(userInstance);
+                    rememberMe(userInstance);
+                }
             })
         })
 
         //user has logged in
-        if(localStorage.getItem("user")){
-            const userData = JSON.parse(localStorage.getItem("user"));
+        if(getMe()){
+            const userInstance = getMe();
+            console.log(userInstance)
             $(".returning-user-ctrl").removeClass("hide");
-            $("#username").val(userData.username);
-            $("#returning-user-name").text(userData.name.first+" "+userData.name.last)
+            $("#username").val(userInstance.username);
+            $("#returning-user-name").text(userInstance.first_name+" "+userInstance.last_name)
             $("#password").focus();
-            setAvatar(userData.avatar)
+            console.log(userInstance)
+            setAvatar(userInstance);
         }
         //no local storage on my username
         else{
@@ -78,7 +109,7 @@ $(function () {
 
         
         $("#returning-user-name-cancel").click(function(){
-            localStorage.removeItem("user")
+            forgetMe();
             $("#username-group").removeClass("hide");
             $(".returning-user-ctrl").addClass("hide");
             $("#username").val("");

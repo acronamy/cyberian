@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 10);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -10455,7 +10455,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(14);
+var	fixUrls = __webpack_require__(15);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -10775,12 +10775,18 @@ function updateLink (link, options, obj) {
 
 /***/ }),
 /* 4 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mousetrap__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mousetrap__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mousetrap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_mousetrap__);
 
 
@@ -10794,10 +10800,14 @@ __WEBPACK_IMPORTED_MODULE_0_jquery__(function () {
              * If password is in place allow submit on enter.
             */
             if (__WEBPACK_IMPORTED_MODULE_0_jquery__("#username").val() !== "") {
-                __WEBPACK_IMPORTED_MODULE_0_jquery__("#username").parent().removeClass("error");
-                __WEBPACK_IMPORTED_MODULE_0_jquery__["post"]("/user/login", function(userData) {
-                    if(userData){
-                        localStorage.setItem("user",JSON.stringify(userData))
+                //$("#username").parent().removeClass("error");
+                __WEBPACK_IMPORTED_MODULE_0_jquery__["post"]("/user/login", {username:__WEBPACK_IMPORTED_MODULE_0_jquery__("#username").val(), password:__WEBPACK_IMPORTED_MODULE_0_jquery__("#password").val()}, function(userInstance) {
+                    if(userInstance){
+                        rememberMe(userInstance)
+                        window.location = "/"
+                    }
+                    else{
+                        console.log("user or password wrong")
                     }
                 })
             }
@@ -10807,52 +10817,79 @@ __WEBPACK_IMPORTED_MODULE_0_jquery__(function () {
 
         })
 
+        function isSVGAvatar(str) {
+            //we need a really really basic and fast way to determine the avatar type
+            return [
+                str[0]==="<",
+                str[1]==="s",
+                str[2]==="v",
+                str[3]==="g"
+            ]
+            .every(test=>test===true);
+        }
 
-        function setAvatar(avatar){
-            if(avatar){
+        function setAvatar(userInstance){
+            if(userInstance){
                 __WEBPACK_IMPORTED_MODULE_0_jquery__(".avatar").addClass("found")
             }
             else{
                 __WEBPACK_IMPORTED_MODULE_0_jquery__(".avatar").removeClass("found")
             }
-            if(avatar.type === "identicon"){
+            if(isSVGAvatar(userInstance.avatar)){
+                //inline svg
                 __WEBPACK_IMPORTED_MODULE_0_jquery__(".avatar-inner").css({
-                    backgroundImage:"url('data:image/svg+xml;utf8,"+avatar.data+"')"
+                    backgroundImage:"url('data:image/svg+xml;utf8,"+userInstance.avatar+"')"
                 })
                 .addClass("show");
             }
-            else if(avatar.type === "image"){
+            else{
+                //image
                 __WEBPACK_IMPORTED_MODULE_0_jquery__(".avatar-inner").css({
-                    backgroundImage:"url('"+avatar.data+"')"
+                    backgroundImage:"url('"+userInstance.avatar+"')"
                 })
                 .addClass("show");
             }
         }
+        function rememberMe(userInstance){
+            localStorage.setItem("user",JSON.stringify(userInstance))
+        }
+        function forgetMe(){
+            localStorage.removeItem("user");
+        }
+        function getMe(){
+            return JSON.parse(localStorage.getItem("user"));
+        }
+
         function unsetAvatar(){
             __WEBPACK_IMPORTED_MODULE_0_jquery__(".avatar").removeClass("found")
             __WEBPACK_IMPORTED_MODULE_0_jquery__(".avatar-inner").removeClass("show");
         }
 
         /**
-         * Regaurless of if user has local strorage set, set the event listener to load user image
+         * Regardless of if user has local storage set, set the event listener to load user image
         */
         __WEBPACK_IMPORTED_MODULE_0_jquery__("#username").on("blur", function(){
             /**
              * Find a username
             */
-            __WEBPACK_IMPORTED_MODULE_0_jquery__["post"]("/user/login/check-user", {username:__WEBPACK_IMPORTED_MODULE_0_jquery__(this).val()}, function (avatar) {
-                setAvatar(avatar)
+            __WEBPACK_IMPORTED_MODULE_0_jquery__["post"]("/user/login/check-user", {username: __WEBPACK_IMPORTED_MODULE_0_jquery__(this).val()}, function (userInstance) {
+                if(userInstance){
+                    setAvatar(userInstance);
+                    rememberMe(userInstance);
+                }
             })
         })
 
         //user has logged in
-        if(localStorage.getItem("user")){
-            const userData = JSON.parse(localStorage.getItem("user"));
+        if(getMe()){
+            const userInstance = getMe();
+            console.log(userInstance)
             __WEBPACK_IMPORTED_MODULE_0_jquery__(".returning-user-ctrl").removeClass("hide");
-            __WEBPACK_IMPORTED_MODULE_0_jquery__("#username").val(userData.username);
-            __WEBPACK_IMPORTED_MODULE_0_jquery__("#returning-user-name").text(userData.name.first+" "+userData.name.last)
+            __WEBPACK_IMPORTED_MODULE_0_jquery__("#username").val(userInstance.username);
+            __WEBPACK_IMPORTED_MODULE_0_jquery__("#returning-user-name").text(userInstance.first_name+" "+userInstance.last_name)
             __WEBPACK_IMPORTED_MODULE_0_jquery__("#password").focus();
-            setAvatar(userData.avatar)
+            console.log(userInstance)
+            setAvatar(userInstance);
         }
         //no local storage on my username
         else{
@@ -10862,7 +10899,7 @@ __WEBPACK_IMPORTED_MODULE_0_jquery__(function () {
 
         
         __WEBPACK_IMPORTED_MODULE_0_jquery__("#returning-user-name-cancel").click(function(){
-            localStorage.removeItem("user")
+            forgetMe();
             __WEBPACK_IMPORTED_MODULE_0_jquery__("#username-group").removeClass("hide");
             __WEBPACK_IMPORTED_MODULE_0_jquery__(".returning-user-ctrl").addClass("hide");
             __WEBPACK_IMPORTED_MODULE_0_jquery__("#username").val("");
@@ -10912,7 +10949,7 @@ __WEBPACK_IMPORTED_MODULE_0_jquery__(function () {
 })
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/*!
@@ -13296,37 +13333,6 @@ if (typeof jQuery === 'undefined') {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(10);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(2)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./index.scss", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./index.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13347,8 +13353,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./login.scss", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./login.scss");
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./index.scss", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./index.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -13378,6 +13384,37 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./login.scss", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./login.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(13);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(2)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
 		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./toggle.scss", function() {
 			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./toggle.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
@@ -13389,24 +13426,27 @@ if(false) {
 }
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_bootstrap_dist_js_bootstrap__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_bootstrap_dist_js_bootstrap__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_bootstrap_dist_js_bootstrap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_bootstrap_dist_js_bootstrap__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__scripts_list__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__scripts_list__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__scripts_list___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__scripts_list__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__scripts_remember_login__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__styles_index_scss__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__styles_index_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__styles_index_scss__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__styles_login_scss__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__styles_login_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__styles_login_scss__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__styles_toggle_scss__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__styles_toggle_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__styles_toggle_scss__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__scripts_remember_login__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__scripts_admin_toolbar__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__scripts_admin_toolbar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__scripts_admin_toolbar__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__styles_index_scss__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__styles_index_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__styles_index_scss__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__styles_login_scss__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__styles_login_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__styles_login_scss__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__styles_toggle_scss__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__styles_toggle_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__styles_toggle_scss__);
+
 
 
 
@@ -13419,7 +13459,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -13433,7 +13473,7 @@ exports.push([module.i, "html,\nbody {\n  height: 100%; }\n", ""]);
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -13447,7 +13487,7 @@ exports.push([module.i, "body.page-login {\n  background-image: url(\"https://sc
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -13461,7 +13501,7 @@ exports.push([module.i, "[data-toggle] {\n  width: 50px;\n  height: 25px;\n  pos
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;/*global define:false */
@@ -14512,7 +14552,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*global define:false */
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 

@@ -3,6 +3,7 @@ import 'bootstrap/dist/js/bootstrap';
 
 import "./scripts/list";
 import "./scripts/remember-login";
+import "./scripts/admin-toolbar";
 
 //styles
 import "./styles/index.scss";
