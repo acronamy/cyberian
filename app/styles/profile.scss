@@ -1,0 +1,110 @@
+//Profile page
+body.page-login.logged-in{
+    background-image:none;
+    #user-hero{
+        &:before{
+            content:"";
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHklEQVQYV2NkwAIY8Qr+///fl5GRcTNIEX6VyMYAANDMBAYBjpzVAAAAAElFTkSuQmCC");
+            display: block;
+            top:0;
+            bottom: 0;
+            left:0;
+            right:0;
+            position: absolute;
+            background-color:rgba(0,0,0,.3);
+            z-index: 1;
+        }
+        &>*{
+            z-index: 2;
+            position: relative;
+        }
+        background-size: cover;
+        background-position: center;
+        height:300px;
+        position: relative;
+        display: table;
+        width:100%;
+        padding-right: 30px;
+        padding-left: 30px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        .username{
+            color:#f1f1f1;
+            text-transform: capitalize;
+            font-weight: 100;
+            width: 100%;
+            text-align: center;
+            display: table-cell;
+            vertical-align: middle;
+            //demo
+            &:empty:before{
+                content: "username";
+            }
+        }
+        [for="cover-photo"]{
+            position: relative;
+            border-radius: 1px;
+            color:#f1f1f1;
+            background-color:rgba(255,255,255,0);
+            border:1px solid #f1f1f1;
+            display: inline-block;
+            
+            &:before{
+                content:"Cover Photo";
+                float:right;
+                white-space: nowrap;
+                padding-left: 10px;
+            }
+
+            [type="file"]{
+                height: 100%;
+                display: none;
+            }
+        }
+    }
+
+    #profile-sub-navbar{
+        background-color: #171717;
+        border-radius: 0;
+        border:0;
+        width:100%;
+        border-bottom:1px solid rgba(255,255,255,.1);
+        position: relative;
+        text-align: center;
+        .btn-group-pill{
+            border-radius: 1px;
+            .btn{
+                border: 1px solid rgba(255,255,255,.1);
+                color:#f1f1f1;
+                background-color:transparent;
+                border-radius:0;
+                border-right-width:0;
+                color:#9d9d9d;
+                &:focus{
+                    color:#fff;
+                    outline: 0;
+                }
+                &:last-child{
+                    border-top-right-radius: 2px;
+                    border-bottom-right-radius: 2px;
+                    border-right-width:1px;
+                }
+                border-left-width:0;
+                &:first-child{
+                    border-top-left-radius: 2px;
+                    border-bottom-left-radius: 2px;
+                    border-left-width:1px;
+                }
+                
+                margin-left: 0;
+            }
+        }
+        .navbar-header{
+            width: 100%;
+        }
+    }
+
+    .wrapper-profile{
+        height:100vh;
+    }
+}

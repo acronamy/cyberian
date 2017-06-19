@@ -1,5 +1,4 @@
 import * as path from "path";
-import * as cheerio from "cheerio";
 import * as express from "express";
 import * as hbs from 'express-hbs';
 import * as bodyParser from "body-parser";
@@ -8,21 +7,30 @@ import * as jdenticon from "jdenticon";
 import "reflect-metadata";
 import * as bcrypt from "bcrypt";
 import * as jsHash from "jshashes";
+/*one-shot install*/
+import {installSite} from "./install";
+
+import * as fileUpload from "express-fileupload";
+
+
+import { injector } from "./routes/main.injector";
+import { postCoverPhoto } from "./routes/cover-photo.post";
+import { collectionsRoute, photosRoute } from "./routes/editor.get";
 
 //Database
 import {database} from "./database";
 import {User} from "./entities/user.entity";
 
+
 const webpackGlobal = require("../webpack.config");
 const main = express();
-const admin = express();
+const editor = express();
 
 console.log("Server started")
 
-main.use("/admin", admin);
-
-
+main.use("/editor", editor);
 main.use(bodyParser.urlencoded({ extended: false }))
+main.use(fileUpload());
 main.use(cookieParser())
 
 //DI
@@ -37,78 +45,10 @@ main.use("/media", express.static( path.join(__dirname, "public", "media") ));
 main.engine('hbs', hbs.express4());
 main.set('view engine', 'hbs');
 main.set('views', path.join(__dirname, '/templates'));
-admin.set('views', path.join(__dirname, '/templates'))
+editor.set('views', path.join(__dirname, '/templates'))
 
 
-const locals = {
-}
-function injector(err, html){
-  
-    const $ = cheerio.load(html);
-    //head
-    $("head").append('<script src="http://localhost:35729/livereload.js"></script>')
-    $("head").append(`<title>${this.req.url}</title>`)
-    $("head").append( `<script src="${webpackOutputUrl}/${webpackOutputFilename}"></script>`);
-    
-    if(this.template){
-        const templateParent = $("#"+this.template).parent()
-        templateParent.append($("#"+this.template).html())
-    }
-
-    if(this.session){
-        $("body").addClass("logged-in");
-        $("body").prepend(
-`
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-    </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Photos <span class="sr-only">(current)</span></a></li>
-        <li><a href="#">Collections</a></li>
-      </ul>
-
-      <!--USER-->
-      <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PIC</a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Settings</a></li>
-            <li><a href="#">Your Profile</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#logout">Log out</a></li>
-          </ul>
-        </li>
-      </ul>
-
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
-`
-)
-    }
-
-    if(err){
-        this.render("error")
-    }
-    else{
-        this.send($.html())
-    }
-}
-const avatarMediaUrl = "/media/avatar/"
-
-
-//routes
+const locals = {}
 
 async function createUser(user:User){
     const saltRounds = 10;
@@ -139,22 +79,35 @@ async function createUser(user:User){
 database.then(async connection=>{
 
     console.log("Database connection established: "+connection.isConnected)
-    console.log(connection)
+    await installSite(connection, main, editor);
+
+    //Routes index
+    postCoverPhoto(main, connection);
+    photosRoute(main, connection);
+    collectionsRoute(main, connection);
+
 
     main.get('/', (req, res)=>{
         const renderOptions = {
             session:req.cookies.session||false,
         }
 
-        res.render("index", locals, injector.bind( Object.assign(res, renderOptions) ))
+        res.render("index", locals, injector.bind( Object.assign(
+            res, 
+            main.get("siteMetadata"), 
+            renderOptions
+        )));
     })
 
     main.get('/user', (req, res)=>{
+        
+        const isLoggedIn = "session" in req.cookies;
         const renderOptions = {
-            template:"login"
+            template:isLoggedIn?"profile":"login",
+            session:req.cookies.session||false,
         }
 
-        res.render("user", injector.bind(Object.assign(res, renderOptions)))
+        res.render("user", injector.bind(Object.assign(res, main.get("siteMetadata"), renderOptions)))
     })
 
     main.get('/user/register', (req, res)=>{
@@ -162,7 +115,11 @@ database.then(async connection=>{
             template:"register"
         }
 
-        res.render("user", injector.bind(Object.assign(res, renderOptions)))
+        res.render("user", injector.bind(Object.assign(
+            res,
+            main.get("siteMetadata"), 
+            renderOptions
+        )))
     })
     main.post('/user/register/new', (req, res)=>{
         const formData = req.body;
@@ -231,19 +188,11 @@ database.then(async connection=>{
             console.log("no such user")
             res.send(false)
         }
+    })
 
-
-        // res.send({
-        //     username:"adam",
-        //     name:{
-        //         first:"Adam",
-        //         last:"Crockett"
-        //     },
-        //     avatar:{
-        //         type:"image",
-        //         data:avatarMediaUrl+"adam.jpg"
-        //     }
-        // })
+    main.post("/user/logout",function(req,res){
+        res.clearCookie("session");
+        res.send("")
     })
 
     
@@ -265,11 +214,6 @@ database.then(async connection=>{
         }
     })
 
-    admin.get('/', (req, res)=>{
-        res.render("index", locals, injector.bind(res))
-    })
-
-
 })
 .catch(err=>{
     if(err){
@@ -280,5 +224,7 @@ database.then(async connection=>{
 
 
 
-
-main.listen(9000);
+const port = 9000;
+main.listen(port, function(){
+    console.log("listening on port:",port)
+});

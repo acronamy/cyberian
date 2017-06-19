@@ -1,0 +1,82 @@
+#admin-toolbar{
+    z-index: 9999;
+    width: 100%;
+    position: fixed;
+    border-radius:0;
+    border:0;
+    border-bottom:1px solid rgba(255,255,255,.1);
+    background-color:#171717;
+    margin-bottom: 0;
+    .navbar-nav>.open>a{
+        background-color: rgba(255,255,255,0);
+    }
+    .collapsing > ul > li,
+    .collapse > ul > li{
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        &.active>a{
+            background-color: rgba(255,255,255,0);
+            color:#fff;
+        }
+        .dropdown-menu{
+            width:100%;
+            margin-top:-1px;
+            border-radius: 0;
+            background-color: #171717;
+            letter-spacing: normal;
+            text-transform: none;
+            &>li>a{
+                color:#9d9d9d;
+                &:hover{
+                    color:#fff;
+                    background-color: rgba(255,255,255,0);
+                }
+            }
+            .divider{
+                height: 2px;
+                margin: 0 auto;
+                background-color: rgba(255,255,255,0);
+                background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHklEQVQYV2NkwAIY8Qr+///fl5GRcTNIEX6VyMYAANDMBAYBjpzVAAAAAElFTkSuQmCC");
+            }
+        }
+    }
+    .navbar-user{
+        .dropdown-toggle{
+            padding-top: 4px;
+            padding-bottom: 4px;
+        }
+        .toolbar-username{
+            line-height: 3;
+            padding-right: 10px;
+        }
+        .toolbar-avatar,
+        .toolbar-username{
+            float:left;
+        }
+        .toolbar-avatar{
+            background-size: cover;
+            background-position: center;
+            border-radius: 9999em;
+            height: 40px;
+            width:40px;
+            display: inline-block;
+        }
+    }
+}
+
+#page-top{
+    .progress{
+        transition:height .3s;
+        height:0;
+        background-color:rgba(255,255,255,0);
+        margin-bottom: 0;
+        border-radius: 0;
+        position: absolute;
+        bottom: 0;
+        width:100%;
+        z-index: 9999;
+    }
+    .progress.active{
+        height: 2px;
+    }
+}

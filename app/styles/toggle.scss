@@ -3,7 +3,7 @@ $color:#2196f3;
 $height: 25px;
 $width: 50px;
 
-[data-toggle] {
+[data-toggleswitch] {
   width: $width;
   height: $height;
   position: relative;
@@ -11,14 +11,14 @@ $width: 50px;
   border-radius: 9999em;
   cursor:pointer;
 }
-[data-toggle] input[type='checkbox'] {
+[data-toggleswitch] input[type='checkbox'] {
   position: absolute;
   visibility: hidden;
 }
-[data-toggle] input[type='checkbox']:not(:checked)+div.inner {
+[data-toggleswitch] input[type='checkbox']:not(:checked)+div.inner {
   background-position: $height, 45px;
 }
-[data-toggle] div.inner {
+[data-toggleswitch] div.inner {
   border-radius: 9999em;
   transition: background $speed;
   width: $width;

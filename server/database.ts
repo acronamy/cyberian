@@ -1,6 +1,7 @@
 import * as path from "path";
 import {createConnection, ConnectionOptions} from "typeorm";
 import {User} from "./entities/user.entity";
+import {Site} from "./entities/site.entity"
 
 const options:ConnectionOptions = {
     type:"mysql",
@@ -14,7 +15,8 @@ const options:ConnectionOptions = {
     },
     autoSchemaSync:true,
     entities:[
-        User
+        User,
+        Site
     ]
 }
 
