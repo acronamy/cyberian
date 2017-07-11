@@ -51,7 +51,9 @@
     "webpack-livereload-plugin": "^0.11.0"
   },
   "scripts": {
-    "develop": "webpack"
+    "develop": "webpack --env.develop",
+    "test:production":"webpack",
+    "start":"ts-node ./server/index.ts"
   },
   "author": "",
   "license": "ISC"
