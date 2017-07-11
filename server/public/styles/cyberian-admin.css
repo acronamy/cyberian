@@ -1,0 +1,564 @@
+.loader {
+  height: 4px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background-color: #ddd; }
+
+.loader:before {
+  display: block;
+  position: absolute;
+  content: "";
+  left: -200px;
+  width: 200px;
+  height: 4px;
+  background-color: #2980b9;
+  animation: loading 2s linear infinite; }
+
+@keyframes loading {
+  from {
+    left: -200px;
+    width: 30%; }
+  50% {
+    width: 30%; }
+  70% {
+    width: 70%; }
+  80% {
+    left: 50%; }
+  95% {
+    left: 120%; }
+  to {
+    left: 100%; } }
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg); } }
+
+.spinner {
+  display: inline-block;
+  position: relative; }
+
+.spinner:before {
+  position: absolute;
+  content: '';
+  box-sizing: border-box;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #67ABCD;
+  animation: spinner .6s linear infinite; }
+.folder {
+  background-color: #3781a6;
+  border-top-size: 2px;
+  border-top-style: solid;
+  border-color: #2f6e8d;
+  width: 35px;
+  height: 22px;
+  border-radius: 2px;
+  cursor: pointer;
+  position: relative;
+  color: #fff; }
+  .folder.folder-dropbox:after {
+    content: '\F340';
+    font: normal normal normal 14px/1 'Material-Design-Iconic-Font';
+    text-align: center;
+    display: block;
+    line-height: 1.6; }
+
+.folder-row:hover .folder {
+  background-color: #67abcd;
+  border-color: #56a1c7; }
+
+.folder-row:hover .folder:before {
+  background-color: #56a1c7; }
+
+.folder:before {
+  content: '';
+  width: 20px;
+  height: 3px;
+  background-color: #2f6e8d;
+  display: block;
+  margin-top: -5px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 5px; }
+
+.folder-tree {
+  height: 100vh;
+  height: calc(100vh - 50px);
+  overflow: auto;
+  padding-top: 10px;
+  border-top: 2px solid rgba(255, 255, 255, 0.1); }
+  .folder-tree h5 {
+    padding: 10px;
+    color: #9d9d9d; }
+
+.folder-row {
+  margin-top: 15px;
+  cursor: pointer; }
+  .folder-row h4 {
+    color: #9d9d9d;
+    font-size: 16px;
+    margin: 3px 0;
+    padding-left: 15px; }
+  .folder-row:hover h4 {
+    color: #fff; }
+  .folder-row > * {
+    float: left; }
+  .folder-row + .list-group .list-group-item {
+    border: 0;
+    color: #9e9e9e;
+    background-color: transparent;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; }
+  .folder-row .dropdown-toggle {
+    background-color: transparent;
+    color: #f1f1f1;
+    border: 0; }
+  .folder-row.loading .spinner {
+    float: right;
+    width: 15px;
+    margin-right: 10px; }
+  .folder-row.loading .folder {
+    opacity: .3; }
+  .folder-row.loading:hover .folder {
+    background-color: #3781a6;
+    border-color: #2f6e8d; }
+  .folder-row.loading:hover .folder:before {
+    background-color: #2f6e8d; }
+  .folder-row.loading h4 {
+    color: #777; }
+.gu-mirror {
+  position: fixed !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  opacity: 0.8;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80); }
+
+.gu-hide {
+  display: none !important; }
+
+.gu-unselectable {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important; }
+
+.gu-transit {
+  opacity: 0.2;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+  filter: alpha(opacity=20); }
+body.editor {
+  background-color: #111; }
+  body.editor .sidebar {
+    overflow: hidden;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    background-color: inherit;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 30px; }
+    body.editor .sidebar header {
+      margin-bottom: 30px; }
+    body.editor .sidebar .collection-photo-list {
+      width: 100%;
+      clear: both; }
+    body.editor .sidebar .list-group-item {
+      opacity: .3;
+      user-select: none; }
+      body.editor .sidebar .list-group-item .status {
+        display: none; }
+      body.editor .sidebar .list-group-item.selected {
+        background-color: #45454b; }
+      body.editor .sidebar .list-group-item.downloading {
+        background-color: #43c8bc; }
+      body.editor .sidebar .list-group-item.valid {
+        opacity: 1; }
+        body.editor .sidebar .list-group-item.valid .status {
+          display: inline-block; }
+        body.editor .sidebar .list-group-item.valid .photo-thumbnail {
+          display: inline-block; }
+      body.editor .sidebar .list-group-item:hover {
+        background-color: #2d2d30;
+        border-radius: 2px;
+        cursor: default; }
+        body.editor .sidebar .list-group-item:hover.selected {
+          background-color: #45454b; }
+        body.editor .sidebar .list-group-item:hover > * {
+          cursor: inherit; }
+      body.editor .sidebar .list-group-item .photo-thumbnail {
+        display: none;
+        width: 20px;
+        height: 20px;
+        float: left;
+        background-size: cover;
+        margin-right: 15px; }
+  body.editor .gu-mirror.photo-tile {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #111;
+    background-size: cover;
+    cursor: move;
+    cursor: -webkit-grabbing; }
+    body.editor .gu-mirror.photo-tile > * {
+      display: none; }
+    body.editor .gu-mirror.photo-tile > .photo-tile-photo {
+      display: block;
+      height: 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: #111;
+      background-size: cover; }
+    body.editor .gu-mirror.photo-tile.disabled .photo-tile-photo {
+      opacity: .3;
+      filter: blur(2px); }
+  body.editor .editor-collection-panel {
+    width: 100%;
+    min-height: 400px;
+    overflow: hidden;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHklEQVQYV2NkwAIY8Qr+///fl5GRcTNIEX6VyMYAANDMBAYBjpzVAAAAAElFTkSuQmCC);
+    margin-bottom: 80px;
+    border: 1px solid rgba(255, 255, 255, 0.1); }
+    body.editor .editor-collection-panel:first-child {
+      margin-top: 35px; }
+    body.editor .editor-collection-panel .editor-collection-photo {
+      background-repeat: no-repeat;
+      height: 490px;
+      box-sizing: border-box;
+      display: block;
+      float: left;
+      height: 400px;
+      cursor: default;
+      user-select: none;
+      background-color: #000;
+      margin-bottom: 20px;
+      margin-top: 20px;
+      margin-right: 25px;
+      background-position: center; }
+      body.editor .editor-collection-panel .editor-collection-photo.orientation-landscape {
+        width: 780px;
+        background-size: cover; }
+      body.editor .editor-collection-panel .editor-collection-photo.orientation-portrait {
+        width: 490px;
+        background-size: contain; }
+      body.editor .editor-collection-panel .editor-collection-photo.orientation-even {
+        background-size: cover;
+        width: 490px; }
+      body.editor .editor-collection-panel .editor-collection-photo:last-child {
+        margin-right: 0; }
+    body.editor .editor-collection-panel .editor-collection-meta .editor-collection-description {
+      margin-top: 10px;
+      color: #9e9e9e;
+      padding: 20px;
+      margin: 0;
+      padding-top: 0;
+      background-color: rgba(17, 17, 17, 0.8); }
+    body.editor .editor-collection-panel .editor-collection-meta .editor-collection-name {
+      color: #f1f1f1;
+      text-transform: capitalize;
+      display: table;
+      margin: 0;
+      padding: 20px;
+      padding-bottom: 10px;
+      background-color: rgba(17, 17, 17, 0.8); }
+      body.editor .editor-collection-panel .editor-collection-meta .editor-collection-name::after {
+        margin-top: 10px;
+        content: "";
+        background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2PQ19f/DwACqwGNmN/oeAAAAABJRU5ErkJggg==");
+        background-position: 20px bottom;
+        padding-left: 20px;
+        background-repeat: repeat no-repeat;
+        background-size: 100% 2px;
+        height: 1px;
+        width: 100%;
+        display: table-cell; }
+    body.editor .editor-collection-panel .editor-collection-controls {
+      padding: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: rgba(17, 17, 17, 0.8); }
+      body.editor .editor-collection-panel .editor-collection-controls .btn.btn-link {
+        margin-left: 20px;
+        outline: 0;
+        text-decoration: none;
+        color: #f1f1f1; }
+    body.editor .editor-collection-panel .editor-collection-tags {
+      margin: 10px 5px;
+      display: none; }
+    body.editor .editor-collection-panel main {
+      background-color: rgba(17, 17, 17, 0.8); }
+      body.editor .editor-collection-panel main .rail {
+        width: 9999em; }
+  body.editor .modal-delete-collection {
+    z-index: 9999;
+    top: 0px; }
+    body.editor .modal-delete-collection .modal-dialog {
+      width: 100%;
+      margin-top: 0;
+      display: flex; }
+    body.editor .modal-delete-collection .modal-content {
+      min-width: 80%;
+      margin: 0 auto;
+      display: table;
+      justify-content: space-around;
+      min-width: inherit;
+      background-color: #222;
+      border-radius: 2px;
+      border: 1px solid rgba(255, 255, 255, 0.1); }
+      body.editor .modal-delete-collection .modal-content .modal-body {
+        display: table-cell;
+        color: #fff; }
+        body.editor .modal-delete-collection .modal-content .modal-body:before {
+          content: "Danger";
+          background-color: #a94442;
+          display: inline-block;
+          cursor: default;
+          user-select: none;
+          text-transform: capitalize;
+          font-weight: bold;
+          padding: 5px 10px;
+          color: #fff;
+          font-size: .8em; }
+        body.editor .modal-delete-collection .modal-content .modal-body p {
+          margin: 3px 10px;
+          margin-right: 30px;
+          display: inline-block; }
+      body.editor .modal-delete-collection .modal-content .modal-footer {
+        background-color: #a94442;
+        color: #fff;
+        display: table-cell;
+        border: 0;
+        padding: 0; }
+        body.editor .modal-delete-collection .modal-content .modal-footer .btn.btn-link {
+          color: #fff;
+          text-decoration: none;
+          float: right;
+          outline: 0; }
+          body.editor .modal-delete-collection .modal-content .modal-footer .btn.btn-link:hover {
+            background-color: rgba(255, 255, 255, 0.1); }
+      body.editor .modal-delete-collection .modal-content .modal-body {
+        padding: 3px; }
+  body.editor .modal.edit-collection,
+  body.editor .modal.add-collection {
+    z-index: 9999; }
+    body.editor .modal.edit-collection .collection-group .collection-name,
+    body.editor .modal.add-collection .collection-group .collection-name {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      box-shadow: 0;
+      border: 0; }
+    body.editor .modal.edit-collection .collection-group .collection-description,
+    body.editor .modal.add-collection .collection-group .collection-description {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0; }
+    body.editor .modal.edit-collection textarea,
+    body.editor .modal.add-collection textarea {
+      resize: vertical; }
+    body.editor .modal.edit-collection h5,
+    body.editor .modal.edit-collection h4,
+    body.editor .modal.add-collection h5,
+    body.editor .modal.add-collection h4 {
+      color: #9d9d9d; }
+    body.editor .modal.edit-collection .modal-dialog,
+    body.editor .modal.add-collection .modal-dialog {
+      width: calc(100% - 60px);
+      position: fixed;
+      bottom: 0;
+      top: 40px;
+      left: 0;
+      right: 0; }
+      body.editor .modal.edit-collection .modal-dialog .modal-content,
+      body.editor .modal.add-collection .modal-dialog .modal-content {
+        height: 100%;
+        background: #222;
+        border-radius: 2px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        overflow: hidden; }
+        body.editor .modal.edit-collection .modal-dialog .modal-content .modal-header,
+        body.editor .modal.add-collection .modal-dialog .modal-content .modal-header {
+          border-bottom: 0; }
+          body.editor .modal.edit-collection .modal-dialog .modal-content .modal-header h4,
+          body.editor .modal.add-collection .modal-dialog .modal-content .modal-header h4 {
+            float: left; }
+          body.editor .modal.edit-collection .modal-dialog .modal-content .modal-header .close,
+          body.editor .modal.add-collection .modal-dialog .modal-content .modal-header .close {
+            line-height: 2;
+            float: right;
+            color: #f1f1f1;
+            text-shadow: none;
+            opacity: 1; }
+            body.editor .modal.edit-collection .modal-dialog .modal-content .modal-header .close > span,
+            body.editor .modal.add-collection .modal-dialog .modal-content .modal-header .close > span {
+              opacity: 1; }
+        body.editor .modal.edit-collection .modal-dialog .modal-content > main,
+        body.editor .modal.add-collection .modal-dialog .modal-content > main {
+          background-color: #2e2e2e;
+          height: 100%;
+          height: calc(100% - (65px * 2));
+          padding-bottom: 140px;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          border-left: 1px solid rgba(255, 255, 255, 0.1);
+          overflow-x: auto; }
+          body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile,
+          body.editor .modal.add-collection .modal-dialog .modal-content > main .tile {
+            min-height: 260px;
+            overflow: hidden;
+            border: 1px solid #444;
+            cursor: move;
+            cursor: -webkit-grab;
+            transition: opacity .3s;
+            position: relative;
+            float: left;
+            height: 50%;
+            height: calc(50% - 20px);
+            width: 20%;
+            width: calc(20% - 10px);
+            margin-right: calc(10px);
+            margin-top: 20px;
+            background-color: rgba(0, 0, 0, 0.2); }
+            body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile .photo-tile-photo,
+            body.editor .modal.add-collection .modal-dialog .modal-content > main .tile .photo-tile-photo {
+              background-position: center;
+              background-repeat: no-repeat;
+              background-color: #111;
+              background-size: cover; }
+            body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile.portrait,
+            body.editor .modal.add-collection .modal-dialog .modal-content > main .tile.portrait {
+              background-size: contain; }
+              body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile.portrait .photo-tile-photo,
+              body.editor .modal.add-collection .modal-dialog .modal-content > main .tile.portrait .photo-tile-photo {
+                background-size: contain; }
+            body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile.photo-tile:before,
+            body.editor .modal.add-collection .modal-dialog .modal-content > main .tile.photo-tile:before {
+              z-index: 1;
+              transition: all .3s ease-in-out;
+              content: "";
+              display: block;
+              background-color: rgba(0, 0, 0, 0.5);
+              height: 100%;
+              width: 100%;
+              position: absolute;
+              opacity: 0; }
+            body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile.photo-tile > *,
+            body.editor .modal.add-collection .modal-dialog .modal-content > main .tile.photo-tile > * {
+              transition: opacity .3s;
+              opacity: 0; }
+            body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile.photo-tile.show-controls:before,
+            body.editor .modal.add-collection .modal-dialog .modal-content > main .tile.photo-tile.show-controls:before {
+              height: 100%;
+              width: 100%;
+              opacity: 1; }
+            body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile.photo-tile.show-controls > *,
+            body.editor .modal.add-collection .modal-dialog .modal-content > main .tile.photo-tile.show-controls > * {
+              opacity: 1; }
+            body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile.disabled .photo-tile-photo,
+            body.editor .modal.add-collection .modal-dialog .modal-content > main .tile.disabled .photo-tile-photo {
+              opacity: .3;
+              filter: blur(2px); }
+            body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile .photo-tile-photo,
+            body.editor .modal.add-collection .modal-dialog .modal-content > main .tile .photo-tile-photo {
+              height: 100%;
+              opacity: 1; }
+            body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile.add-placeholder,
+            body.editor .modal.add-collection .modal-dialog .modal-content > main .tile.add-placeholder {
+              background-color: transparent;
+              color: #9d9d9d;
+              border: 1px dashed;
+              cursor: pointer;
+              position: relative; }
+              body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile.add-placeholder:before,
+              body.editor .modal.add-collection .modal-dialog .modal-content > main .tile.add-placeholder:before {
+                content: "+ Add Photo";
+                font-size: 25px;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%); }
+              body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile.add-placeholder .photo-upload-target,
+              body.editor .modal.add-collection .modal-dialog .modal-content > main .tile.add-placeholder .photo-upload-target {
+                position: absolute;
+                top: -50px;
+                outline: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                display: block;
+                opacity: .1;
+                cursor: pointer;
+                width: 100%; }
+            body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile header,
+            body.editor .modal.add-collection .modal-dialog .modal-content > main .tile header {
+              position: absolute;
+              width: 100%;
+              z-index: 9999;
+              background: -moz-linear-gradient(top, rgba(0, 0, 0, 0.65) 20%, transparent 100%);
+              background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.65) 20%, transparent 100%);
+              background: linear-gradient(to bottom, rgba(0, 0, 0, 0.65) 20%, transparent 100%);
+              cursor: default;
+              padding: 6px 12px; }
+              body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile header [data-toggleswitch],
+              body.editor .modal.add-collection .modal-dialog .modal-content > main .tile header [data-toggleswitch] {
+                margin-bottom: 0;
+                margin-top: 4px;
+                margin-right: 2px;
+                cursor: pointer; }
+              body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile header .photo-enebled-text,
+              body.editor .modal.add-collection .modal-dialog .modal-content > main .tile header .photo-enebled-text {
+                display: table-cell;
+                vertical-align: middle;
+                color: #fff;
+                user-select: none; }
+                body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile header .photo-enebled-text .enabled-text,
+                body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile header .photo-enebled-text .disabled-text,
+                body.editor .modal.add-collection .modal-dialog .modal-content > main .tile header .photo-enebled-text .enabled-text,
+                body.editor .modal.add-collection .modal-dialog .modal-content > main .tile header .photo-enebled-text .disabled-text {
+                  cursor: default;
+                  user-select: none;
+                  color: #9d9d9d; }
+              body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile header .close,
+              body.editor .modal.add-collection .modal-dialog .modal-content > main .tile header .close {
+                color: #fff;
+                opacity: 1;
+                text-shadow: none; }
+            body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile footer,
+            body.editor .modal.add-collection .modal-dialog .modal-content > main .tile footer {
+              z-index: 9999;
+              background: -moz-linear-gradient(top, transparent 0%, rgba(0, 0, 0, 0.65) 100%);
+              background: -webkit-linear-gradient(top, transparent 0%, rgba(0, 0, 0, 0.65) 100%);
+              background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.65) 100%);
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              right: 0; }
+              body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile footer textarea,
+              body.editor .modal.add-collection .modal-dialog .modal-content > main .tile footer textarea {
+                background: transparent;
+                width: 100%;
+                float: left;
+                resize: none;
+                padding: 6px 12px;
+                color: #f1f1f1;
+                border: 0;
+                outline: 0; }
+                body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile footer textarea:focus,
+                body.editor .modal.add-collection .modal-dialog .modal-content > main .tile footer textarea:focus {
+                  background-color: rgba(0, 0, 0, 0.1); }
+        body.editor .modal.edit-collection .modal-dialog .modal-content > aside,
+        body.editor .modal.add-collection .modal-dialog .modal-content > aside {
+          max-height: calc(100% - 70px);
+          overflow: auto; }
+          body.editor .modal.edit-collection .modal-dialog .modal-content > aside .bootstrap-tagsinput,
+          body.editor .modal.add-collection .modal-dialog .modal-content > aside .bootstrap-tagsinput {
+            width: 100%;
+            user-select: none; }
+        body.editor .modal.edit-collection .modal-dialog .modal-content > footer,
+        body.editor .modal.add-collection .modal-dialog .modal-content > footer {
+          background-color: #2e2e2e;
+          border-left: 1px solid rgba(255, 255, 255, 0.1);
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          z-index: 9999;
+          border-top: 1px solid rgba(255, 255, 255, 0.1); }

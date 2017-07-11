@@ -1,26 +1,81 @@
-import * as path from "path";
+//Webpack
 import * as webpack from "webpack";
 import * as LiveReloadPlugin from "webpack-livereload-plugin"
+import * as WebpackPreBuildPlugin from "pre-build-webpack";
+import * as ExtractTextPlugin from "extract-text-webpack-plugin";
 
-console.log("HEY")
+//Post css
+import { postCSSConfig } from "./postcss.config";
+
+//Node
+import * as child from "child_process";
+import * as os from "os";
+import * as path from "path";
+
+const extractSass = new ExtractTextPlugin({
+    filename: "styles/cyberian-[name].css",
+    
+    disable: process.env.NODE_ENV === "development"
+});
+
+function startServer(){
+    //not using dev server as express is also being developed.
+    let server;
+    process.env.TS_NODE_PROJECT = path.join(process.cwd(),"tsconfig.json")
+    console.log("tsconfig:", process.env.TS_NODE_PROJECT)
+
+    if(os.platform() === "linux"){
+        server = child.spawn('bash', ['-c','ts-node','./server/index.ts']);
+    }
+    else{
+        server = child.spawn('cmd', ['/c','ts-node','./server/index.ts']);
+    }
+
+    server.stdout.on('data', data => {
+        console.log(`server: ${data}`);
+    });
+    server.stderr.on('data', data => {
+        console.log(`server: ${data}`);
+    });
+    server.on('close', code => {
+        console.log(`server exited with code ${code}`);
+    });
+
+    process.on("exit", ()=> {
+        //webpack.kill();
+        server.kill();
+    })
+}
 
 const config = {
-    entry: './app/index.ts',
+    entry: {
+        main:'./app/index.ts',
+        admin:'./app/styles/admin.index.ts',
+        front:'./app/styles/front.index.ts'
+    },
     output: {
-        path: path.resolve(__dirname, 'server', 'public', 'scripts'),
-        filename: 'admin.bundle.js'
+        path: path.resolve(__dirname, 'server', 'public'),
+        filename: 'scripts/cyberian-[name].bundle.js',
+        library: "cyberian"
     },
     module: {
         rules: [
             {
                 test: /\.scss$/,
-                use: [{
-                    loader: "style-loader" // creates style nodes from JS strings
-                }, {
-                    loader: "css-loader" // translates CSS into CommonJS
-                }, {
-                    loader: "sass-loader" // compiles Sass to CSS
-                }]
+                use: extractSass.extract({
+                    use:[
+                        {
+                            loader: "css-loader"
+                        },
+                        {
+                            loader: "sass-loader",
+                            options:{
+                                sourceMap:true,
+                            }
+                        }
+                    ],
+                    fallback:"style-loader"
+                })
             },
             {
                 test: /\.css$/,
@@ -53,7 +108,12 @@ const config = {
         }),
         new LiveReloadPlugin({
 
-        })
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'common', // Specify the common bundle's name.
+        }),
+        extractSass,
+        new WebpackPreBuildPlugin(startServer),
     ]
 };
 

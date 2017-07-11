@@ -41,14 +41,17 @@
     "@types/express": "^4.0.35",
     "@types/jquery": "^3.2.0",
     "@types/node": "^7.0.34",
-    "@types/webpack": "^2.2.15",
+    "@types/webpack": "^2.2.16",
+    "extract-text-webpack-plugin": "^2.1.2",
     "node-sass": "^4.5.3",
+    "postcss-loader": "^2.0.6",
+    "pre-build-webpack": "^0.1.0",
     "sass-loader": "^6.0.5",
     "webpack": "^2.6.1",
     "webpack-livereload-plugin": "^0.11.0"
   },
   "scripts": {
-    "develop": "webpack --watch --config .\\webpack.config.ts"
+    "develop": "webpack"
   },
   "author": "",
   "license": "ISC"

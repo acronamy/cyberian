@@ -9,7 +9,7 @@ const Dropbox = require("dropbox");
 const dbx = new Dropbox({ accessToken: '9x3oXu1QUfAAAAAAAAAQhpuxPKAV8iQfdN3ZljlNfCaf9WCY2TBxWly8WymlraLV' });
 
 export function collectionsRoute(mount:Application, connection:Connection){
-    mount.get("/editor/collections", async (req, res)=>{
+    mount.get("/collections", async (req, res)=>{
         
         const connectionsRepo = connection.getRepository(Collection)
         const photoRepo = connection.getRepository(Photo)

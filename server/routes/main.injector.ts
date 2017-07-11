@@ -1,20 +1,31 @@
 import * as cheerio from "cheerio";
 
-const webpackGlobal = require("../../webpack.config");
-//DI
-const webpackOutputDir = webpackGlobal.output.path;
-const webpackOutputFilename = webpackGlobal.output.filename;
-const webpackOutputUrl = "/bundle";
-
+function injectAt(url:string, callback:Function){
+    if(this.req.baseUrl === url){
+        callback();
+    }
+}
 
 export function injector(err, html){
   
     const $ = cheerio.load(html);
     //head
-    $("head").append('<script src="http://localhost:35729/livereload.js"></script>')
-    $("head").append(`<title>${this.name} | ${this.req.url.replace("/","")}</title>`)
-    
-    
+    $("head").append('<script src="http://localhost:35729/livereload.js"></script>');
+    $("head").append(`<title>${this.name} | ${this.req.url.replace("/","")}</title>`);
+    $("head").append("<link rel='stylesheet' type='text/css' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'/>")
+
+    //shared across both mounts
+    //be carefull, if one sass sheet is meant to be in on one mount do not include in both sheets.
+    $("head").append("<link rel='stylesheet' type='text/css' href='styles/cyberian-common.css'/>")
+
+    injectAt.bind(this)("",function(){
+        $("head").append("<link rel='stylesheet' type='text/css' href='styles/cyberian-front.css'/>")
+    })
+    injectAt.bind(this)("/editor",function(){
+        $("head").append("<link rel='stylesheet' type='text/css' href='styles/cyberian-admin.css'/>")
+    })
+
+
     if(this.template){
         console.log(this.template)
         const templateParent = $("#"+this.template).parent()
@@ -162,12 +173,24 @@ export function injector(err, html){
 
     }
 
+    //Login conditional
     if(this.session){
         $("body").addClass("logged-in");
         $("body").prepend(`<div id="page-top"></div>`);
     }
 
-    $("body").append( `<script src="${webpackOutputUrl}/${webpackOutputFilename}"></script>`);
+    //Eternal libraries
+    $("body").append('<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>');
+    //Front page
+    injectAt.bind(this)("",function(){
+        $("body").append("<script src='scripts/cyberian-common.bundle.js'></script>")
+        $("body").append("<script src='scripts/cyberian-main.bundle.js'></script>")
+    })
+    injectAt.bind(this)("/editor",function(){
+        $("body").append("<script src='scripts/cyberian-common.bundle.js'></script>")
+        $("body").append("<script src='scripts/cyberian-main.bundle.js'></script>")
+    })
+
 
     if(err){
         this.render("error")

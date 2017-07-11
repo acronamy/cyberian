@@ -1,173 +1,24 @@
-/******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// identity function for calling harmony imports with the correct context
-/******/ 	__webpack_require__.i = function(value) { return value; };
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 53);
-/******/ })
-/************************************************************************/
-/******/ ([
+var cyberian =
+webpackJsonpcyberian([0],[
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["$"] = __webpack_require__(121);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["$"] = __webpack_require__(111);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		return this.map(function (item) {
-			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
-				return "@media " + item[2] + "{" + content + "}";
-			} else {
-				return content;
-			}
-		}).join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-function cssWithMappingToString(item, useSourceMap) {
-	var content = item[1] || '';
-	var cssMapping = item[3];
-	if (!cssMapping) {
-		return content;
-	}
-
-	if (useSourceMap && typeof btoa === 'function') {
-		var sourceMapping = toComment(cssMapping);
-		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
-		});
-
-		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-	}
-
-	return [content].join('\n');
-}
-
-// Adapted from convert-source-map (MIT)
-function toComment(sourceMap) {
-	// eslint-disable-next-line no-undef
-	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
-
-	return '/*# ' + data + ' */';
-}
-
-
-/***/ }),
-/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _ = __webpack_require__(4);
+var _ = __webpack_require__(2);
 var cls = __webpack_require__(14);
-var defaultSettings = __webpack_require__(127);
-var dom = __webpack_require__(8);
-var EventManager = __webpack_require__(124);
-var guid = __webpack_require__(125);
+var defaultSettings = __webpack_require__(117);
+var dom = __webpack_require__(6);
+var EventManager = __webpack_require__(114);
+var guid = __webpack_require__(115);
 
 var instances = {};
 
@@ -270,373 +121,14 @@ exports.get = function (element) {
 
 
 /***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-
-var stylesInDom = {};
-
-var	memoize = function (fn) {
-	var memo;
-
-	return function () {
-		if (typeof memo === "undefined") memo = fn.apply(this, arguments);
-		return memo;
-	};
-};
-
-var isOldIE = memoize(function () {
-	// Test for IE <= 9 as proposed by Browserhacks
-	// @see http://browserhacks.com/#hack-e71d8692f65334173fee715c222cb805
-	// Tests for existence of standard globals is to allow style-loader
-	// to operate correctly into non-standard environments
-	// @see https://github.com/webpack-contrib/style-loader/issues/177
-	return window && document && document.all && !window.atob;
-});
-
-var getElement = (function (fn) {
-	var memo = {};
-
-	return function(selector) {
-		if (typeof memo[selector] === "undefined") {
-			memo[selector] = fn.call(this, selector);
-		}
-
-		return memo[selector]
-	};
-})(function (target) {
-	return document.querySelector(target)
-});
-
-var singleton = null;
-var	singletonCounter = 0;
-var	stylesInsertedAtTop = [];
-
-var	fixUrls = __webpack_require__(139);
-
-module.exports = function(list, options) {
-	if (typeof DEBUG !== "undefined" && DEBUG) {
-		if (typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
-	}
-
-	options = options || {};
-
-	options.attrs = typeof options.attrs === "object" ? options.attrs : {};
-
-	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-	// tags it will allow on a page
-	if (!options.singleton) options.singleton = isOldIE();
-
-	// By default, add <style> tags to the <head> element
-	if (!options.insertInto) options.insertInto = "head";
-
-	// By default, add <style> tags to the bottom of the target
-	if (!options.insertAt) options.insertAt = "bottom";
-
-	var styles = listToStyles(list, options);
-
-	addStylesToDom(styles, options);
-
-	return function update (newList) {
-		var mayRemove = [];
-
-		for (var i = 0; i < styles.length; i++) {
-			var item = styles[i];
-			var domStyle = stylesInDom[item.id];
-
-			domStyle.refs--;
-			mayRemove.push(domStyle);
-		}
-
-		if(newList) {
-			var newStyles = listToStyles(newList, options);
-			addStylesToDom(newStyles, options);
-		}
-
-		for (var i = 0; i < mayRemove.length; i++) {
-			var domStyle = mayRemove[i];
-
-			if(domStyle.refs === 0) {
-				for (var j = 0; j < domStyle.parts.length; j++) domStyle.parts[j]();
-
-				delete stylesInDom[domStyle.id];
-			}
-		}
-	};
-};
-
-function addStylesToDom (styles, options) {
-	for (var i = 0; i < styles.length; i++) {
-		var item = styles[i];
-		var domStyle = stylesInDom[item.id];
-
-		if(domStyle) {
-			domStyle.refs++;
-
-			for(var j = 0; j < domStyle.parts.length; j++) {
-				domStyle.parts[j](item.parts[j]);
-			}
-
-			for(; j < item.parts.length; j++) {
-				domStyle.parts.push(addStyle(item.parts[j], options));
-			}
-		} else {
-			var parts = [];
-
-			for(var j = 0; j < item.parts.length; j++) {
-				parts.push(addStyle(item.parts[j], options));
-			}
-
-			stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
-		}
-	}
-}
-
-function listToStyles (list, options) {
-	var styles = [];
-	var newStyles = {};
-
-	for (var i = 0; i < list.length; i++) {
-		var item = list[i];
-		var id = options.base ? item[0] + options.base : item[0];
-		var css = item[1];
-		var media = item[2];
-		var sourceMap = item[3];
-		var part = {css: css, media: media, sourceMap: sourceMap};
-
-		if(!newStyles[id]) styles.push(newStyles[id] = {id: id, parts: [part]});
-		else newStyles[id].parts.push(part);
-	}
-
-	return styles;
-}
-
-function insertStyleElement (options, style) {
-	var target = getElement(options.insertInto)
-
-	if (!target) {
-		throw new Error("Couldn't find a style target. This probably means that the value for the 'insertInto' parameter is invalid.");
-	}
-
-	var lastStyleElementInsertedAtTop = stylesInsertedAtTop[stylesInsertedAtTop.length - 1];
-
-	if (options.insertAt === "top") {
-		if (!lastStyleElementInsertedAtTop) {
-			target.insertBefore(style, target.firstChild);
-		} else if (lastStyleElementInsertedAtTop.nextSibling) {
-			target.insertBefore(style, lastStyleElementInsertedAtTop.nextSibling);
-		} else {
-			target.appendChild(style);
-		}
-		stylesInsertedAtTop.push(style);
-	} else if (options.insertAt === "bottom") {
-		target.appendChild(style);
-	} else {
-		throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
-	}
-}
-
-function removeStyleElement (style) {
-	if (style.parentNode === null) return false;
-	style.parentNode.removeChild(style);
-
-	var idx = stylesInsertedAtTop.indexOf(style);
-	if(idx >= 0) {
-		stylesInsertedAtTop.splice(idx, 1);
-	}
-}
-
-function createStyleElement (options) {
-	var style = document.createElement("style");
-
-	options.attrs.type = "text/css";
-
-	addAttrs(style, options.attrs);
-	insertStyleElement(options, style);
-
-	return style;
-}
-
-function createLinkElement (options) {
-	var link = document.createElement("link");
-
-	options.attrs.type = "text/css";
-	options.attrs.rel = "stylesheet";
-
-	addAttrs(link, options.attrs);
-	insertStyleElement(options, link);
-
-	return link;
-}
-
-function addAttrs (el, attrs) {
-	Object.keys(attrs).forEach(function (key) {
-		el.setAttribute(key, attrs[key]);
-	});
-}
-
-function addStyle (obj, options) {
-	var style, update, remove, result;
-
-	// If a transform function was defined, run it on the css
-	if (options.transform && obj.css) {
-	    result = options.transform(obj.css);
-
-	    if (result) {
-	    	// If transform returns a value, use that instead of the original css.
-	    	// This allows running runtime transformations on the css.
-	    	obj.css = result;
-	    } else {
-	    	// If the transform function returns a falsy value, don't add this css.
-	    	// This allows conditional loading of css
-	    	return function() {
-	    		// noop
-	    	};
-	    }
-	}
-
-	if (options.singleton) {
-		var styleIndex = singletonCounter++;
-
-		style = singleton || (singleton = createStyleElement(options));
-
-		update = applyToSingletonTag.bind(null, style, styleIndex, false);
-		remove = applyToSingletonTag.bind(null, style, styleIndex, true);
-
-	} else if (
-		obj.sourceMap &&
-		typeof URL === "function" &&
-		typeof URL.createObjectURL === "function" &&
-		typeof URL.revokeObjectURL === "function" &&
-		typeof Blob === "function" &&
-		typeof btoa === "function"
-	) {
-		style = createLinkElement(options);
-		update = updateLink.bind(null, style, options);
-		remove = function () {
-			removeStyleElement(style);
-
-			if(style.href) URL.revokeObjectURL(style.href);
-		};
-	} else {
-		style = createStyleElement(options);
-		update = applyToTag.bind(null, style);
-		remove = function () {
-			removeStyleElement(style);
-		};
-	}
-
-	update(obj);
-
-	return function updateStyle (newObj) {
-		if (newObj) {
-			if (
-				newObj.css === obj.css &&
-				newObj.media === obj.media &&
-				newObj.sourceMap === obj.sourceMap
-			) {
-				return;
-			}
-
-			update(obj = newObj);
-		} else {
-			remove();
-		}
-	};
-}
-
-var replaceText = (function () {
-	var textStore = [];
-
-	return function (index, replacement) {
-		textStore[index] = replacement;
-
-		return textStore.filter(Boolean).join('\n');
-	};
-})();
-
-function applyToSingletonTag (style, index, remove, obj) {
-	var css = remove ? "" : obj.css;
-
-	if (style.styleSheet) {
-		style.styleSheet.cssText = replaceText(index, css);
-	} else {
-		var cssNode = document.createTextNode(css);
-		var childNodes = style.childNodes;
-
-		if (childNodes[index]) style.removeChild(childNodes[index]);
-
-		if (childNodes.length) {
-			style.insertBefore(cssNode, childNodes[index]);
-		} else {
-			style.appendChild(cssNode);
-		}
-	}
-}
-
-function applyToTag (style, obj) {
-	var css = obj.css;
-	var media = obj.media;
-
-	if(media) {
-		style.setAttribute("media", media)
-	}
-
-	if(style.styleSheet) {
-		style.styleSheet.cssText = css;
-	} else {
-		while(style.firstChild) {
-			style.removeChild(style.firstChild);
-		}
-
-		style.appendChild(document.createTextNode(css));
-	}
-}
-
-function updateLink (link, options, obj) {
-	var css = obj.css;
-	var sourceMap = obj.sourceMap;
-
-	/*
-		If convertToAbsoluteUrls isn't defined, but sourcemaps are enabled
-		and there is no publicPath defined then lets turn convertToAbsoluteUrls
-		on by default.  Otherwise default to the convertToAbsoluteUrls option
-		directly
-	*/
-	var autoFixUrls = options.convertToAbsoluteUrls === undefined && sourceMap;
-
-	if (options.convertToAbsoluteUrls || autoFixUrls) {
-		css = fixUrls(css);
-	}
-
-	if (sourceMap) {
-		// http://stackoverflow.com/a/26603875
-		css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
-	}
-
-	var blob = new Blob([css], { type: "text/css" });
-
-	var oldSrc = link.href;
-
-	link.href = URL.createObjectURL(blob);
-
-	if(oldSrc) URL.revokeObjectURL(oldSrc);
-}
-
-
-/***/ }),
-/* 4 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var cls = __webpack_require__(14);
-var dom = __webpack_require__(8);
+var dom = __webpack_require__(6);
 
 var toInt = exports.toInt = function (x) {
   return parseInt(x, 10) || 0;
@@ -715,17 +207,17 @@ exports.env = {
 
 
 /***/ }),
-/* 5 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _ = __webpack_require__(4);
+var _ = __webpack_require__(2);
 var cls = __webpack_require__(14);
-var dom = __webpack_require__(8);
-var instances = __webpack_require__(2);
-var updateScroll = __webpack_require__(7);
+var dom = __webpack_require__(6);
+var instances = __webpack_require__(1);
+var updateScroll = __webpack_require__(4);
 
 function getThumbSize(i, thumbSize) {
   if (i.settings.minScrollbarLength) {
@@ -848,40 +340,13 @@ module.exports = function (element) {
 
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 7 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var instances = __webpack_require__(2);
+var instances = __webpack_require__(1);
 
 var createDOMEvent = function (name) {
   var event = document.createEvent("Event");
@@ -976,7 +441,34 @@ module.exports = function (element, axis, value) {
 
 
 /***/ }),
-/* 8 */
+/* 5 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1067,7 +559,7 @@ module.exports = DOM;
 
 
 /***/ }),
-/* 9 */
+/* 7 */
 /***/ (function(module, exports) {
 
 /**
@@ -1093,7 +585,7 @@ module.exports = isLength;
 
 
 /***/ }),
-/* 10 */
+/* 8 */
 /***/ (function(module, exports) {
 
 /**
@@ -1127,6 +619,8 @@ module.exports = isObject;
 
 
 /***/ }),
+/* 9 */,
+/* 10 */,
 /* 11 */
 /***/ (function(module, exports) {
 
@@ -1148,8 +642,8 @@ module.exports = isObjectLike;
 /* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(24),
-    isLength = __webpack_require__(9),
+var getNative = __webpack_require__(23),
+    isLength = __webpack_require__(7),
     isObjectLike = __webpack_require__(11);
 
 /** `Object#toString` result references. */
@@ -1194,9 +688,9 @@ module.exports = isArray;
 /* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(24),
+var getNative = __webpack_require__(23),
     isArrayLike = __webpack_require__(17),
-    isObject = __webpack_require__(10),
+    isObject = __webpack_require__(8),
     shimKeys = __webpack_require__(77);
 
 /* Native method references for those with the same name as other `lodash` methods. */
@@ -1431,7 +925,7 @@ module.exports = getLength;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getLength = __webpack_require__(16),
-    isLength = __webpack_require__(9);
+    isLength = __webpack_require__(7);
 
 /**
  * Checks if `value` is array-like.
@@ -1624,7 +1118,7 @@ function flush() {
 function attemptVertx() {
   try {
     var r = require;
-    var vertx = __webpack_require__(143);
+    var vertx = __webpack_require__(135);
     vertxNext = vertx.runOnLoop || vertx.runOnContext;
     return useVertxTimer();
   } catch (e) {
@@ -2646,7 +2140,7 @@ return Promise;
 
 })));
 //# sourceMappingURL=es6-promise.map
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22), __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31), __webpack_require__(5)))
 
 /***/ }),
 /* 21 */
@@ -2657,9 +2151,9 @@ return Promise;
  */
 
 var Emitter = __webpack_require__(90);
-var reduce = __webpack_require__(138);
-var requestBase = __webpack_require__(140);
-var isObject = __webpack_require__(31);
+var reduce = __webpack_require__(128);
+var requestBase = __webpack_require__(131);
+var isObject = __webpack_require__(33);
 
 /**
  * Root reference for iframes.
@@ -2708,7 +2202,7 @@ function isHost(obj) {
  * Expose `request`.
  */
 
-var request = module.exports = __webpack_require__(141).bind(null, Request);
+var request = module.exports = __webpack_require__(132).bind(null, Request);
 
 /**
  * Determine XHR.
@@ -3733,196 +3227,6 @@ request.put = function(url, data, fn){
 
 /***/ }),
 /* 22 */
-/***/ (function(module, exports) {
-
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-
-/***/ }),
-/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var identity = __webpack_require__(84);
@@ -3967,7 +3271,7 @@ module.exports = bindCallback;
 
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isNative = __webpack_require__(78);
@@ -3989,12 +3293,12 @@ module.exports = getNative;
 
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isArrayLike = __webpack_require__(17),
     isIndex = __webpack_require__(18),
-    isObject = __webpack_require__(10);
+    isObject = __webpack_require__(8);
 
 /**
  * Checks if the provided arguments are from an iteratee call.
@@ -4023,10 +3327,10 @@ module.exports = isIterateeCall;
 
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObject = __webpack_require__(10);
+var isObject = __webpack_require__(8);
 
 /**
  * Converts `value` to an object if it's not one.
@@ -4043,7 +3347,7 @@ module.exports = toObject;
 
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isArrayLike = __webpack_require__(17),
@@ -4083,10 +3387,10 @@ module.exports = isArguments;
 
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObject = __webpack_require__(10);
+var isObject = __webpack_require__(8);
 
 /** `Object#toString` result references. */
 var funcTag = '[object Function]';
@@ -4127,6 +3431,7 @@ module.exports = isFunction;
 
 
 /***/ }),
+/* 28 */,
 /* 29 */
 /***/ (function(module, exports) {
 
@@ -5197,6 +4502,197 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*global define:false */
 /* 31 */
 /***/ (function(module, exports) {
 
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+
+/***/ }),
+/* 32 */,
+/* 33 */
+/***/ (function(module, exports) {
+
 /**
  * Check if `obj` is an object.
  *
@@ -5213,7 +4709,7 @@ module.exports = isObject;
 
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5319,20 +4815,20 @@ __WEBPACK_IMPORTED_MODULE_0_jquery__(function(){
 })
 
 /***/ }),
-/* 33 */
+/* 35 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_dragula__ = __webpack_require__(109);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_dragula__ = __webpack_require__(99);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_dragula___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_dragula__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_jshashes__ = __webpack_require__(122);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_jshashes__ = __webpack_require__(112);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_jshashes___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_jshashes__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_perfect_scrollbar__ = __webpack_require__(123);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_perfect_scrollbar__ = __webpack_require__(113);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_perfect_scrollbar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_perfect_scrollbar__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__editor_sidebar__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__editor_sidebar__ = __webpack_require__(52);
 
 
 
@@ -5669,7 +5165,7 @@ __WEBPACK_IMPORTED_MODULE_0_jquery__(function () {
 
 
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5710,7 +5206,7 @@ __WEBPACK_IMPORTED_MODULE_0_jquery__(function () {
 })
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5745,7 +5241,7 @@ __WEBPACK_IMPORTED_MODULE_0_jquery__(function(){
 })
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5914,7 +5410,7 @@ __WEBPACK_IMPORTED_MODULE_0_jquery__(function () {
 })
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5972,7 +5468,7 @@ __WEBPACK_IMPORTED_MODULE_0_jquery__["fn"].stick = function(options){
 }
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/*!
@@ -8356,669 +7852,31 @@ if (typeof jQuery === 'undefined') {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 39 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(95);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../css-loader/index.js!./bootstrap-tagsinput.css", function() {
-			var newContent = require("!!../../css-loader/index.js!./bootstrap-tagsinput.css");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 40 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(96);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../css-loader/index.js!./perfect-scrollbar.min.css", function() {
-			var newContent = require("!!../../../css-loader/index.js!./perfect-scrollbar.min.css");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 41 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(97);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./admin-toolbar.scss", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./admin-toolbar.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 42 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(98);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./dragula.scss", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./dragula.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 43 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(99);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./editor.scss", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./editor.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 44 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(100);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./folder.scss", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./folder.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 45 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(101);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./index.scss", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./index.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 46 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(102);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./loader.scss", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./loader.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 47 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(103);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./login.scss", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./login.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 48 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(104);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./profile.scss", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./profile.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 49 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(105);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./site-theme.scss", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./site-theme.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 50 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(106);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./toggle.scss", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./toggle.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */,
 /* 51 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
-    "use strict";
-
-    if (global.setImmediate) {
-        return;
-    }
-
-    var nextHandle = 1; // Spec says greater than zero
-    var tasksByHandle = {};
-    var currentlyRunningATask = false;
-    var doc = global.document;
-    var registerImmediate;
-
-    function setImmediate(callback) {
-      // Callback can either be a function or a string
-      if (typeof callback !== "function") {
-        callback = new Function("" + callback);
-      }
-      // Copy function arguments
-      var args = new Array(arguments.length - 1);
-      for (var i = 0; i < args.length; i++) {
-          args[i] = arguments[i + 1];
-      }
-      // Store and register the task
-      var task = { callback: callback, args: args };
-      tasksByHandle[nextHandle] = task;
-      registerImmediate(nextHandle);
-      return nextHandle++;
-    }
-
-    function clearImmediate(handle) {
-        delete tasksByHandle[handle];
-    }
-
-    function run(task) {
-        var callback = task.callback;
-        var args = task.args;
-        switch (args.length) {
-        case 0:
-            callback();
-            break;
-        case 1:
-            callback(args[0]);
-            break;
-        case 2:
-            callback(args[0], args[1]);
-            break;
-        case 3:
-            callback(args[0], args[1], args[2]);
-            break;
-        default:
-            callback.apply(undefined, args);
-            break;
-        }
-    }
-
-    function runIfPresent(handle) {
-        // From the spec: "Wait until any invocations of this algorithm started before this one have completed."
-        // So if we're currently running a task, we'll need to delay this invocation.
-        if (currentlyRunningATask) {
-            // Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
-            // "too much recursion" error.
-            setTimeout(runIfPresent, 0, handle);
-        } else {
-            var task = tasksByHandle[handle];
-            if (task) {
-                currentlyRunningATask = true;
-                try {
-                    run(task);
-                } finally {
-                    clearImmediate(handle);
-                    currentlyRunningATask = false;
-                }
-            }
-        }
-    }
-
-    function installNextTickImplementation() {
-        registerImmediate = function(handle) {
-            process.nextTick(function () { runIfPresent(handle); });
-        };
-    }
-
-    function canUsePostMessage() {
-        // The test against `importScripts` prevents this implementation from being installed inside a web worker,
-        // where `global.postMessage` means something completely different and can't be used for this purpose.
-        if (global.postMessage && !global.importScripts) {
-            var postMessageIsAsynchronous = true;
-            var oldOnMessage = global.onmessage;
-            global.onmessage = function() {
-                postMessageIsAsynchronous = false;
-            };
-            global.postMessage("", "*");
-            global.onmessage = oldOnMessage;
-            return postMessageIsAsynchronous;
-        }
-    }
-
-    function installPostMessageImplementation() {
-        // Installs an event handler on `global` for the `message` event: see
-        // * https://developer.mozilla.org/en/DOM/window.postMessage
-        // * http://www.whatwg.org/specs/web-apps/current-work/multipage/comms.html#crossDocumentMessages
-
-        var messagePrefix = "setImmediate$" + Math.random() + "$";
-        var onGlobalMessage = function(event) {
-            if (event.source === global &&
-                typeof event.data === "string" &&
-                event.data.indexOf(messagePrefix) === 0) {
-                runIfPresent(+event.data.slice(messagePrefix.length));
-            }
-        };
-
-        if (global.addEventListener) {
-            global.addEventListener("message", onGlobalMessage, false);
-        } else {
-            global.attachEvent("onmessage", onGlobalMessage);
-        }
-
-        registerImmediate = function(handle) {
-            global.postMessage(messagePrefix + handle, "*");
-        };
-    }
-
-    function installMessageChannelImplementation() {
-        var channel = new MessageChannel();
-        channel.port1.onmessage = function(event) {
-            var handle = event.data;
-            runIfPresent(handle);
-        };
-
-        registerImmediate = function(handle) {
-            channel.port2.postMessage(handle);
-        };
-    }
-
-    function installReadyStateChangeImplementation() {
-        var html = doc.documentElement;
-        registerImmediate = function(handle) {
-            // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
-            // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
-            var script = doc.createElement("script");
-            script.onreadystatechange = function () {
-                runIfPresent(handle);
-                script.onreadystatechange = null;
-                html.removeChild(script);
-                script = null;
-            };
-            html.appendChild(script);
-        };
-    }
-
-    function installSetTimeoutImplementation() {
-        registerImmediate = function(handle) {
-            setTimeout(runIfPresent, 0, handle);
-        };
-    }
-
-    // If supported, we should attach to the prototype of global, since that is where setTimeout et al. live.
-    var attachTo = Object.getPrototypeOf && Object.getPrototypeOf(global);
-    attachTo = attachTo && attachTo.setTimeout ? attachTo : global;
-
-    // Don't get fooled by e.g. browserify environments.
-    if ({}.toString.call(global.process) === "[object process]") {
-        // For Node.js before 0.9
-        installNextTickImplementation();
-
-    } else if (canUsePostMessage()) {
-        // For non-IE10 modern browsers
-        installPostMessageImplementation();
-
-    } else if (global.MessageChannel) {
-        // For web workers, where supported
-        installMessageChannelImplementation();
-
-    } else if (doc && "onreadystatechange" in doc.createElement("script")) {
-        // For IE 6–8
-        installReadyStateChangeImplementation();
-
-    } else {
-        // For older browsers
-        installSetTimeoutImplementation();
-    }
-
-    attachTo.setImmediate = setImmediate;
-    attachTo.clearImmediate = clearImmediate;
-}(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6), __webpack_require__(22)))
-
-/***/ }),
-/* 52 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var apply = Function.prototype.apply;
-
-// DOM APIs, for completeness
-
-exports.setTimeout = function() {
-  return new Timeout(apply.call(setTimeout, window, arguments), clearTimeout);
-};
-exports.setInterval = function() {
-  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
-};
-exports.clearTimeout =
-exports.clearInterval = function(timeout) {
-  if (timeout) {
-    timeout.close();
-  }
-};
-
-function Timeout(id, clearFn) {
-  this._id = id;
-  this._clearFn = clearFn;
-}
-Timeout.prototype.unref = Timeout.prototype.ref = function() {};
-Timeout.prototype.close = function() {
-  this._clearFn.call(window, this._id);
-};
-
-// Does not start the time, just sets up the members needed.
-exports.enroll = function(item, msecs) {
-  clearTimeout(item._idleTimeoutId);
-  item._idleTimeout = msecs;
-};
-
-exports.unenroll = function(item) {
-  clearTimeout(item._idleTimeoutId);
-  item._idleTimeout = -1;
-};
-
-exports._unrefActive = exports.active = function(item) {
-  clearTimeout(item._idleTimeoutId);
-
-  var msecs = item._idleTimeout;
-  if (msecs >= 0) {
-    item._idleTimeoutId = setTimeout(function onTimeout() {
-      if (item._onTimeout)
-        item._onTimeout();
-    }, msecs);
-  }
-};
-
-// setimmediate attaches itself to the global object
-__webpack_require__(51);
-exports.setImmediate = setImmediate;
-exports.clearImmediate = clearImmediate;
-
-
-/***/ }),
-/* 53 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_bootstrap_dist_js_bootstrap__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_bootstrap_dist_js_bootstrap__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_bootstrap_dist_js_bootstrap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_bootstrap_dist_js_bootstrap__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__scripts_sticky__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__scripts_portrait_landscape__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__scripts_editor__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__scripts_admin_toolbar__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__scripts_remember_login__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__scripts_profile__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_bootstrap_tagsinput_dist_bootstrap_tagsinput_css__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_bootstrap_tagsinput_dist_bootstrap_tagsinput_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_bootstrap_tagsinput_dist_bootstrap_tagsinput_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_perfect_scrollbar_dist_css_perfect_scrollbar_min_css__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_perfect_scrollbar_dist_css_perfect_scrollbar_min_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_perfect_scrollbar_dist_css_perfect_scrollbar_min_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__styles_index_scss__ = __webpack_require__(45);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__styles_index_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__styles_index_scss__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__styles_loader_scss__ = __webpack_require__(46);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__styles_loader_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11__styles_loader_scss__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__styles_site_theme_scss__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__styles_site_theme_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12__styles_site_theme_scss__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__styles_folder_scss__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__styles_folder_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_13__styles_folder_scss__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__styles_dragula_scss__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__styles_dragula_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_14__styles_dragula_scss__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__styles_login_scss__ = __webpack_require__(47);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__styles_login_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_15__styles_login_scss__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__styles_toggle_scss__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__styles_toggle_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_16__styles_toggle_scss__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__styles_admin_toolbar_scss__ = __webpack_require__(41);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__styles_admin_toolbar_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_17__styles_admin_toolbar_scss__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__styles_profile_scss__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__styles_profile_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_18__styles_profile_scss__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__styles_editor_scss__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__styles_editor_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_19__styles_editor_scss__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__scripts_sticky__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__scripts_portrait_landscape__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__scripts_editor__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__scripts_admin_toolbar__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__scripts_remember_login__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__scripts_profile__ = __webpack_require__(37);
 //Libs (probably needs addressing)
 
 
@@ -9031,22 +7889,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-//styles
-
-
-
-
-
-
-
-
-
-
-
-
 
 /***/ }),
-/* 54 */
+/* 52 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9058,7 +7903,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-var Dropbox = __webpack_require__(113)
+var Dropbox = __webpack_require__(103)
 var BootstrapMenu = __webpack_require__(87);
 var dbx = new Dropbox({ accessToken: '9x3oXu1QUfAAAAAAAAAQhpuxPKAV8iQfdN3ZljlNfCaf9WCY2TBxWly8WymlraLV' });
 
@@ -9353,6 +8198,8 @@ function sidebar() {
 }
 
 /***/ }),
+/* 53 */,
+/* 54 */,
 /* 55 */
 /***/ (function(module, exports) {
 
@@ -9423,8 +8270,8 @@ module.exports = forEach;
 var baseIndexOf = __webpack_require__(68),
     getLength = __webpack_require__(16),
     isArray = __webpack_require__(12),
-    isIterateeCall = __webpack_require__(25),
-    isLength = __webpack_require__(9),
+    isIterateeCall = __webpack_require__(24),
+    isLength = __webpack_require__(7),
     isString = __webpack_require__(79),
     values = __webpack_require__(83);
 
@@ -9834,8 +8681,8 @@ module.exports = baseValues;
 /* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var bindCallback = __webpack_require__(23),
-    isIterateeCall = __webpack_require__(25),
+var bindCallback = __webpack_require__(22),
+    isIterateeCall = __webpack_require__(24),
     restParam = __webpack_require__(60);
 
 /**
@@ -9882,8 +8729,8 @@ module.exports = createAssigner;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getLength = __webpack_require__(16),
-    isLength = __webpack_require__(9),
-    toObject = __webpack_require__(26);
+    isLength = __webpack_require__(7),
+    toObject = __webpack_require__(25);
 
 /**
  * Creates a `baseEach` or `baseEachRight` function.
@@ -9918,7 +8765,7 @@ module.exports = createBaseEach;
 /* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var toObject = __webpack_require__(26);
+var toObject = __webpack_require__(25);
 
 /**
  * Creates a base function for `_.forIn` or `_.forInRight`.
@@ -9951,7 +8798,7 @@ module.exports = createBaseFor;
 /* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var bindCallback = __webpack_require__(23),
+var bindCallback = __webpack_require__(22),
     isArray = __webpack_require__(12);
 
 /**
@@ -10006,10 +8853,10 @@ module.exports = indexOfNaN;
 /* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isArguments = __webpack_require__(27),
+var isArguments = __webpack_require__(26),
     isArray = __webpack_require__(12),
     isIndex = __webpack_require__(18),
-    isLength = __webpack_require__(9),
+    isLength = __webpack_require__(7),
     keysIn = __webpack_require__(82);
 
 /** Used for native method references. */
@@ -10053,7 +8900,7 @@ module.exports = shimKeys;
 /* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isFunction = __webpack_require__(28),
+var isFunction = __webpack_require__(27),
     isObjectLike = __webpack_require__(11);
 
 /** Used to detect host constructors (Safari > 5). */
@@ -10204,11 +9051,11 @@ module.exports = __webpack_require__(80);
 /* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isArguments = __webpack_require__(27),
+var isArguments = __webpack_require__(26),
     isArray = __webpack_require__(12),
     isIndex = __webpack_require__(18),
-    isLength = __webpack_require__(9),
-    isObject = __webpack_require__(10);
+    isLength = __webpack_require__(7),
+    isObject = __webpack_require__(8);
 
 /** Used for native method references. */
 var objectProto = Object.prototype;
@@ -10402,7 +9249,7 @@ module.exports = uniqueId;
 
 var classNames = __webpack_require__(89);
 var $ = __webpack_require__(0);
-__webpack_require__(119);
+__webpack_require__(109);
 
 // modular lodash requires
 var _ = function() {
@@ -10414,7 +9261,7 @@ _.each = __webpack_require__(57);
 _.contains = __webpack_require__(56);
 _.extend = __webpack_require__(81);
 _.uniqueId = __webpack_require__(86);
-_.isFunction = __webpack_require__(28);
+_.isFunction = __webpack_require__(27);
 
 
 var defaultOptions = {
@@ -11497,7 +10344,7 @@ module.exports = BootstrapMenu;
   $(function() {
     $("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput();
   });
-})(window.$);
+})(window.jQuery);
 
 
 /***/ }),
@@ -11731,7 +10578,7 @@ Emitter.prototype.hasListeners = function(event){
 "use strict";
 
 
-var ticky = __webpack_require__(142);
+var ticky = __webpack_require__(133);
 
 module.exports = function debounce (fn, args, ctx) {
   if (!fn) { return; }
@@ -11809,7 +10656,7 @@ module.exports = function emitter (thing, options) {
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 
-var customEvent = __webpack_require__(107);
+var customEvent = __webpack_require__(97);
 var eventmap = __webpack_require__(94);
 var doc = global.document;
 var addEvent = addEventEasy;
@@ -11909,7 +10756,7 @@ function find (el, type, fn) {
   }
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
 /* 94 */
@@ -11930,178 +10777,12 @@ for (eventname in global) {
 
 module.exports = eventmap;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
-/* 95 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, ".bootstrap-tagsinput {\n  background-color: #fff;\n  border: 1px solid #ccc;\n  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);\n  display: inline-block;\n  padding: 4px 6px;\n  color: #555;\n  vertical-align: middle;\n  border-radius: 4px;\n  max-width: 100%;\n  line-height: 22px;\n  cursor: text;\n}\n.bootstrap-tagsinput input {\n  border: none;\n  box-shadow: none;\n  outline: none;\n  background-color: transparent;\n  padding: 0 6px;\n  margin: 0;\n  width: auto;\n  max-width: inherit;\n}\n.bootstrap-tagsinput.form-control input::-moz-placeholder {\n  color: #777;\n  opacity: 1;\n}\n.bootstrap-tagsinput.form-control input:-ms-input-placeholder {\n  color: #777;\n}\n.bootstrap-tagsinput.form-control input::-webkit-input-placeholder {\n  color: #777;\n}\n.bootstrap-tagsinput input:focus {\n  border: none;\n  box-shadow: none;\n}\n.bootstrap-tagsinput .tag {\n  margin-right: 2px;\n  color: white;\n}\n.bootstrap-tagsinput .tag [data-role=\"remove\"] {\n  margin-left: 8px;\n  cursor: pointer;\n}\n.bootstrap-tagsinput .tag [data-role=\"remove\"]:after {\n  content: \"x\";\n  padding: 0px 2px;\n}\n.bootstrap-tagsinput .tag [data-role=\"remove\"]:hover {\n  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);\n}\n.bootstrap-tagsinput .tag [data-role=\"remove\"]:hover:active {\n  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 96 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "/* perfect-scrollbar v0.7.1 */\n.ps{-ms-touch-action:auto;touch-action:auto;overflow:hidden !important;-ms-overflow-style:none}@supports (-ms-overflow-style: none){.ps{overflow:auto !important}}@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none){.ps{overflow:auto !important}}.ps.ps--active-x>.ps__scrollbar-x-rail,.ps.ps--active-y>.ps__scrollbar-y-rail{display:block;background-color:transparent}.ps.ps--in-scrolling.ps--x>.ps__scrollbar-x-rail{background-color:#eee;opacity:.9}.ps.ps--in-scrolling.ps--x>.ps__scrollbar-x-rail>.ps__scrollbar-x{background-color:#999;height:11px}.ps.ps--in-scrolling.ps--y>.ps__scrollbar-y-rail{background-color:#eee;opacity:.9}.ps.ps--in-scrolling.ps--y>.ps__scrollbar-y-rail>.ps__scrollbar-y{background-color:#999;width:11px}.ps>.ps__scrollbar-x-rail{display:none;position:absolute;opacity:0;-webkit-transition:background-color .2s linear, opacity .2s linear;-moz-transition:background-color .2s linear, opacity .2s linear;-o-transition:background-color .2s linear, opacity .2s linear;transition:background-color .2s linear, opacity .2s linear;bottom:0px;height:15px}.ps>.ps__scrollbar-x-rail>.ps__scrollbar-x{position:absolute;background-color:#aaa;-webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px;-webkit-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;-moz-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;-o-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -webkit-border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;bottom:2px;height:6px}.ps>.ps__scrollbar-x-rail:hover>.ps__scrollbar-x,.ps>.ps__scrollbar-x-rail:active>.ps__scrollbar-x{height:11px}.ps>.ps__scrollbar-y-rail{display:none;position:absolute;opacity:0;-webkit-transition:background-color .2s linear, opacity .2s linear;-moz-transition:background-color .2s linear, opacity .2s linear;-o-transition:background-color .2s linear, opacity .2s linear;transition:background-color .2s linear, opacity .2s linear;right:0;width:15px}.ps>.ps__scrollbar-y-rail>.ps__scrollbar-y{position:absolute;background-color:#aaa;-webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px;-webkit-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;-moz-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;-o-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -webkit-border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;right:2px;width:6px}.ps>.ps__scrollbar-y-rail:hover>.ps__scrollbar-y,.ps>.ps__scrollbar-y-rail:active>.ps__scrollbar-y{width:11px}.ps:hover.ps--in-scrolling.ps--x>.ps__scrollbar-x-rail{background-color:#eee;opacity:.9}.ps:hover.ps--in-scrolling.ps--x>.ps__scrollbar-x-rail>.ps__scrollbar-x{background-color:#999;height:11px}.ps:hover.ps--in-scrolling.ps--y>.ps__scrollbar-y-rail{background-color:#eee;opacity:.9}.ps:hover.ps--in-scrolling.ps--y>.ps__scrollbar-y-rail>.ps__scrollbar-y{background-color:#999;width:11px}.ps:hover>.ps__scrollbar-x-rail,.ps:hover>.ps__scrollbar-y-rail{opacity:.6}.ps:hover>.ps__scrollbar-x-rail:hover{background-color:#eee;opacity:.9}.ps:hover>.ps__scrollbar-x-rail:hover>.ps__scrollbar-x{background-color:#999}.ps:hover>.ps__scrollbar-y-rail:hover{background-color:#eee;opacity:.9}.ps:hover>.ps__scrollbar-y-rail:hover>.ps__scrollbar-y{background-color:#999}\n", ""]);
-
-// exports
-
-
-/***/ }),
+/* 95 */,
+/* 96 */,
 /* 97 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "#admin-toolbar {\n  z-index: 9999;\n  width: 100%;\n  position: fixed;\n  border-radius: 0;\n  border: 0;\n  border-bottom: 1px solid rgba(255, 255, 255, 0.1);\n  background-color: #171717;\n  margin-bottom: 0; }\n  #admin-toolbar .navbar-nav > .open > a {\n    background-color: rgba(255, 255, 255, 0); }\n  #admin-toolbar .collapsing > ul > li,\n  #admin-toolbar .collapse > ul > li {\n    text-transform: uppercase;\n    letter-spacing: 2px; }\n    #admin-toolbar .collapsing > ul > li.active > a,\n    #admin-toolbar .collapse > ul > li.active > a {\n      background-color: rgba(255, 255, 255, 0);\n      color: #fff; }\n    #admin-toolbar .collapsing > ul > li .dropdown-menu,\n    #admin-toolbar .collapse > ul > li .dropdown-menu {\n      width: 100%;\n      margin-top: -1px;\n      border-radius: 0;\n      background-color: #171717;\n      letter-spacing: normal;\n      text-transform: none; }\n      #admin-toolbar .collapsing > ul > li .dropdown-menu > li > a,\n      #admin-toolbar .collapse > ul > li .dropdown-menu > li > a {\n        color: #9d9d9d; }\n        #admin-toolbar .collapsing > ul > li .dropdown-menu > li > a:hover,\n        #admin-toolbar .collapse > ul > li .dropdown-menu > li > a:hover {\n          color: #fff;\n          background-color: rgba(255, 255, 255, 0); }\n      #admin-toolbar .collapsing > ul > li .dropdown-menu .divider,\n      #admin-toolbar .collapse > ul > li .dropdown-menu .divider {\n        height: 2px;\n        margin: 0 auto;\n        background-color: rgba(255, 255, 255, 0);\n        background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHklEQVQYV2NkwAIY8Qr+///fl5GRcTNIEX6VyMYAANDMBAYBjpzVAAAAAElFTkSuQmCC\"); }\n  #admin-toolbar .navbar-user .dropdown-toggle {\n    padding-top: 4px;\n    padding-bottom: 4px; }\n  #admin-toolbar .navbar-user .toolbar-username {\n    line-height: 3;\n    padding-right: 10px; }\n  #admin-toolbar .navbar-user .toolbar-avatar,\n  #admin-toolbar .navbar-user .toolbar-username {\n    float: left; }\n  #admin-toolbar .navbar-user .toolbar-avatar {\n    background-size: cover;\n    background-position: center;\n    border-radius: 9999em;\n    height: 40px;\n    width: 40px;\n    display: inline-block; }\n\n#page-top .progress {\n  transition: height .3s;\n  height: 0;\n  background-color: rgba(255, 255, 255, 0);\n  margin-bottom: 0;\n  border-radius: 0;\n  position: absolute;\n  bottom: 0;\n  width: 100%;\n  z-index: 9999; }\n\n#page-top .progress.active {\n  height: 2px; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 98 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, ".gu-mirror {\n  position: fixed !important;\n  margin: 0 !important;\n  z-index: 9999 !important;\n  opacity: 0.8;\n  -ms-filter: \"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)\";\n  filter: alpha(opacity=80); }\n\n.gu-hide {\n  display: none !important; }\n\n.gu-unselectable {\n  -webkit-user-select: none !important;\n  -moz-user-select: none !important;\n  -ms-user-select: none !important;\n  user-select: none !important; }\n\n.gu-transit {\n  opacity: 0.2;\n  -ms-filter: \"progid:DXImageTransform.Microsoft.Alpha(Opacity=20)\";\n  filter: alpha(opacity=20); }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 99 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "body.editor {\n  background-color: #111; }\n  body.editor .sidebar {\n    overflow: hidden;\n    height: 100%;\n    position: fixed;\n    left: 0;\n    background-color: inherit;\n    border-right: 1px solid rgba(255, 255, 255, 0.1);\n    padding-top: 30px; }\n    body.editor .sidebar header {\n      margin-bottom: 30px; }\n    body.editor .sidebar .collection-photo-list {\n      width: 100%;\n      clear: both; }\n    body.editor .sidebar .list-group-item {\n      opacity: .3;\n      user-select: none; }\n      body.editor .sidebar .list-group-item .status {\n        display: none; }\n      body.editor .sidebar .list-group-item.selected {\n        background-color: #45454b; }\n      body.editor .sidebar .list-group-item.downloading {\n        background-color: #43c8bc; }\n      body.editor .sidebar .list-group-item.valid {\n        opacity: 1; }\n        body.editor .sidebar .list-group-item.valid .status {\n          display: inline-block; }\n        body.editor .sidebar .list-group-item.valid .photo-thumbnail {\n          display: inline-block; }\n      body.editor .sidebar .list-group-item:hover {\n        background-color: #2d2d30;\n        border-radius: 2px;\n        cursor: default; }\n        body.editor .sidebar .list-group-item:hover.selected {\n          background-color: #45454b; }\n        body.editor .sidebar .list-group-item:hover > * {\n          cursor: inherit; }\n      body.editor .sidebar .list-group-item .photo-thumbnail {\n        display: none;\n        width: 20px;\n        height: 20px;\n        float: left;\n        background-size: cover;\n        margin-right: 15px; }\n  body.editor .gu-mirror.photo-tile {\n    background-position: center;\n    background-repeat: no-repeat;\n    background-color: #111;\n    background-size: cover;\n    cursor: move;\n    cursor: -webkit-grabbing; }\n    body.editor .gu-mirror.photo-tile > * {\n      display: none; }\n    body.editor .gu-mirror.photo-tile > .photo-tile-photo {\n      display: block;\n      height: 100%;\n      background-position: center;\n      background-repeat: no-repeat;\n      background-color: #111;\n      background-size: cover; }\n    body.editor .gu-mirror.photo-tile.disabled .photo-tile-photo {\n      opacity: .3;\n      filter: blur(2px); }\n  body.editor .editor-collection-panel {\n    width: 100%;\n    min-height: 400px;\n    overflow: hidden;\n    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHklEQVQYV2NkwAIY8Qr+///fl5GRcTNIEX6VyMYAANDMBAYBjpzVAAAAAElFTkSuQmCC);\n    margin-bottom: 80px;\n    border: 1px solid rgba(255, 255, 255, 0.1); }\n    body.editor .editor-collection-panel:first-child {\n      margin-top: 35px; }\n    body.editor .editor-collection-panel .editor-collection-photo {\n      background-repeat: no-repeat;\n      height: 490px;\n      box-sizing: border-box;\n      display: block;\n      float: left;\n      height: 400px;\n      cursor: default;\n      user-select: none;\n      background-color: #000;\n      margin-bottom: 20px;\n      margin-top: 20px;\n      margin-right: 25px;\n      background-position: center; }\n      body.editor .editor-collection-panel .editor-collection-photo.orientation-landscape {\n        width: 780px;\n        background-size: cover; }\n      body.editor .editor-collection-panel .editor-collection-photo.orientation-portrait {\n        width: 490px;\n        background-size: contain; }\n      body.editor .editor-collection-panel .editor-collection-photo.orientation-even {\n        background-size: cover;\n        width: 490px; }\n      body.editor .editor-collection-panel .editor-collection-photo:last-child {\n        margin-right: 0; }\n    body.editor .editor-collection-panel .editor-collection-meta .editor-collection-description {\n      margin-top: 10px;\n      color: #9e9e9e;\n      padding: 20px;\n      margin: 0;\n      padding-top: 0;\n      background-color: rgba(17, 17, 17, 0.8); }\n    body.editor .editor-collection-panel .editor-collection-meta .editor-collection-name {\n      color: #f1f1f1;\n      text-transform: capitalize;\n      display: table;\n      margin: 0;\n      padding: 20px;\n      padding-bottom: 10px;\n      background-color: rgba(17, 17, 17, 0.8); }\n      body.editor .editor-collection-panel .editor-collection-meta .editor-collection-name::after {\n        margin-top: 10px;\n        content: \"\";\n        background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2PQ19f/DwACqwGNmN/oeAAAAABJRU5ErkJggg==\");\n        background-position: 20px bottom;\n        padding-left: 20px;\n        background-repeat: repeat no-repeat;\n        background-size: 100% 2px;\n        height: 1px;\n        width: 100%;\n        display: table-cell; }\n    body.editor .editor-collection-panel .editor-collection-controls {\n      padding: 20px;\n      border-top: 1px solid rgba(255, 255, 255, 0.1);\n      background-color: rgba(17, 17, 17, 0.8); }\n      body.editor .editor-collection-panel .editor-collection-controls .btn.btn-link {\n        margin-left: 20px;\n        outline: 0;\n        text-decoration: none;\n        color: #f1f1f1; }\n    body.editor .editor-collection-panel .editor-collection-tags {\n      margin: 10px 5px;\n      display: none; }\n    body.editor .editor-collection-panel main {\n      background-color: rgba(17, 17, 17, 0.8); }\n      body.editor .editor-collection-panel main .rail {\n        width: 9999em; }\n  body.editor .modal-delete-collection {\n    z-index: 9999;\n    top: 0px; }\n    body.editor .modal-delete-collection .modal-dialog {\n      width: 100%;\n      margin-top: 0;\n      display: flex; }\n    body.editor .modal-delete-collection .modal-content {\n      min-width: 80%;\n      margin: 0 auto;\n      display: table;\n      justify-content: space-around;\n      min-width: inherit;\n      background-color: #222;\n      border-radius: 2px;\n      border: 1px solid rgba(255, 255, 255, 0.1); }\n      body.editor .modal-delete-collection .modal-content .modal-body {\n        display: table-cell;\n        color: #fff; }\n        body.editor .modal-delete-collection .modal-content .modal-body:before {\n          content: \"Danger\";\n          background-color: #a94442;\n          display: inline-block;\n          cursor: default;\n          user-select: none;\n          text-transform: capitalize;\n          font-weight: bold;\n          padding: 5px 10px;\n          color: #fff;\n          font-size: .8em; }\n        body.editor .modal-delete-collection .modal-content .modal-body p {\n          margin: 3px 10px;\n          margin-right: 30px;\n          display: inline-block; }\n      body.editor .modal-delete-collection .modal-content .modal-footer {\n        background-color: #a94442;\n        color: #fff;\n        display: table-cell;\n        border: 0;\n        padding: 0; }\n        body.editor .modal-delete-collection .modal-content .modal-footer .btn.btn-link {\n          color: #fff;\n          text-decoration: none;\n          float: right;\n          outline: 0; }\n          body.editor .modal-delete-collection .modal-content .modal-footer .btn.btn-link:hover {\n            background-color: rgba(255, 255, 255, 0.1); }\n      body.editor .modal-delete-collection .modal-content .modal-body {\n        padding: 3px; }\n  body.editor .modal.edit-collection,\n  body.editor .modal.add-collection {\n    z-index: 9999; }\n    body.editor .modal.edit-collection .collection-group .collection-name,\n    body.editor .modal.add-collection .collection-group .collection-name {\n      border-bottom-left-radius: 0;\n      border-bottom-right-radius: 0;\n      box-shadow: 0;\n      border: 0; }\n    body.editor .modal.edit-collection .collection-group .collection-description,\n    body.editor .modal.add-collection .collection-group .collection-description {\n      border-top-left-radius: 0;\n      border-top-right-radius: 0; }\n    body.editor .modal.edit-collection textarea,\n    body.editor .modal.add-collection textarea {\n      resize: vertical; }\n    body.editor .modal.edit-collection h5,\n    body.editor .modal.edit-collection h4,\n    body.editor .modal.add-collection h5,\n    body.editor .modal.add-collection h4 {\n      color: #9d9d9d; }\n    body.editor .modal.edit-collection .modal-dialog,\n    body.editor .modal.add-collection .modal-dialog {\n      width: calc(100% - 60px);\n      position: fixed;\n      bottom: 0;\n      top: 40px;\n      left: 0;\n      right: 0; }\n      body.editor .modal.edit-collection .modal-dialog .modal-content,\n      body.editor .modal.add-collection .modal-dialog .modal-content {\n        height: 100%;\n        background: #222;\n        border-radius: 2px;\n        border: 1px solid rgba(255, 255, 255, 0.1);\n        overflow: hidden; }\n        body.editor .modal.edit-collection .modal-dialog .modal-content .modal-header,\n        body.editor .modal.add-collection .modal-dialog .modal-content .modal-header {\n          border-bottom: 0; }\n          body.editor .modal.edit-collection .modal-dialog .modal-content .modal-header h4,\n          body.editor .modal.add-collection .modal-dialog .modal-content .modal-header h4 {\n            float: left; }\n          body.editor .modal.edit-collection .modal-dialog .modal-content .modal-header .close,\n          body.editor .modal.add-collection .modal-dialog .modal-content .modal-header .close {\n            line-height: 2;\n            float: right;\n            color: #f1f1f1;\n            text-shadow: none;\n            opacity: 1; }\n            body.editor .modal.edit-collection .modal-dialog .modal-content .modal-header .close > span,\n            body.editor .modal.add-collection .modal-dialog .modal-content .modal-header .close > span {\n              opacity: 1; }\n        body.editor .modal.edit-collection .modal-dialog .modal-content > main,\n        body.editor .modal.add-collection .modal-dialog .modal-content > main {\n          background-color: #2e2e2e;\n          height: 100%;\n          height: calc(100% - (65px * 2));\n          padding-bottom: 140px;\n          border-top: 1px solid rgba(255, 255, 255, 0.1);\n          border-left: 1px solid rgba(255, 255, 255, 0.1);\n          overflow-x: auto; }\n          body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile,\n          body.editor .modal.add-collection .modal-dialog .modal-content > main .tile {\n            min-height: 260px;\n            overflow: hidden;\n            border: 1px solid #444;\n            cursor: move;\n            cursor: -webkit-grab;\n            transition: opacity .3s;\n            position: relative;\n            float: left;\n            height: 50%;\n            height: calc(50% - 20px);\n            width: 20%;\n            width: calc(20% - 10px);\n            margin-right: calc(10px);\n            margin-top: 20px;\n            background-color: rgba(0, 0, 0, 0.2); }\n            body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile .photo-tile-photo,\n            body.editor .modal.add-collection .modal-dialog .modal-content > main .tile .photo-tile-photo {\n              background-position: center;\n              background-repeat: no-repeat;\n              background-color: #111;\n              background-size: cover; }\n            body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile.portrait,\n            body.editor .modal.add-collection .modal-dialog .modal-content > main .tile.portrait {\n              background-size: contain; }\n              body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile.portrait .photo-tile-photo,\n              body.editor .modal.add-collection .modal-dialog .modal-content > main .tile.portrait .photo-tile-photo {\n                background-size: contain; }\n            body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile.photo-tile:before,\n            body.editor .modal.add-collection .modal-dialog .modal-content > main .tile.photo-tile:before {\n              z-index: 1;\n              transition: all .3s ease-in-out;\n              content: \"\";\n              display: block;\n              background-color: rgba(0, 0, 0, 0.5);\n              height: 100%;\n              width: 100%;\n              position: absolute;\n              opacity: 0; }\n            body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile.photo-tile > *,\n            body.editor .modal.add-collection .modal-dialog .modal-content > main .tile.photo-tile > * {\n              transition: opacity .3s;\n              opacity: 0; }\n            body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile.photo-tile.show-controls:before,\n            body.editor .modal.add-collection .modal-dialog .modal-content > main .tile.photo-tile.show-controls:before {\n              height: 100%;\n              width: 100%;\n              opacity: 1; }\n            body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile.photo-tile.show-controls > *,\n            body.editor .modal.add-collection .modal-dialog .modal-content > main .tile.photo-tile.show-controls > * {\n              opacity: 1; }\n            body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile.disabled .photo-tile-photo,\n            body.editor .modal.add-collection .modal-dialog .modal-content > main .tile.disabled .photo-tile-photo {\n              opacity: .3;\n              filter: blur(2px); }\n            body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile .photo-tile-photo,\n            body.editor .modal.add-collection .modal-dialog .modal-content > main .tile .photo-tile-photo {\n              height: 100%;\n              opacity: 1; }\n            body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile.add-placeholder,\n            body.editor .modal.add-collection .modal-dialog .modal-content > main .tile.add-placeholder {\n              background-color: transparent;\n              color: #9d9d9d;\n              border: 1px dashed;\n              cursor: pointer;\n              position: relative; }\n              body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile.add-placeholder:before,\n              body.editor .modal.add-collection .modal-dialog .modal-content > main .tile.add-placeholder:before {\n                content: \"+ Add Photo\";\n                font-size: 25px;\n                position: absolute;\n                top: 50%;\n                left: 50%;\n                transform: translate(-50%, -50%); }\n              body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile.add-placeholder .photo-upload-target,\n              body.editor .modal.add-collection .modal-dialog .modal-content > main .tile.add-placeholder .photo-upload-target {\n                position: absolute;\n                top: -50px;\n                outline: 0;\n                bottom: 0;\n                left: 0;\n                right: 0;\n                display: block;\n                opacity: .1;\n                cursor: pointer;\n                width: 100%; }\n            body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile header,\n            body.editor .modal.add-collection .modal-dialog .modal-content > main .tile header {\n              position: absolute;\n              width: 100%;\n              z-index: 9999;\n              background: -moz-linear-gradient(top, rgba(0, 0, 0, 0.65) 20%, transparent 100%);\n              background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.65) 20%, transparent 100%);\n              background: linear-gradient(to bottom, rgba(0, 0, 0, 0.65) 20%, transparent 100%);\n              cursor: default;\n              padding: 6px 12px; }\n              body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile header [data-toggleswitch],\n              body.editor .modal.add-collection .modal-dialog .modal-content > main .tile header [data-toggleswitch] {\n                margin-bottom: 0;\n                margin-top: 4px;\n                margin-right: 2px;\n                cursor: pointer; }\n              body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile header .photo-enebled-text,\n              body.editor .modal.add-collection .modal-dialog .modal-content > main .tile header .photo-enebled-text {\n                display: table-cell;\n                vertical-align: middle;\n                color: #fff;\n                user-select: none; }\n                body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile header .photo-enebled-text .enabled-text,\n                body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile header .photo-enebled-text .disabled-text,\n                body.editor .modal.add-collection .modal-dialog .modal-content > main .tile header .photo-enebled-text .enabled-text,\n                body.editor .modal.add-collection .modal-dialog .modal-content > main .tile header .photo-enebled-text .disabled-text {\n                  cursor: default;\n                  user-select: none;\n                  color: #9d9d9d; }\n              body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile header .close,\n              body.editor .modal.add-collection .modal-dialog .modal-content > main .tile header .close {\n                color: #fff;\n                opacity: 1;\n                text-shadow: none; }\n            body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile footer,\n            body.editor .modal.add-collection .modal-dialog .modal-content > main .tile footer {\n              z-index: 9999;\n              background: -moz-linear-gradient(top, transparent 0%, rgba(0, 0, 0, 0.65) 100%);\n              background: -webkit-linear-gradient(top, transparent 0%, rgba(0, 0, 0, 0.65) 100%);\n              background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.65) 100%);\n              position: absolute;\n              bottom: 0;\n              left: 0;\n              right: 0; }\n              body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile footer textarea,\n              body.editor .modal.add-collection .modal-dialog .modal-content > main .tile footer textarea {\n                background: transparent;\n                width: 100%;\n                float: left;\n                resize: none;\n                padding: 6px 12px;\n                color: #f1f1f1;\n                border: 0;\n                outline: 0; }\n                body.editor .modal.edit-collection .modal-dialog .modal-content > main .tile footer textarea:focus,\n                body.editor .modal.add-collection .modal-dialog .modal-content > main .tile footer textarea:focus {\n                  background-color: rgba(0, 0, 0, 0.1); }\n        body.editor .modal.edit-collection .modal-dialog .modal-content > aside,\n        body.editor .modal.add-collection .modal-dialog .modal-content > aside {\n          max-height: calc(100% - 70px);\n          overflow: auto; }\n          body.editor .modal.edit-collection .modal-dialog .modal-content > aside .bootstrap-tagsinput,\n          body.editor .modal.add-collection .modal-dialog .modal-content > aside .bootstrap-tagsinput {\n            width: 100%;\n            user-select: none; }\n        body.editor .modal.edit-collection .modal-dialog .modal-content > footer,\n        body.editor .modal.add-collection .modal-dialog .modal-content > footer {\n          background-color: #2e2e2e;\n          border-left: 1px solid rgba(255, 255, 255, 0.1);\n          position: absolute;\n          bottom: 0;\n          right: 0;\n          z-index: 9999;\n          border-top: 1px solid rgba(255, 255, 255, 0.1); }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 100 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, ".folder {\n  background-color: #3781a6;\n  border-top-size: 2px;\n  border-top-style: solid;\n  border-color: #2f6e8d;\n  width: 35px;\n  height: 22px;\n  border-radius: 2px;\n  cursor: pointer;\n  position: relative;\n  color: #fff; }\n  .folder.folder-dropbox:after {\n    content: '\\F340';\n    font: normal normal normal 14px/1 'Material-Design-Iconic-Font';\n    text-align: center;\n    display: block;\n    line-height: 1.6; }\n\n.folder-row:hover .folder {\n  background-color: #67abcd;\n  border-color: #56a1c7; }\n\n.folder-row:hover .folder:before {\n  background-color: #56a1c7; }\n\n.folder:before {\n  content: '';\n  width: 20px;\n  height: 3px;\n  background-color: #2f6e8d;\n  display: block;\n  margin-top: -5px;\n  border-top-left-radius: 4px;\n  border-top-right-radius: 5px; }\n\n.folder-tree {\n  height: 100vh;\n  height: calc(100vh - 50px);\n  overflow: auto;\n  padding-top: 10px;\n  border-top: 2px solid rgba(255, 255, 255, 0.1); }\n  .folder-tree h5 {\n    padding: 10px;\n    color: #9d9d9d; }\n\n.folder-row {\n  margin-top: 15px;\n  cursor: pointer; }\n  .folder-row h4 {\n    color: #9d9d9d;\n    font-size: 16px;\n    margin: 3px 0;\n    padding-left: 15px; }\n  .folder-row:hover h4 {\n    color: #fff; }\n  .folder-row > * {\n    float: left; }\n  .folder-row + .list-group .list-group-item {\n    border: 0;\n    color: #9e9e9e;\n    background-color: transparent;\n    width: 100%;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis; }\n  .folder-row .dropdown-toggle {\n    background-color: transparent;\n    color: #f1f1f1;\n    border: 0; }\n  .folder-row.loading .spinner {\n    float: right;\n    width: 15px;\n    margin-right: 10px; }\n  .folder-row.loading .folder {\n    opacity: .3; }\n  .folder-row.loading:hover .folder {\n    background-color: #3781a6;\n    border-color: #2f6e8d; }\n  .folder-row.loading:hover .folder:before {\n    background-color: #2f6e8d; }\n  .folder-row.loading h4 {\n    color: #777; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 101 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(undefined);
-// imports
-exports.push([module.i, "@import url(https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css);", ""]);
-
-// module
-exports.push([module.i, "html,\nbody {\n  height: 100%; }\n\n.btn-group-pill {\n  display: inline-block; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 102 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, ".loader {\n  height: 4px;\n  width: 100%;\n  position: relative;\n  overflow: hidden;\n  background-color: #ddd; }\n\n.loader:before {\n  display: block;\n  position: absolute;\n  content: \"\";\n  left: -200px;\n  width: 200px;\n  height: 4px;\n  background-color: #2980b9;\n  animation: loading 2s linear infinite; }\n\n@keyframes loading {\n  from {\n    left: -200px;\n    width: 30%; }\n  50% {\n    width: 30%; }\n  70% {\n    width: 70%; }\n  80% {\n    left: 50%; }\n  95% {\n    left: 120%; }\n  to {\n    left: 100%; } }\n\n@keyframes spinner {\n  to {\n    transform: rotate(360deg); } }\n\n.spinner {\n  display: inline-block;\n  position: relative; }\n\n.spinner:before {\n  position: absolute;\n  content: '';\n  box-sizing: border-box;\n  width: 15px;\n  height: 15px;\n  border-radius: 50%;\n  border: 1px solid rgba(255, 255, 255, 0.2);\n  border-top-color: #67ABCD;\n  animation: spinner .6s linear infinite; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 103 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "body.page-login {\n  background-image: url(\"https://scontent-cdg2-1.xx.fbcdn.net/v/t1.0-9/17990680_1299392930109258_3457878154051037142_n.jpg?oh=fceba9bb78d51e08659a34f22b354235&oe=59DF0C1E\");\n  background-size: cover;\n  background-attachment: fixed;\n  background-color: #111; }\n  body.page-login .overlay {\n    top: 0;\n    left: 0;\n    bottom: 0;\n    right: 0;\n    position: fixed;\n    z-index: 1;\n    height: 100%;\n    background-color: rgba(0, 0, 0, 0.8); }\n  body.page-login .col-center {\n    padding-top: 60px;\n    float: none;\n    margin: 0 auto;\n    height: 100vh;\n    z-index: 2; }\n  body.page-login .pos-vert {\n    position: relative;\n    top: 50%;\n    transform: translateY(-50%); }\n  body.page-login .login {\n    max-width: 450px;\n    position: relative;\n    margin: 0 auto; }\n    body.page-login .login .avatar .avatar-inner {\n      position: absolute;\n      left: 0;\n      right: 0;\n      top: 0;\n      bottom: 0;\n      transition: opacity .3s;\n      opacity: 0;\n      border-radius: 9999em;\n      background-size: cover;\n      box-shadow: inset 0 1px rgba(255, 255, 255, 0.6); }\n      body.page-login .login .avatar .avatar-inner.show {\n        opacity: 1; }\n  body.page-login .login .avatar {\n    margin-right: 20px;\n    width: 100px;\n    height: 100px;\n    background-color: rgba(255, 255, 255, 0.5);\n    border-radius: 9999em;\n    background-size: contain;\n    background-position: center;\n    position: absolute;\n    left: 0;\n    top: 0; }\n  body.page-login .login .avatar:after {\n    content: \"\\E008\";\n    font-family: 'Glyphicons Halflings';\n    color: #fff;\n    display: block;\n    width: 25px;\n    height: 25px;\n    border-radius: 9999em;\n    box-shadow: inset 0 1px rgba(255, 255, 255, 0.36);\n    position: absolute;\n    bottom: 2px;\n    right: 2px;\n    background-color: #999999;\n    font-size: 12px;\n    line-height: 1.8;\n    text-align: center;\n    padding-top: 2px;\n    text-indent: -1px; }\n  body.page-login .login .avatar.found:after {\n    content: \"\\E013\";\n    font-family: 'Glyphicons Halflings';\n    color: #fff;\n    box-shadow: inset 0 1px rgba(255, 255, 255, 0.36);\n    background-color: #2196f3; }\n  body.page-login .login .avatar + .form-group {\n    margin-left: 120px; }\n  body.page-login .login .avatar + .form-group .user-name {\n    color: #fff;\n    font-family: 'Raleway', sans-serif;\n    margin-top: 0;\n    margin-bottom: 26px;\n    width: 100%;\n    vertical-align: middle;\n    font-weight: 100;\n    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5); }\n  body.page-login .login .avatar + .form-group .user-name small {\n    color: #999;\n    text-shadow: initial;\n    font-size: 0.5em;\n    margin-top: 0.5em;\n    padding-right: 8px; }\n  body.page-login .login .avatar + .form-group .input-group .input-group-addon,\n  body.page-login .form-group .input-group .input-group-addon {\n    background-color: #fff;\n    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); }\n  body.page-login .login .avatar + .form-group .input-group .input-group-addon span[class^='glyph'],\n  body.page-login .form-group .input-group .input-group-addon span[class^='glyph'] {\n    color: #999; }\n  body.page-login .login .avatar + .form-group .input-group input,\n  body.page-login .form-group .input-group input {\n    border-left: 0;\n    border-right: 0; }\n  body.page-login .input-group {\n    padding-bottom: 30px; }\n    body.page-login .input-group:last-child {\n      padding-bottom: 0; }\n  body.page-login .toggle-group {\n    display: flex;\n    align-items: center;\n    justify-content: space-between; }\n  body.page-login .user-name:empty {\n    display: none; }\n  body.page-login [type=\"text\"] {\n    height: 35px; }\n  body.page-login textarea {\n    resize: vertical;\n    margin-bottom: 30px; }\n  body.page-login #returning-user-name-cancel {\n    position: absolute;\n    top: 0;\n    right: 0;\n    color: #fff;\n    opacity: 1;\n    outline: 0; }\n  body.page-login .wrapper-register p,\n  body.page-login .wrapper-register small,\n  body.page-login .wrapper-register h1 {\n    color: #fff; }\n  body.page-login .wrapper-register h4 {\n    color: #999999; }\n  body.page-login .wrapper-register small {\n    display: block; }\n  body.page-login .wrapper-register h1 {\n    margin-top: 0; }\n  body.page-login .control-group .btn {\n    top: 20px;\n    position: relative; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 104 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "body.page-login.logged-in {\n  background-image: none; }\n  body.page-login.logged-in #user-hero {\n    background-size: cover;\n    background-position: center;\n    height: 300px;\n    position: relative;\n    display: table;\n    width: 100%;\n    padding-right: 30px;\n    padding-left: 30px;\n    padding-top: 20px;\n    padding-bottom: 20px; }\n    body.page-login.logged-in #user-hero:before {\n      content: \"\";\n      background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHklEQVQYV2NkwAIY8Qr+///fl5GRcTNIEX6VyMYAANDMBAYBjpzVAAAAAElFTkSuQmCC\");\n      display: block;\n      top: 0;\n      bottom: 0;\n      left: 0;\n      right: 0;\n      position: absolute;\n      background-color: rgba(0, 0, 0, 0.3);\n      z-index: 1; }\n    body.page-login.logged-in #user-hero > * {\n      z-index: 2;\n      position: relative; }\n    body.page-login.logged-in #user-hero .username {\n      color: #f1f1f1;\n      text-transform: capitalize;\n      font-weight: 100;\n      width: 100%;\n      text-align: center;\n      display: table-cell;\n      vertical-align: middle; }\n      body.page-login.logged-in #user-hero .username:empty:before {\n        content: \"username\"; }\n    body.page-login.logged-in #user-hero [for=\"cover-photo\"] {\n      position: relative;\n      border-radius: 1px;\n      color: #f1f1f1;\n      background-color: rgba(255, 255, 255, 0);\n      border: 1px solid #f1f1f1;\n      display: inline-block; }\n      body.page-login.logged-in #user-hero [for=\"cover-photo\"]:before {\n        content: \"Cover Photo\";\n        float: right;\n        white-space: nowrap;\n        padding-left: 10px; }\n      body.page-login.logged-in #user-hero [for=\"cover-photo\"] [type=\"file\"] {\n        height: 100%;\n        display: none; }\n  body.page-login.logged-in #profile-sub-navbar {\n    background-color: #171717;\n    border-radius: 0;\n    border: 0;\n    width: 100%;\n    border-bottom: 1px solid rgba(255, 255, 255, 0.1);\n    position: relative;\n    text-align: center; }\n    body.page-login.logged-in #profile-sub-navbar .btn-group-pill {\n      border-radius: 1px; }\n      body.page-login.logged-in #profile-sub-navbar .btn-group-pill .btn {\n        border: 1px solid rgba(255, 255, 255, 0.1);\n        color: #f1f1f1;\n        background-color: transparent;\n        border-radius: 0;\n        border-right-width: 0;\n        color: #9d9d9d;\n        border-left-width: 0;\n        margin-left: 0; }\n        body.page-login.logged-in #profile-sub-navbar .btn-group-pill .btn:focus {\n          color: #fff;\n          outline: 0; }\n        body.page-login.logged-in #profile-sub-navbar .btn-group-pill .btn:last-child {\n          border-top-right-radius: 2px;\n          border-bottom-right-radius: 2px;\n          border-right-width: 1px; }\n        body.page-login.logged-in #profile-sub-navbar .btn-group-pill .btn:first-child {\n          border-top-left-radius: 2px;\n          border-bottom-left-radius: 2px;\n          border-left-width: 1px; }\n    body.page-login.logged-in #profile-sub-navbar .navbar-header {\n      width: 100%; }\n  body.page-login.logged-in .wrapper-profile {\n    height: 100vh; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 105 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, ".site-content {\n  font-family: 'Lato', sans-serif; }\n  .site-content h1,\n  .site-content h2,\n  .site-content h3,\n  .site-content h4,\n  .site-content h5 {\n    color: #2E3192; }\n  .site-content .btn {\n    border-radius: 2px;\n    text-transform: uppercase; }\n  .site-content input,\n  .site-content textarea {\n    border-radius: 2px; }\n  .site-content nav.navbar {\n    background-color: #fff;\n    margin-bottom: 0; }\n    .site-content nav.navbar.navbar-center .navbar-nav {\n      width: 100%;\n      text-align: center; }\n      .site-content nav.navbar.navbar-center .navbar-nav > li {\n        float: none;\n        display: inline-block; }\n    .site-content nav.navbar.navbar-center .nav > li > a.navbar-brand {\n      text-transform: uppercase;\n      padding: 0;\n      margin-top: 3px;\n      background-color: transparent;\n      line-height: 1;\n      text-align: center; }\n      .site-content nav.navbar.navbar-center .nav > li > a.navbar-brand span {\n        display: block; }\n      .site-content nav.navbar.navbar-center .nav > li > a.navbar-brand span:first-child {\n        font-weight: 400;\n        letter-spacing: 5px;\n        margin-left: 5px;\n        font-size: 1.8em; }\n      .site-content nav.navbar.navbar-center .nav > li > a.navbar-brand span:last-child {\n        font-weight: 300; }\n  .site-content #hero {\n    background-color: #808080;\n    height: 700px; }\n    .site-content #hero .carousel-control {\n      width: 35px;\n      display: table; }\n      .site-content #hero .carousel-control span {\n        display: table-cell;\n        vertical-align: middle;\n        color: rgba(0, 0, 0, 0.8); }\n    .site-content #hero .carousel-control,\n    .site-content #hero .item,\n    .site-content #hero .carousel-inner {\n      height: 100%; }\n    .site-content #hero .carousel-indicators {\n      display: none; }\n    .site-content #hero .call-to-action-continue {\n      font-size: 20px;\n      position: absolute;\n      left: 0;\n      right: 0;\n      bottom: 0;\n      z-index: 10;\n      text-align: center; }\n      .site-content #hero .call-to-action-continue .next-action {\n        display: block;\n        font-size: .8em; }\n  .site-content .carousel-fade .carousel-inner .item {\n    transition-property: opacity; }\n  .site-content .carousel-fade .carousel-inner .item,\n  .site-content .carousel-fade .carousel-inner .active.left,\n  .site-content .carousel-fade .carousel-inner .active.right {\n    opacity: 0; }\n  .site-content .carousel-fade .carousel-inner .active,\n  .site-content .carousel-fade .carousel-inner .next.left,\n  .site-content .carousel-fade .carousel-inner .prev.right {\n    opacity: 1; }\n  .site-content .carousel-fade .carousel-inner .next,\n  .site-content .carousel-fade .carousel-inner .prev,\n  .site-content .carousel-fade .carousel-inner .active.left,\n  .site-content .carousel-fade .carousel-inner .active.right {\n    left: 0;\n    transform: translate3d(0, 0, 0); }\n  .site-content .carousel-fade .carousel-control {\n    z-index: 2; }\n  .site-content #photo-gallery h2 {\n    margin-top: 60px; }\n  .site-content #photo-gallery .btn-group-justified {\n    padding-top: 40px; }\n    .site-content #photo-gallery .btn-group-justified .btn {\n      border: 0;\n      outline: 0; }\n  .site-content .overspan-gallery {\n    overflow: hidden; }\n    .site-content .overspan-gallery .tier {\n      table-layout: fixed;\n      display: table;\n      margin-top: 40px; }\n      .site-content .overspan-gallery .tier .photo {\n        box-sizing: border-box;\n        border-left: 20px solid #fff;\n        display: table-cell;\n        width: 300px;\n        height: 300px;\n        background-color: #ededed; }\n        .site-content .overspan-gallery .tier .photo:nth-child(odd) {\n          background-color: silver; }\n    .site-content .overspan-gallery .top-tier {\n      width: 150%;\n      margin-left: -25%; }\n    .site-content .overspan-gallery .bottom-tier {\n      width: 200%;\n      margin-left: -50%; }\n  .site-content #about-me {\n    margin-top: 60px;\n    padding: 17px; }\n    .site-content #about-me h2 {\n      color: #2E3192; }\n    .site-content #about-me .headshot-wrapper {\n      position: relative;\n      min-height: inherit;\n      height: 420px; }\n    .site-content #about-me p {\n      font-size: 1.2em;\n      line-height: 1.7;\n      margin: 0 0 40px; }\n  .site-content #contact-me {\n    margin-top: 60px;\n    height: 650px;\n    background-color: #808080;\n    position: relative;\n    display: flex;\n    align-items: center; }\n    .site-content #contact-me .panel-body {\n      position: relative;\n      z-index: 3;\n      padding-left: 22px;\n      padding-right: 22px;\n      padding-top: 26px;\n      padding-bottom: 26px; }\n      .site-content #contact-me .panel-body input,\n      .site-content #contact-me .panel-body textarea {\n        background-color: rgba(255, 255, 255, 0.8); }\n    .site-content #contact-me .form-controls {\n      margin-top: 50px; }\n    .site-content #contact-me h3 {\n      padding-left: 30px;\n      color: #fff;\n      margin-top: 30px;\n      margin-bottom: 30px; }\n  .site-content #hire-me {\n    margin-top: 60px;\n    width: 100%;\n    position: relative;\n    height: 650px;\n    background-color: #808080;\n    display: flex;\n    align-items: center; }\n  .site-content .border-corner {\n    position: relative;\n    display: inline-block;\n    border: 3px solid black;\n    width: 100%;\n    min-height: 150px; }\n    .site-content .border-corner::before {\n      content: \"\";\n      position: absolute;\n      height: calc(100% + 10px);\n      width: 100%;\n      width: calc(100% - 40px);\n      border-top: 5px solid white;\n      border-bottom: 5px solid white;\n      top: -5px;\n      left: 0;\n      left: calc(20px); }\n    .site-content .border-corner::after {\n      content: \"\";\n      position: absolute;\n      height: 100%;\n      height: calc(100% - 40px);\n      width: calc(100% + 10px);\n      border-left: 5px solid white;\n      border-right: 5px solid white;\n      top: 0;\n      top: calc(20px);\n      left: -5px; }\n    .site-content .border-corner.light {\n      border: 5px solid #fff; }\n      .site-content .border-corner.light::after {\n        border-color: #000; }\n      .site-content .border-corner.light::before {\n        border-color: #000; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 106 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "[data-toggleswitch] input[type='checkbox'] {\n  position: absolute;\n  visibility: hidden; }\n\n[data-toggleswitch] input[type='checkbox'] {\n  position: absolute;\n  visibility: hidden; }\n\n[data-toggleswitch] input[type='checkbox']:not(:checked) + div.inner {\n  background-position: 25px, 45px; }\n\n[data-toggleswitch] div.inner {\n  border-radius: 9999em;\n  transition: background 0.2s;\n  width: 50px;\n  height: 25px;\n  background-color: #ddd;\n  background-image: radial-gradient(ellipse at center, #fff 0%, #fff 67%, transparent 69%), linear-gradient(to right, #2196f3 0%, #2196f3 100%);\n  background-size: 25px 25px, 100% 100%;\n  background-repeat: no-repeat; }\n\n[data-toggleswitch].small input[type='checkbox']:not(:checked) + div.inner {\n  background-position: 15px, 45px; }\n\n[data-toggleswitch].small div.inner {\n  width: 30px;\n  height: 15px;\n  background-size: 15px 15px, 100% 100%;\n  background-repeat: no-repeat; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -12153,10 +10834,10 @@ function CustomEvent (type, params) {
   return e;
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
-/* 108 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12196,7 +10877,7 @@ module.exports = {
 
 
 /***/ }),
-/* 109 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12204,7 +10885,7 @@ module.exports = {
 
 var emitter = __webpack_require__(92);
 var crossvent = __webpack_require__(93);
-var classes = __webpack_require__(108);
+var classes = __webpack_require__(98);
 var doc = document;
 var documentElement = doc.documentElement;
 
@@ -12809,10 +11490,10 @@ function getCoord (coord, e) {
 
 module.exports = dragula;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
-/* 110 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var request = __webpack_require__(21);
@@ -12915,14 +11596,14 @@ module.exports = downloadRequest;
 
 
 /***/ }),
-/* 111 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var REQUEST_CONSTANTS = __webpack_require__(115);
+var REQUEST_CONSTANTS = __webpack_require__(105);
 var DropboxBase;
 
 // Polyfill Object.assign() for older browsers
-__webpack_require__(114);
+__webpack_require__(104);
 
 /**
  * @private
@@ -13100,7 +11781,7 @@ DropboxBase.prototype.setRpcRequest = function (newRpcRequest) {
 
 DropboxBase.prototype.getRpcRequest = function () {
   if (DropboxBase.prototype.rpcRequest === undefined) {
-    DropboxBase.prototype.rpcRequest = __webpack_require__(117);
+    DropboxBase.prototype.rpcRequest = __webpack_require__(107);
   }
 
   return DropboxBase.prototype.rpcRequest;
@@ -13112,7 +11793,7 @@ DropboxBase.prototype.setDownloadRequest = function (newDownloadRequest) {
 
 DropboxBase.prototype.getDownloadRequest = function () {
   if (DropboxBase.prototype.downloadRequest === undefined) {
-    DropboxBase.prototype.downloadRequest = __webpack_require__(110);
+    DropboxBase.prototype.downloadRequest = __webpack_require__(100);
   }
 
   return DropboxBase.prototype.downloadRequest;
@@ -13124,7 +11805,7 @@ DropboxBase.prototype.setUploadRequest = function (newUploadRequest) {
 
 DropboxBase.prototype.getUploadRequest = function () {
   if (DropboxBase.prototype.uploadRequest === undefined) {
-    DropboxBase.prototype.uploadRequest = __webpack_require__(118);
+    DropboxBase.prototype.uploadRequest = __webpack_require__(108);
   }
 
   return DropboxBase.prototype.uploadRequest;
@@ -13134,11 +11815,11 @@ module.exports = DropboxBase;
 
 
 /***/ }),
-/* 112 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var DropboxBase = __webpack_require__(111);
-var routes = __webpack_require__(116);
+var DropboxBase = __webpack_require__(101);
+var routes = __webpack_require__(106);
 var Dropbox;
 
 /**
@@ -13173,16 +11854,16 @@ module.exports = Dropbox;
 
 
 /***/ }),
-/* 113 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Dropbox = __webpack_require__(112);
+var Dropbox = __webpack_require__(102);
 
 module.exports = Dropbox;
 
 
 /***/ }),
-/* 114 */
+/* 104 */
 /***/ (function(module, exports) {
 
 // Polyfill object.assign for legacy browsers
@@ -13217,7 +11898,7 @@ if (typeof Object.assign !== 'function') {
 
 
 /***/ }),
-/* 115 */
+/* 105 */
 /***/ (function(module, exports) {
 
 var REQUEST_CONSTANTS = {
@@ -13230,7 +11911,7 @@ module.exports = REQUEST_CONSTANTS;
 
 
 /***/ }),
-/* 116 */
+/* 106 */
 /***/ (function(module, exports) {
 
 // Auto-generated by Stone, do not modify.
@@ -14515,7 +13196,7 @@ module.exports = routes;
 
 
 /***/ }),
-/* 117 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var request = __webpack_require__(21);
@@ -14598,7 +13279,7 @@ module.exports = rpcRequest;
 
 
 /***/ }),
-/* 118 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var request = __webpack_require__(21);
@@ -14669,7 +13350,7 @@ module.exports = uploadRequest;
 
 
 /***/ }),
-/* 119 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -14693,7 +13374,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 	if ( true ) {
 
 		// AMD. Register as an anonymous module.
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(0), __webpack_require__(120) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(0), __webpack_require__(110) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -15176,7 +13857,7 @@ return $.ui.position;
 
 
 /***/ }),
-/* 120 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;( function( factory ) {
@@ -15202,7 +13883,7 @@ return $.ui.version = "1.12.1";
 
 
 /***/ }),
-/* 121 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -25462,7 +24143,7 @@ return jQuery;
 
 
 /***/ }),
-/* 122 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -27232,20 +25913,20 @@ return jQuery;
   }(this));
 }()); // IIFE
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
-/* 123 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(126);
+module.exports = __webpack_require__(116);
 
 
 /***/ }),
-/* 124 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27323,7 +26004,7 @@ module.exports = EventManager;
 
 
 /***/ }),
-/* 125 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27343,15 +26024,15 @@ module.exports = (function () {
 
 
 /***/ }),
-/* 126 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var destroy = __webpack_require__(128);
-var initialize = __webpack_require__(136);
-var update = __webpack_require__(137);
+var destroy = __webpack_require__(118);
+var initialize = __webpack_require__(126);
+var update = __webpack_require__(127);
 
 module.exports = {
   initialize: initialize,
@@ -27361,7 +26042,7 @@ module.exports = {
 
 
 /***/ }),
-/* 127 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27385,15 +26066,15 @@ module.exports = {
 
 
 /***/ }),
-/* 128 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _ = __webpack_require__(4);
-var dom = __webpack_require__(8);
-var instances = __webpack_require__(2);
+var _ = __webpack_require__(2);
+var dom = __webpack_require__(6);
+var instances = __webpack_require__(1);
 
 module.exports = function (element) {
   var i = instances.get(element);
@@ -27414,15 +26095,15 @@ module.exports = function (element) {
 
 
 /***/ }),
-/* 129 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var instances = __webpack_require__(2);
-var updateGeometry = __webpack_require__(5);
-var updateScroll = __webpack_require__(7);
+var instances = __webpack_require__(1);
+var updateGeometry = __webpack_require__(3);
+var updateScroll = __webpack_require__(4);
 
 function bindClickRailHandler(element, i) {
   function pageOffset(el) {
@@ -27460,17 +26141,17 @@ module.exports = function (element) {
 
 
 /***/ }),
-/* 130 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _ = __webpack_require__(4);
-var dom = __webpack_require__(8);
-var instances = __webpack_require__(2);
-var updateGeometry = __webpack_require__(5);
-var updateScroll = __webpack_require__(7);
+var _ = __webpack_require__(2);
+var dom = __webpack_require__(6);
+var instances = __webpack_require__(1);
+var updateGeometry = __webpack_require__(3);
+var updateScroll = __webpack_require__(4);
 
 function bindMouseScrollXHandler(element, i) {
   var currentLeft = null;
@@ -27570,17 +26251,17 @@ module.exports = function (element) {
 
 
 /***/ }),
-/* 131 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _ = __webpack_require__(4);
-var dom = __webpack_require__(8);
-var instances = __webpack_require__(2);
-var updateGeometry = __webpack_require__(5);
-var updateScroll = __webpack_require__(7);
+var _ = __webpack_require__(2);
+var dom = __webpack_require__(6);
+var instances = __webpack_require__(1);
+var updateGeometry = __webpack_require__(3);
+var updateScroll = __webpack_require__(4);
 
 function bindKeyboardHandler(element, i) {
   var hovered = false;
@@ -27731,15 +26412,15 @@ module.exports = function (element) {
 
 
 /***/ }),
-/* 132 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var instances = __webpack_require__(2);
-var updateGeometry = __webpack_require__(5);
-var updateScroll = __webpack_require__(7);
+var instances = __webpack_require__(1);
+var updateGeometry = __webpack_require__(3);
+var updateScroll = __webpack_require__(4);
 
 function bindMouseWheelHandler(element, i) {
   var shouldPrevent = false;
@@ -27886,14 +26567,14 @@ module.exports = function (element) {
 
 
 /***/ }),
-/* 133 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var instances = __webpack_require__(2);
-var updateGeometry = __webpack_require__(5);
+var instances = __webpack_require__(1);
+var updateGeometry = __webpack_require__(3);
 
 function bindNativeScrollHandler(element, i) {
   i.event.bind(element, 'scroll', function () {
@@ -27908,16 +26589,16 @@ module.exports = function (element) {
 
 
 /***/ }),
-/* 134 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _ = __webpack_require__(4);
-var instances = __webpack_require__(2);
-var updateGeometry = __webpack_require__(5);
-var updateScroll = __webpack_require__(7);
+var _ = __webpack_require__(2);
+var instances = __webpack_require__(1);
+var updateGeometry = __webpack_require__(3);
+var updateScroll = __webpack_require__(4);
 
 function bindSelectionHandler(element, i) {
   function getRangeNode() {
@@ -28030,16 +26711,16 @@ module.exports = function (element) {
 
 
 /***/ }),
-/* 135 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _ = __webpack_require__(4);
-var instances = __webpack_require__(2);
-var updateGeometry = __webpack_require__(5);
-var updateScroll = __webpack_require__(7);
+var _ = __webpack_require__(2);
+var instances = __webpack_require__(1);
+var updateGeometry = __webpack_require__(3);
+var updateScroll = __webpack_require__(4);
 
 function bindTouchHandler(element, i, supportsTouch, supportsIePointer) {
   function shouldPreventDefault(deltaX, deltaY) {
@@ -28218,27 +26899,27 @@ module.exports = function (element) {
 
 
 /***/ }),
-/* 136 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _ = __webpack_require__(4);
+var _ = __webpack_require__(2);
 var cls = __webpack_require__(14);
-var instances = __webpack_require__(2);
-var updateGeometry = __webpack_require__(5);
+var instances = __webpack_require__(1);
+var updateGeometry = __webpack_require__(3);
 
 // Handlers
 var handlers = {
-  'click-rail': __webpack_require__(129),
-  'drag-scrollbar': __webpack_require__(130),
-  'keyboard': __webpack_require__(131),
-  'wheel': __webpack_require__(132),
-  'touch': __webpack_require__(135),
-  'selection': __webpack_require__(134)
+  'click-rail': __webpack_require__(119),
+  'drag-scrollbar': __webpack_require__(120),
+  'keyboard': __webpack_require__(121),
+  'wheel': __webpack_require__(122),
+  'touch': __webpack_require__(125),
+  'selection': __webpack_require__(124)
 };
-var nativeScrollHandler = __webpack_require__(133);
+var nativeScrollHandler = __webpack_require__(123);
 
 module.exports = function (element, userSettings) {
   userSettings = typeof userSettings === 'object' ? userSettings : {};
@@ -28262,17 +26943,17 @@ module.exports = function (element, userSettings) {
 
 
 /***/ }),
-/* 137 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _ = __webpack_require__(4);
-var dom = __webpack_require__(8);
-var instances = __webpack_require__(2);
-var updateGeometry = __webpack_require__(5);
-var updateScroll = __webpack_require__(7);
+var _ = __webpack_require__(2);
+var dom = __webpack_require__(6);
+var instances = __webpack_require__(1);
+var updateGeometry = __webpack_require__(3);
+var updateScroll = __webpack_require__(4);
 
 module.exports = function (element) {
   var i = instances.get(element);
@@ -28306,7 +26987,7 @@ module.exports = function (element) {
 
 
 /***/ }),
-/* 138 */
+/* 128 */
 /***/ (function(module, exports) {
 
 
@@ -28335,108 +27016,207 @@ module.exports = function(arr, fn, initial){
 };
 
 /***/ }),
-/* 139 */
-/***/ (function(module, exports) {
+/* 129 */
+/***/ (function(module, exports, __webpack_require__) {
 
+/* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
+    "use strict";
 
-/**
- * When source maps are enabled, `style-loader` uses a link element with a data-uri to
- * embed the css on the page. This breaks all relative urls because now they are relative to a
- * bundle instead of the current page.
- *
- * One solution is to only use full urls, but that may be impossible.
- *
- * Instead, this function "fixes" the relative urls to be absolute according to the current page location.
- *
- * A rudimentary test suite is located at `test/fixUrls.js` and can be run via the `npm test` command.
- *
- */
+    if (global.setImmediate) {
+        return;
+    }
 
-module.exports = function (css) {
-  // get current location
-  var location = typeof window !== "undefined" && window.location;
+    var nextHandle = 1; // Spec says greater than zero
+    var tasksByHandle = {};
+    var currentlyRunningATask = false;
+    var doc = global.document;
+    var registerImmediate;
 
-  if (!location) {
-    throw new Error("fixUrls requires window.location");
-  }
+    function setImmediate(callback) {
+      // Callback can either be a function or a string
+      if (typeof callback !== "function") {
+        callback = new Function("" + callback);
+      }
+      // Copy function arguments
+      var args = new Array(arguments.length - 1);
+      for (var i = 0; i < args.length; i++) {
+          args[i] = arguments[i + 1];
+      }
+      // Store and register the task
+      var task = { callback: callback, args: args };
+      tasksByHandle[nextHandle] = task;
+      registerImmediate(nextHandle);
+      return nextHandle++;
+    }
 
-	// blank or null?
-	if (!css || typeof css !== "string") {
-	  return css;
-  }
+    function clearImmediate(handle) {
+        delete tasksByHandle[handle];
+    }
 
-  var baseUrl = location.protocol + "//" + location.host;
-  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
+    function run(task) {
+        var callback = task.callback;
+        var args = task.args;
+        switch (args.length) {
+        case 0:
+            callback();
+            break;
+        case 1:
+            callback(args[0]);
+            break;
+        case 2:
+            callback(args[0], args[1]);
+            break;
+        case 3:
+            callback(args[0], args[1], args[2]);
+            break;
+        default:
+            callback.apply(undefined, args);
+            break;
+        }
+    }
 
-	// convert each url(...)
-	/*
-	This regular expression is just a way to recursively match brackets within
-	a string.
+    function runIfPresent(handle) {
+        // From the spec: "Wait until any invocations of this algorithm started before this one have completed."
+        // So if we're currently running a task, we'll need to delay this invocation.
+        if (currentlyRunningATask) {
+            // Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
+            // "too much recursion" error.
+            setTimeout(runIfPresent, 0, handle);
+        } else {
+            var task = tasksByHandle[handle];
+            if (task) {
+                currentlyRunningATask = true;
+                try {
+                    run(task);
+                } finally {
+                    clearImmediate(handle);
+                    currentlyRunningATask = false;
+                }
+            }
+        }
+    }
 
-	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
-	   (  = Start a capturing group
-	     (?:  = Start a non-capturing group
-	         [^)(]  = Match anything that isn't a parentheses
-	         |  = OR
-	         \(  = Match a start parentheses
-	             (?:  = Start another non-capturing groups
-	                 [^)(]+  = Match anything that isn't a parentheses
-	                 |  = OR
-	                 \(  = Match a start parentheses
-	                     [^)(]*  = Match anything that isn't a parentheses
-	                 \)  = Match a end parentheses
-	             )  = End Group
-              *\) = Match anything and then a close parens
-          )  = Close non-capturing group
-          *  = Match anything
-       )  = Close capturing group
-	 \)  = Match a close parens
+    function installNextTickImplementation() {
+        registerImmediate = function(handle) {
+            process.nextTick(function () { runIfPresent(handle); });
+        };
+    }
 
-	 /gi  = Get all matches, not the first.  Be case insensitive.
-	 */
-	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function(fullMatch, origUrl) {
-		// strip quotes (if they exist)
-		var unquotedOrigUrl = origUrl
-			.trim()
-			.replace(/^"(.*)"$/, function(o, $1){ return $1; })
-			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
+    function canUsePostMessage() {
+        // The test against `importScripts` prevents this implementation from being installed inside a web worker,
+        // where `global.postMessage` means something completely different and can't be used for this purpose.
+        if (global.postMessage && !global.importScripts) {
+            var postMessageIsAsynchronous = true;
+            var oldOnMessage = global.onmessage;
+            global.onmessage = function() {
+                postMessageIsAsynchronous = false;
+            };
+            global.postMessage("", "*");
+            global.onmessage = oldOnMessage;
+            return postMessageIsAsynchronous;
+        }
+    }
 
-		// already a full url? no change
-		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/)/i.test(unquotedOrigUrl)) {
-		  return fullMatch;
-		}
+    function installPostMessageImplementation() {
+        // Installs an event handler on `global` for the `message` event: see
+        // * https://developer.mozilla.org/en/DOM/window.postMessage
+        // * http://www.whatwg.org/specs/web-apps/current-work/multipage/comms.html#crossDocumentMessages
 
-		// convert the url to a full url
-		var newUrl;
+        var messagePrefix = "setImmediate$" + Math.random() + "$";
+        var onGlobalMessage = function(event) {
+            if (event.source === global &&
+                typeof event.data === "string" &&
+                event.data.indexOf(messagePrefix) === 0) {
+                runIfPresent(+event.data.slice(messagePrefix.length));
+            }
+        };
 
-		if (unquotedOrigUrl.indexOf("//") === 0) {
-		  	//TODO: should we add protocol?
-			newUrl = unquotedOrigUrl;
-		} else if (unquotedOrigUrl.indexOf("/") === 0) {
-			// path should be relative to the base url
-			newUrl = baseUrl + unquotedOrigUrl; // already starts with '/'
-		} else {
-			// path should be relative to current directory
-			newUrl = currentDir + unquotedOrigUrl.replace(/^\.\//, ""); // Strip leading './'
-		}
+        if (global.addEventListener) {
+            global.addEventListener("message", onGlobalMessage, false);
+        } else {
+            global.attachEvent("onmessage", onGlobalMessage);
+        }
 
-		// send back the fixed url(...)
-		return "url(" + JSON.stringify(newUrl) + ")";
-	});
+        registerImmediate = function(handle) {
+            global.postMessage(messagePrefix + handle, "*");
+        };
+    }
 
-	// send back the fixed css
-	return fixedCss;
-};
+    function installMessageChannelImplementation() {
+        var channel = new MessageChannel();
+        channel.port1.onmessage = function(event) {
+            var handle = event.data;
+            runIfPresent(handle);
+        };
 
+        registerImmediate = function(handle) {
+            channel.port2.postMessage(handle);
+        };
+    }
+
+    function installReadyStateChangeImplementation() {
+        var html = doc.documentElement;
+        registerImmediate = function(handle) {
+            // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
+            // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
+            var script = doc.createElement("script");
+            script.onreadystatechange = function () {
+                runIfPresent(handle);
+                script.onreadystatechange = null;
+                html.removeChild(script);
+                script = null;
+            };
+            html.appendChild(script);
+        };
+    }
+
+    function installSetTimeoutImplementation() {
+        registerImmediate = function(handle) {
+            setTimeout(runIfPresent, 0, handle);
+        };
+    }
+
+    // If supported, we should attach to the prototype of global, since that is where setTimeout et al. live.
+    var attachTo = Object.getPrototypeOf && Object.getPrototypeOf(global);
+    attachTo = attachTo && attachTo.setTimeout ? attachTo : global;
+
+    // Don't get fooled by e.g. browserify environments.
+    if ({}.toString.call(global.process) === "[object process]") {
+        // For Node.js before 0.9
+        installNextTickImplementation();
+
+    } else if (canUsePostMessage()) {
+        // For non-IE10 modern browsers
+        installPostMessageImplementation();
+
+    } else if (global.MessageChannel) {
+        // For web workers, where supported
+        installMessageChannelImplementation();
+
+    } else if (doc && "onreadystatechange" in doc.createElement("script")) {
+        // For IE 6–8
+        installReadyStateChangeImplementation();
+
+    } else {
+        // For older browsers
+        installSetTimeoutImplementation();
+    }
+
+    attachTo.setImmediate = setImmediate;
+    attachTo.clearImmediate = clearImmediate;
+}(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5), __webpack_require__(31)))
 
 /***/ }),
-/* 140 */
+/* 130 */,
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
  * Module of mixed-in functions shared between node and client code
  */
-var isObject = __webpack_require__(31);
+var isObject = __webpack_require__(33);
 
 /**
  * Clear previous timeout.
@@ -28602,7 +27382,7 @@ exports.field = function(name, val) {
 
 
 /***/ }),
-/* 141 */
+/* 132 */
 /***/ (function(module, exports) {
 
 // The node and browser modules expose versions of this with the
@@ -28640,7 +27420,7 @@ module.exports = request;
 
 
 /***/ }),
-/* 142 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {var si = typeof setImmediate === 'function', tick;
@@ -28651,13 +27431,72 @@ if (si) {
 }
 
 module.exports = tick;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(52).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(134).setImmediate))
 
 /***/ }),
-/* 143 */
+/* 134 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var apply = Function.prototype.apply;
+
+// DOM APIs, for completeness
+
+exports.setTimeout = function() {
+  return new Timeout(apply.call(setTimeout, window, arguments), clearTimeout);
+};
+exports.setInterval = function() {
+  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
+};
+exports.clearTimeout =
+exports.clearInterval = function(timeout) {
+  if (timeout) {
+    timeout.close();
+  }
+};
+
+function Timeout(id, clearFn) {
+  this._id = id;
+  this._clearFn = clearFn;
+}
+Timeout.prototype.unref = Timeout.prototype.ref = function() {};
+Timeout.prototype.close = function() {
+  this._clearFn.call(window, this._id);
+};
+
+// Does not start the time, just sets up the members needed.
+exports.enroll = function(item, msecs) {
+  clearTimeout(item._idleTimeoutId);
+  item._idleTimeout = msecs;
+};
+
+exports.unenroll = function(item) {
+  clearTimeout(item._idleTimeoutId);
+  item._idleTimeout = -1;
+};
+
+exports._unrefActive = exports.active = function(item) {
+  clearTimeout(item._idleTimeoutId);
+
+  var msecs = item._idleTimeout;
+  if (msecs >= 0) {
+    item._idleTimeoutId = setTimeout(function onTimeout() {
+      if (item._onTimeout)
+        item._onTimeout();
+    }, msecs);
+  }
+};
+
+// setimmediate attaches itself to the global object
+__webpack_require__(129);
+exports.setImmediate = setImmediate;
+exports.clearImmediate = clearImmediate;
+
+
+/***/ }),
+/* 135 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ })
-/******/ ]);
+],[51]);

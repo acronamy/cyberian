@@ -1,54 +1,37 @@
-import * as path from "path";
-import * as express from "express";
-import * as hbs from 'express-hbs';
-import * as bodyParser from "body-parser";
-import * as cookieParser from "cookie-parser";
-import * as jdenticon from "jdenticon";
+//Polyfills
 import "reflect-metadata";
+
+//Node
+import * as path from "path";
+import * as fs from "fs";
+
+//Third party
+import * as express from "express";
+import * as jdenticon from "jdenticon";
 import * as bcrypt from "bcrypt";
 import * as jsHash from "jshashes";
-/*one-shot install*/
+
+//App
+import { editor, main } from "./mounts.index";
 import {installSite} from "./install";
+import { urls } from "./urls.config";
 
-import * as fileUpload from "express-fileupload";
-
-
+//App: Routing
 import { injector } from "./routes/main.injector";
 import { postCoverPhoto } from "./routes/cover-photo.post";
 import { collectionsRoute } from "./routes/editor.get";
 import { postCollection, postCollectionPhoto} from "./routes/collection.post";
 
-//Database
-import {database} from "./database";
-import {User} from "./entities/user.entity";
+//App: Database
+import { database } from "./database";
+import { User } from "./entities/user.entity";
 
-
+//Data
 const webpackGlobal = require("../webpack.config");
-const main = express();
-const editor = express();
 
 console.log("Server started")
-
-main.use("/editor", editor);
-main.use(bodyParser.urlencoded({ extended: false }))
-main.use(fileUpload());
-main.use(cookieParser())
-
-//DI
-const webpackOutputDir = webpackGlobal.output.path;
-const webpackOutputFilename = webpackGlobal.output.filename;
-const webpackOutputUrl = "/bundle";
-
-
-main.use(webpackOutputUrl, express.static( webpackOutputDir ))
-main.use("/media", express.static( path.join(__dirname, "public", "media") ));
-main.use("/uploads", express.static( path.join(__dirname, "uploads") ));
-
-main.engine('hbs', hbs.express4());
-main.set('view engine', 'hbs');
-main.set('views', path.join(__dirname, '/templates'));
-editor.set('views', path.join(__dirname, '/templates'))
-
+//Configure express server
+import "./middleware.config";
 
 const locals = {}
 
@@ -85,7 +68,7 @@ database.then(async connection=>{
 
     //Routes index
     postCoverPhoto(main, connection);
-    collectionsRoute(main, connection);
+    collectionsRoute(editor, connection);
     postCollection(main, connection);
     postCollectionPhoto(main, connection);
 
@@ -97,11 +80,11 @@ database.then(async connection=>{
         res.render("index", locals, injector.bind( Object.assign(
             res, 
             main.get("siteMetadata"), 
-            renderOptions
+            renderOptions,
         )));
     })
 
-    main.get('/user', (req, res)=>{
+    main.get( urls.user.root , (req, res)=>{
         
         const isLoggedIn = "session" in req.cookies;
         const renderOptions = {
@@ -112,7 +95,7 @@ database.then(async connection=>{
         res.render("user", injector.bind(Object.assign(res, main.get("siteMetadata"), renderOptions)))
     })
 
-    main.get('/user/register', (req, res)=>{
+    main.get( urls.user.register , (req, res)=>{
         const renderOptions = {
             template:"register"
         }
@@ -123,7 +106,7 @@ database.then(async connection=>{
             renderOptions
         )))
     })
-    main.post('/user/register/new', (req, res)=>{
+    main.post(urls.user.POST_register, (req, res)=>{
         const formData = req.body;
 
         const name = {
@@ -153,7 +136,7 @@ database.then(async connection=>{
         res.redirect("/user");
     })
 
-    main.post('/user/login',async (req,res)=>{
+    main.post(urls.user.login, async (req,res)=>{
 
         //fake login always passes for the moment
         const usernameInput = req.body.username.toLowerCase();
@@ -192,7 +175,7 @@ database.then(async connection=>{
         }
     })
 
-    main.post("/user/logout",function(req,res){
+    main.post(urls.user.logout,function(req,res){
         res.clearCookie("session");
         res.send("")
     })
@@ -202,7 +185,7 @@ database.then(async connection=>{
     /**
      * Check if user exists
     */
-    main.post('/user/login/check-user',async (req,res)=>{
+    main.post(urls.user.POST_exists ,async (req,res)=>{
         const username = req.body.username.toLowerCase();
         const userInstance = await connection
             .getRepository(User)
