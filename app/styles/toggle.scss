@@ -3,28 +3,41 @@ $color:#2196f3;
 $height: 25px;
 $width: 50px;
 
-[data-toggleswitch] {
-  width: $width;
-  height: $height;
-  position: relative;
-  transition: background $speed;
-  border-radius: 9999em;
-  cursor:pointer;
-}
-[data-toggleswitch] input[type='checkbox'] {
-  position: absolute;
-  visibility: hidden;
-}
-[data-toggleswitch] input[type='checkbox']:not(:checked)+div.inner {
-  background-position: $height, 45px;
-}
-[data-toggleswitch] div.inner {
-  border-radius: 9999em;
-  transition: background $speed;
-  width: $width;
-  height: $height;
-  background-color: #ddd;
-  background-image: radial-gradient(ellipse at center, #fff 0%, #fff 67%, transparent 69%), linear-gradient(to right, $color 0%, $color 100%);
-  background-size: $height $height, 100% 100%;
-  background-repeat: no-repeat;
+$small-height: 15px;
+$small-width: 30px;
+
+
+[data-toggleswitch]{
+  input[type='checkbox'] {
+    position: absolute;
+    visibility: hidden;
+  }
+  input[type='checkbox'] {
+    position: absolute;
+    visibility: hidden;
+  }
+  input[type='checkbox']:not(:checked)+div.inner {
+    background-position: $height, 45px;
+  }
+  div.inner {
+    border-radius: 9999em;
+    transition: background $speed;
+    width: $width;
+    height: $height;
+    background-color: #ddd;
+    background-image: radial-gradient(ellipse at center, #fff 0%, #fff 67%, transparent 69%), linear-gradient(to right, $color 0%, $color 100%);
+    background-size: $height $height, 100% 100%;
+    background-repeat: no-repeat;
+  }
+  &.small{
+      input[type='checkbox']:not(:checked)+div.inner {
+        background-position: $small-height, 45px;
+      }
+      div.inner {
+        width: $small-width;
+        height: $small-height;
+        background-size: $small-height $small-height, 100% 100%;
+        background-repeat: no-repeat;
+      }
+  }
 }

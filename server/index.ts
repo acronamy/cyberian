@@ -15,7 +15,8 @@ import * as fileUpload from "express-fileupload";
 
 import { injector } from "./routes/main.injector";
 import { postCoverPhoto } from "./routes/cover-photo.post";
-import { collectionsRoute, photosRoute } from "./routes/editor.get";
+import { collectionsRoute } from "./routes/editor.get";
+import { postCollection, postCollectionPhoto} from "./routes/collection.post";
 
 //Database
 import {database} from "./database";
@@ -41,6 +42,7 @@ const webpackOutputUrl = "/bundle";
 
 main.use(webpackOutputUrl, express.static( webpackOutputDir ))
 main.use("/media", express.static( path.join(__dirname, "public", "media") ));
+main.use("/uploads", express.static( path.join(__dirname, "uploads") ));
 
 main.engine('hbs', hbs.express4());
 main.set('view engine', 'hbs');
@@ -83,9 +85,9 @@ database.then(async connection=>{
 
     //Routes index
     postCoverPhoto(main, connection);
-    photosRoute(main, connection);
     collectionsRoute(main, connection);
-
+    postCollection(main, connection);
+    postCollectionPhoto(main, connection);
 
     main.get('/', (req, res)=>{
         const renderOptions = {

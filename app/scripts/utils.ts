@@ -25,7 +25,7 @@ Upload.prototype.getSize = function() {
 Upload.prototype.getName = function() {
     return this.file.name;
 };
-Upload.prototype.doUpload = function () {
+Upload.prototype.doUpload = function (cb) {
     var that = this;
     var formData = new FormData();
 
@@ -51,12 +51,26 @@ Upload.prototype.doUpload = function () {
         success: function (data) {
             setTimeout(function(){
                 $(".progress").removeClass("active")
+                if(typeof cb === "function"){
+                    cb({
+                        success:true,
+                        data:data
+                    })
+                }
             },1000)
+
+            
         },
         error: function (error) {
             setTimeout(function(){
                 $(".progress").removeClass("active")
+                if(typeof cb === "function"){
+                    cb({
+                        success:false,
+                    })
+                }
             },1000)
+            
         },
         async: true,
         data: formData,

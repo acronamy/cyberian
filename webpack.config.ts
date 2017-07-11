@@ -2,6 +2,8 @@ import * as path from "path";
 import * as webpack from "webpack";
 import * as LiveReloadPlugin from "webpack-livereload-plugin"
 
+console.log("HEY")
+
 const config = {
     entry: './app/index.ts',
     output: {
@@ -20,11 +22,25 @@ const config = {
                     loader: "sass-loader" // compiles Sass to CSS
                 }]
             },
-            { test: /\.txt$/, use: 'raw-loader' }
+            {
+                test: /\.css$/,
+                use: [ 'style-loader', 'css-loader' ]
+            },
+            { test: /\.txt$/, use: 'raw-loader' },
+            {
+                test: require.resolve('jquery'),
+                use: [{
+                    loader: 'expose-loader',
+                    options: '$'
+                }]
+            }
         ],
     },
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.jsx']
+        extensions: ['.ts', '.tsx', '.js', '.jsx'],
+        alias:{
+            
+        }
     },
     plugins: [
         new webpack.ProvidePlugin({   

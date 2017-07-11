@@ -20,7 +20,7 @@ export function postCoverPhoto(mount:Application, connection:Connection) {
                 if (err) {
                     console.log(err)
                 }
-                res.send(true);
+                res.send("/uploads/"+coverPhoto.name);
             });
 
         }

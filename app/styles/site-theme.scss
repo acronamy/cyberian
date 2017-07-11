@@ -1,0 +1,270 @@
+$primary:#2E3192;
+
+
+.site-content{
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5{
+        color:$primary;
+    }
+
+    .btn{
+        border-radius: 2px;
+        text-transform: uppercase;
+    }
+    input,
+    textarea{
+        border-radius: 2px;
+    }
+
+    font-family: 'Lato', sans-serif;
+    nav.navbar{
+        background-color: #fff;
+        margin-bottom: 0;
+        &.navbar-center{
+            .navbar-nav {
+                width: 100%;
+                text-align: center;
+                > li {
+                    float: none;
+                    display: inline-block;
+                }
+            }
+            .nav>li>a.navbar-brand{
+                text-transform: uppercase;
+                padding: 0;
+                margin-top: 3px;
+                background-color: transparent;
+                line-height: 1;
+                text-align: center;
+                span{
+                    display: block;
+                }
+                span:first-child{
+                    font-weight: 400;
+                    letter-spacing: 5px;
+                    margin-left: 5px;
+                    font-size: 1.8em;
+                }
+                span:last-child{
+                    font-weight: 300;
+                }
+            }
+        }
+    }
+
+    
+
+    #hero{
+        background-color: #808080;
+        height: 700px;
+        .carousel-control{
+            width: 35px;
+            display: table;
+            span{
+                display: table-cell;
+                vertical-align: middle;
+                color:rgba(0,0,0,.8);
+            }
+        }
+        .carousel-control,
+        .item,
+        .carousel-inner{
+            height: 100%;
+        }
+
+        .carousel-indicators{
+            display: none;
+        }
+
+        .call-to-action-continue{
+            font-size: 20px;
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 10;
+            text-align: center;
+            .next-action{
+                display: block;
+                font-size: .8em;
+            }
+        }  
+    }
+
+    .carousel-fade {
+        .carousel-inner {
+            .item {
+                transition-property: opacity;
+            }
+            
+            .item,
+            .active.left,
+            .active.right {
+                opacity: 0;
+            }
+
+            .active,
+            .next.left,
+            .prev.right {
+                opacity: 1;
+            }
+
+            .next,
+            .prev,
+            .active.left,
+            .active.right {
+                left: 0;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .carousel-control {
+            z-index: 2;
+        }
+    }
+
+    #photo-gallery{
+        h2{
+            margin-top: 60px;
+        }
+        .btn-group-justified{
+            padding-top: 40px;
+            .btn{
+                border:0;
+                outline: 0;
+            }
+        }
+    }
+
+    .overspan-gallery{
+            
+        overflow: hidden;
+        .tier{
+            table-layout: fixed;
+            display: table;
+            margin-top: 40px;
+            .photo{
+                box-sizing: border-box;
+                border-left: 20px solid #fff;
+                display: table-cell;
+                width:300px;
+                height: 300px;
+                background-color: #ededed;
+                &:nth-child(odd){
+                    background-color: silver;
+                }
+            }
+        }
+        .top-tier{
+            width: 150%;
+            margin-left: -25%;
+        }
+        .bottom-tier{
+            width: 200%;
+            margin-left: -50%;
+        }
+    }
+
+    #about-me{
+        margin-top: 60px;
+        padding: 17px;
+        h2{
+            color:$primary;
+        }
+        .headshot-wrapper{
+            position: relative;
+            min-height: inherit;
+            height: 420px;
+        }
+        p{
+            font-size: 1.2em;
+            line-height: 1.7;
+            margin: 0 0 40px;
+        }
+    }
+
+    #contact-me{
+        margin-top: 60px;
+        height: 650px;
+        background-color: #808080;
+        position: relative;
+        display: flex;
+        align-items: center;
+        .panel-body{
+            position: relative;
+            z-index: 3;
+            padding-left: 22px;
+            padding-right: 22px;
+            padding-top: 26px;
+            padding-bottom: 26px;
+            input,
+            textarea{
+                background-color: rgba(255,255,255,.8);
+            }
+        }
+        .form-controls{
+            margin-top: 50px;
+        }
+        h3{
+            padding-left: 30px;
+            color:#fff;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+    }
+    #hire-me{
+        margin-top: 60px;
+        width: 100%;
+        position: relative;
+        height: 650px;
+        background-color: #808080;
+        display: flex;
+        align-items: center;
+    }
+
+    .border-corner{
+        position: relative;
+        display: inline-block;
+        border: 3px solid black;
+        width: 100%;
+        min-height: 150px;
+        &::before {
+            content: "";
+            position: absolute;
+            height: calc(100% + 10px);
+            width: 100%;
+            width: calc(100% - 40px);
+            border-top: 5px solid white;
+            border-bottom: 5px solid white;
+            top: -5px;
+            left: 0;
+            left:calc(20px);
+        }
+        &::after {
+            content: "";
+            position: absolute;
+            height: 100%;
+            height: calc(100% - 40px);
+            width: calc(100% + 10px);
+            border-left: 5px solid white;
+            border-right: 5px solid white;
+            top: 0;
+            top:calc(20px);
+            left: -5px;
+        }
+        &.light{
+            border: 5px solid #fff;
+            &::after {
+                border-color: #000;
+            }
+            &::before {
+                border-color: #000;
+            }
+        }
+    }
+
+}

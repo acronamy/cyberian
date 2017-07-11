@@ -28,7 +28,6 @@ const template = (userInstance)=> `
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         ${window.location.pathname!=="/"? '<li id="back-to-site" title="back to site"><a href="/"><span class="glyphicon glyphicon-menu-left"></span></a></li>':""}
-        <li><a href="/editor/photos">Photos <span class="sr-only">(current)</span></a></li>
         <li><a href="/editor/collections">Collections</a></li>
       </ul>
 
@@ -59,6 +58,7 @@ const template = (userInstance)=> `
 </div>
 
 </div>
+
 `
 
 window.addEventListener("load", function(){
