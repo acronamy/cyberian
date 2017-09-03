@@ -1,11 +1,20 @@
 //Libs (probably needs addressing)
 import 'jquery';
 
-import 'bootstrap/dist/js/bootstrap';
-import "./scripts/sticky";
-import "./scripts/portrait-landscape";
+import "select2/dist/js/select2.full.min.js";
+import "select2/dist/css/select2.min.css";
 
-import "./scripts/editor";
-import "./scripts/admin-toolbar";
-import "./scripts/remember-login";
-import "./scripts/profile";
+import "jquery-wheelcolorpicker/css/wheelcolorpicker.css";
+import "jquery-wheelcolorpicker/jquery.wheelcolorpicker-2.5.0.min.js";
+
+import 'bootstrap/dist/js/bootstrap';
+import "./scripts/common/sticky";
+import "./scripts/common/portrait-landscape";
+
+import "./scripts/admin-page-collections/editor";
+import "./scripts/admin-pages/admin-toolbar";
+import "./scripts/admin-pages/autosave-notification";
+import "./scripts/user-page/remember-login";
+import "./scripts/user-page/profile";
+
+import "./scripts/admin-page-design/collections-select";

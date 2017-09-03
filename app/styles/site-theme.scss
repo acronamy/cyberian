@@ -22,13 +22,14 @@ $primary:#2E3192;
 
     font-family: 'Lato', sans-serif;
     nav.navbar{
+        border:0;
         background-color: #fff;
         margin-bottom: 0;
         &.navbar-center{
             .navbar-nav {
                 width: 100%;
                 text-align: center;
-                > li {
+                & > li {
                     float: none;
                     display: inline-block;
                 }
@@ -224,6 +225,7 @@ $primary:#2E3192;
         background-color: #808080;
         display: flex;
         align-items: center;
+        background-image: url("../../server/uploads/dropbox/contact-cover.jpg");
     }
 
     .border-corner{

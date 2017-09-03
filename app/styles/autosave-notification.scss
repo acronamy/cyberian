@@ -1,0 +1,56 @@
+body.autosave-open{
+    overflow: auto!important;
+    padding-right: 0!important;
+}
+
+.modal-autosave{
+    height: 40px;
+    margin: 0 auto;
+    top: 0;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    right: 0;
+    overflow-x: hidden!important;
+    overflow-y: hidden!important;
+
+
+    .modal-dialog{
+            width:100%;
+            margin-top: 0;
+            display: flex;
+        }
+        .modal-content{
+            min-width: 80%;
+            margin: 0 auto;
+            display: table;
+            justify-content: space-around;
+            min-width: inherit;
+            background-color: #222;
+            border-radius: 2px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            .modal-body{
+                &:before{
+                    content: "Info";
+                    background-color: #5bc0de;
+                    display:inline-block;
+                    cursor: default;
+                    user-select: none;
+                    text-transform: capitalize;
+                    font-weight: bold;
+                    padding: 5px 10px;
+                    color:#fff;
+                    font-size: .8em;
+                }
+                display:table-cell;
+                color:#fff;
+                p{
+                    margin: 3px 10px;
+                    display: inline-block;
+                }
+            }
+            .modal-body{
+                padding: 3px;
+            }
+        }
+}

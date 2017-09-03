@@ -108,3 +108,21 @@ $folder-width:35px;
     }
   }
 }
+
+.folder-row.dropbox.loaded{
+  &+.list-group{
+    .spinner{
+      display: none;
+    }
+  }
+}
+
+.no-content{
+  &:before{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-left: 50px;
+    content: "No Content Available";
+    display: inline-block;
+  }
+}

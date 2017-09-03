@@ -4,6 +4,7 @@ import {User} from "./entities/user.entity";
 import {Site} from "./entities/site.entity"
 import {Collection} from "./entities/collection.entity";
 import {Photo} from "./entities/photo.entity";
+import { Design } from "./entities/design.entity";
 
 const options:ConnectionOptions = {
     type:"mysql",
@@ -20,7 +21,8 @@ const options:ConnectionOptions = {
         User,
         Site,
         Collection,
-        Photo
+        Photo,
+        Design
     ]
 }
 

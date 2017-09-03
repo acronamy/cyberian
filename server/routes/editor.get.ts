@@ -40,7 +40,7 @@ export function collectionsRoute(mount:Application, connection:Connection){
                 session:req.cookies.session||false,
                 collections:collections,
                 dropbox:{
-                    folders:await loadDropboxFolder("")
+                    folders:await loadDropboxFolder("/website")
                 }
             }
 

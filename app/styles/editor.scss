@@ -1,9 +1,203 @@
+.center-col{
+    float: none;
+    margin: 0 auto;
+}
+
+body.page-editor{
+    background-color:#111;
+}
+body.page-design{
+
+    .carousel-speed-selector{
+        width: 100px;
+        float:left;
+        &+small{
+            line-height: 35px;
+            margin-left: 10px;
+            color: #9e9e9e;
+            font-size: .8em;
+        }
+    }
+
+    input[type=file]{
+        height: 100px;
+        position: relative;
+        visibility: hidden;
+        &:after{
+            visibility: visible;
+            content: "Upload";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            display: inline-block;
+            width:100%;
+            height: 100%;
+            text-align: center;
+            line-height: 100px;
+            border-radius: 4px;
+            background-color: rgba(255,255,255,.2);
+        }
+    }
+
+    .help{
+        color:#777;
+        padding-top: 5px;
+    }
+
+    [type=color]{
+        height: 43px;
+        border-radius: 9999em;
+        border: 0;
+        padding: 0;
+        outline: 0;
+        -webkit-clip-path: circle(43.6% at 50% 50%);
+        clip-path: circle(36.6% at 50% 50%);
+        background: #a9a9a9;
+        -webkit-box-shadow: inset 0px 0px 6px 0px rgba(0,0,0,0.75);
+        -moz-box-shadow: inset 0px 0px 6px 0px rgba(0,0,0,0.75);
+        box-shadow: inset 0px 0px 6px 0px rgba(0,0,0,0.75);
+        cursor: pointer;
+        &:disabled{
+            cursor: not-allowed;
+        }
+    }
+
+    .demo{
+        padding: 30px 40px;
+        border-radius: 2px;
+        border:1px solid rgba(255, 255, 255, 0.1);
+        margin: 20px 60px;
+    }
+
+    .select2-selection{
+        height: 32px;
+        width: 100%;
+        border:0;
+        background-color:#414141;
+        .select2{
+            width: inherit;
+        }
+        .select2-selection__rendered{
+            color: #f1f1f1;
+        }
+    }
+    .select2-search{
+        display: none;
+    }
+    .select2-selection__choice{
+        background-color: #5bc0de!important;
+        border: 0;
+        font-weight: bold;
+        font-size: .8em;
+        border-radius: 2px!important;
+        border: 0!important;
+        margin-top: 7px!important;
+        .select2-selection__choice__remove{
+            color:#fff;
+            float:right;
+            margin-left: 8px;
+        }
+        color:#fff;
+    }
+    .select2-dropdown{
+        background-color: lighten(#414141,10%);
+        border:0;
+        color:#f1f1f1;
+        .select2-results__group{
+            color: #9e9e9e;
+        }
+        [aria-selected=true]{
+            background-color: #45454b;
+        }
+        .select2-results__option--highlighted{
+            background-color: #2d2d30;
+        }
+    }
+
+    &>.container-fluid{
+        padding-top: 40px;
+    }
+    .panel-heading{
+        color:#f1f1f1;
+        background-color: rgba(20,20,20,0.9);
+        font-size:1.2em;
+        position: relative;
+        text-transform: capitalize;
+        &:before{
+            content: "";
+            display: block;
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+            opacity: .4;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHklEQVQYV2NkwAIY8Qr+///fl5GRcTNIEX6VyMYAANDMBAYBjpzVAAAAAElFTkSuQmCC);
+        }
+    }
+    .panel{
+        border-radius: 0;
+        hr{
+            border-top:2px solid rgba(255, 255, 255, 0.1);
+        }
+        select,
+        textarea,
+        input{
+            border-radius: 2px;
+            background-color: rgba(255,255,255,.2);
+            border: 0;
+            outline: 0;
+            box-shadow: initial;
+            &::active,
+            &::focus{
+                outline: 0;
+                box-shadow: initial;
+            }
+            color:#f1f1f1;
+        }
+        select{
+            color:initial;
+        }
+        textarea{
+            resize: vertical;
+        }
+    }
+    .panel-heading,
+    .panel{
+        
+        background-color: transparent;
+        border-color: rgba(255, 255, 255, 0.1);
+        h4{
+            font-size: .9em;
+            color: #9e9e9e;
+            text-transform: capitalize;
+            transform: translate(-0px);
+            left: -10px;
+            padding-bottom: 20px;
+            &:first-child{
+                margin-top: 20px;
+            }
+            margin-top: 60px;
+        }
+        label{
+            color:#9e9e9e;
+            font-weight: normal;
+            font-size: .8em;
+        }
+    }
+}
+
 body.editor{
     background-color:#111;
     
     .sidebar{
         overflow: hidden;
         height: 100%;
+        height: calc(100% - 51px);
         position: fixed;
         left: 0;
         background-color: inherit;
@@ -11,6 +205,10 @@ body.editor{
         padding-top: 30px;
         header{
             margin-bottom: 30px;
+        }
+        .folder-tree{
+            height: inherit;
+            padding-bottom: 100px;
         }
         .collection-photo-list{
             width: 100%;
@@ -24,9 +222,6 @@ body.editor{
             }
             &.selected{
                 background-color: #45454b;
-            }
-            &.downloading{
-                background-color: #43c8bc;
             }
             &.valid{
                 opacity: 1;
@@ -55,6 +250,70 @@ body.editor{
                 float: left;
                 background-size: cover;
                 margin-right: 15px;
+            }
+            .loader{
+                height: 0px;
+                transition: height .3s, margin-bottom .3s;
+                background-color: rgba(255, 255, 255, 0.1);
+                &::before{
+                    height: inherit;
+                }
+            }
+            .warning{
+                opacity: 0;
+            }
+            .download{
+                transition: opactiy .3s;
+            }
+            &.downloading{
+                background-color: #1d1d1d;
+                .loader{
+                    height: 3px;
+                    margin-bottom: 10px;
+                }
+                .download{
+                    opacity: 0;
+                }
+            }
+            &.saved{
+                background-color: #1d1d1d;
+                .download{
+                    display: none;
+                }
+                .local-copy{
+                    display: inline-block!important;
+                }
+                &.selected{
+                    background-color: #45454b;
+                }
+                &:hover{
+                    &.selected{
+                        background-color: #45454b;
+                    }
+                    background-color: #2d2d30;
+                    border-radius: 2px;
+                    cursor: default;
+                    &>*{
+                        cursor: inherit;
+                    }
+                }
+            }
+            &.error{
+                transition: color .3s;
+                color: #3a3a3a;
+                background-color: transparent;
+                .loader{
+                    height: 0;
+                }
+                .download{
+                    display: none;
+                }
+                .warning{
+                    opacity: 1;
+                }
+                .photo-thumbnail{
+                    opacity: .5;
+                }
             }
         }
     }
@@ -109,7 +368,6 @@ body.editor{
                 width: 490px;
             }
             background-repeat: no-repeat;
-            height: 490px;
             box-sizing: border-box;
             display: block;
             float: left;
@@ -119,12 +377,8 @@ body.editor{
             background-color: #000;
             margin-bottom: 20px;
             margin-top: 20px;
-            margin-right: 25px;
             background-position: center;
             
-            &:last-child{
-                margin-right: 0;
-            }
         }
         .editor-collection-meta{
             .editor-collection-description{
@@ -174,8 +428,19 @@ body.editor{
         }
         main{
             background-color: rgba(17, 17, 17, 0.80);
-            .rail{
-                width:9999em;
+            .carousel{
+                .carousel-inner{
+                    &>[class^=col-]{
+                        overflow: hidden;
+                    }
+                }
+            }
+        }
+        footer{
+            .carousel-ctrl{
+                background-color: transparent;
+                border:0;
+                color:#fff;
             }
         }
     }
@@ -267,6 +532,9 @@ body.editor{
             top: 40px;
             left: 0;
             right:0;
+            form{
+                height: 100%;
+            }
             .modal-content{
                 height:100%;
                 background: #222;

@@ -9,3 +9,4 @@ import "./toggle.scss";
 import "./admin-toolbar.scss";
 import "./profile.scss";
 import "./editor.scss";
+import "./autosave-notification.scss";

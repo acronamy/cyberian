@@ -1,53 +1,303 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
-    </head>
-    <body>
 
-        <template id="collections">
-            <div class="container-fluid">
+<head>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+</head>
 
-                <div class="sidebar col-xs-3">
-                    <header class="clearfix">
-                        <button class="btn btn-primary pull-right" type="button" data-toggle="modal" data-target=".add-collection"><span class="glyphicon glyphicon-plus"></span> Add</button>
-                    </header>
-                    <main class="folder-tree clearfix">
+<body>
 
-                    </main>
-                </div>
+    <template id="collections">
+        <div class="container-fluid">
 
-                <div class="col-xs-9 col-xs-offset-3 collections-real"><!--Injector fed--></div>
+            <div class="sidebar col-xs-3">
+                <header class="clearfix">
+                    <button class="btn btn-primary pull-right" type="button" data-toggle="modal" data-target=".add-collection"><span class="glyphicon glyphicon-plus"></span> Add</button>
+                </header>
+                <main class="folder-tree clearfix">
+                    <h5>Collections</h5>
+
+                </main>
+            </div>
+
+            <div class="col-xs-9 col-xs-offset-3 collections-real">
+                <!--Injector fed-->
+            </div>
 
             <div class="modal fade add-collection" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <header class="modal-header">
-                        <h4>Create Collection</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    </header>
-                    <aside class="col-xs-2">
-                        <form>
-                            <div class="form-group collection-group">
-                                <input required class="form-control collection-name" type="text" placeholder="Collection name"/>
-                                <textarea required class="form-control collection-description" placeholder="Description" size="2"></textarea>
-                                <h5>Tags</h5>
-                                <input id="collection-tags" class="form-control" data-role="tagsinput" />
-                            </div>
-                        </form>
-                    </aside>
-                    <main class="col-xs-10">
-                        <div class="add-placeholder tile">
-                            <input type="file" class='photo-upload-target'/>
+                <div class="modal-dialog modal-lg" role="document">
+                    <form id='save-collection' action="/save/collection">
+                        <div class="modal-content">
+                            <header class="modal-header">
+                                <h4>Create Collection</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            </header>
+                            <aside class="col-xs-2">
+                                
+                                    <div class="form-group collection-group">
+                                        <input id="collection-name" novalidate class="form-control collection-name" type="text" placeholder="Collection name" />
+                                        <textarea id="collection-description" novalidate class="form-control collection-description" placeholder="Description" size="2"></textarea>
+                                        <h5>Tags</h5>
+                                        <input novalidate id="collection-tags" class="form-control" data-role="tagsinput" />
+                                    </div>
+                                
+                            </aside>
+                            <main class="col-xs-10">
+                                <div class="add-placeholder tile">
+                                    <input type="file" class='photo-upload-target' />
+                                </div>
+                            </main>
+                            <footer class="modal-footer col-xs-10" class="clearfix">
+                                <button id='save' type='submit' class="btn btn-primary pull-right">
+                                    <span class='glyphicon glyphicon-ok'></span>
+                                    Save
+                                </button>
+                            </footer>
                         </div>
-                    </main>
-                    <footer class="modal-footer col-xs-10" class="clearfix">
-                        <button disabled data-dismiss="modal" id="collection-save" type="button" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-ok"></span> Save</button>
-                    </footer>
+                    </form>
                 </div>
             </div>
+    </template>
+
+
+
+    <template id="design">
+
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-sm-8 center-col">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Theme</div>
+                        <div class="panel-body">
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <label class='col-sm-2 control-label'>Primary color</label>
+                                    <div class="col-sm-10">
+                                        <input name="primary-color" id="primary-color" type="color" />
+                                        <div class="help">
+                                            <small>The brand color, often used in headings, logos and selections.</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class='col-sm-2 control-label'>Theme color</label>
+                                    <div class="col-sm-10">
+                                        <input name="theme-color" id="theme-color" type="color" />
+                                        <div class="help">
+                                            <small>The general colour used for this websites background.</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class='col-sm-2 control-label'>Text color</label>
+                                    <div class="col-sm-10">
+                                        <input name="text-color" id="text-color" disabled type="color" />
+                                        <small> <span class="glyphicon glyphicon-lock"></span> <span>Automatic</span> </small>
+                                        
+                                        <div class="help">
+                                            <small>The text color will be set to either black or white based on the theme colour.</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class='demo'>
+                                        <h1>Sample heading</h1>
+                                        <p>The quick brown fox jumps over the lazy dog</p>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-8 center-col">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Main Carousel</div>
+                        <div class="panel-body">
+
+
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">Include</label>
+                                    <div class="col-sm-10">
+                                        <select multiple name='carousel-includes' class="collection-select form-control">
+                                            <!--dynamic-->
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">Speed</label>
+                                    <div class="col-sm-10">
+                                        <input name='carousel-speed' value="8" class="form-control carousel-speed-selector" placeholder="Speed" type="number" />
+                                        <small>Seconds</small>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">Auto Scroll</label>
+                                    <div class="col-sm-10">
+                                        <div class="input-group toggle-group">
+                                            <label data-toggleswitch="data-toggle" id="for-hire-toggle">
+                                                <input name='carousel-autoscroll' checked type="checkbox" id="for-hire" value="true"/>
+                                                <div class="inner"></div>
+                                            </label>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </template>
-        
-    </body>
+
+            <div class="row">
+                <div class="col-sm-8 center-col">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">About me</div>
+                        <div class="panel-body">
+                            <form class="form-horizontal">
+
+                                <h4 class="col-sm-offset-2 col-sm-10">Content</h4>
+                                <div class="form-group">
+                                    <div class="col-sm-10 col-sm-offset-2">
+                                        <input name='about-me-heading' class="form-control" placeholder="Heading" type="text" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-10 col-sm-offset-2">
+                                        <textarea name='about-me-bio' placeholder="Content" class="form-control" rows="10"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">Alignment</label>
+                                    <div class="col-sm-10">
+                                        <select name='about-me-bio-alignment' class="form-control axis">
+                                        <optgroup label="Axis">
+                                            <option>left</option>
+                                            <option>right</option>
+                                        <optgroup>
+                                    </select>
+                                    </div>
+                                </div>
+                                
+                                <h4 class="col-sm-offset-2 col-sm-10">Background</h4>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">File</label>
+                                    <div class="col-sm-10">
+                                        <input name='about-me-background-image' class="form-control" type="file" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">Alignment</label>
+                                    <div class="col-sm-10">
+                                        <select name='about-me-background-image-alignment' class="form-control axis">
+                                        <optgroup label="Axis">
+                                            <option>top</option>
+                                            <option>left</option>
+                                            <option>right</option>
+                                            <option>bottom</option>
+                                            <option>center</option>
+                                        <optgroup>
+                                        <optgroup label="Diagonal">
+                                            <option>top left</option>
+                                            <option>top center</option>
+                                            <option>top right</option>
+                                            <option>bottom left</option>
+                                            <option>bottom center</option>
+                                            <option>bottom right</option>
+                                        </optgroup>
+                                    </select>
+                                    </div>
+                                </div>
+
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-8 center-col">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Photo Galleries</div>
+                        <div class="panel-body">
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">Include</label>
+                                    <div class="col-sm-10">
+                                        <select name='photo-gallery-includes' multiple="multiple" class="collection-select form-control">
+                                            <!--dynamic-->
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-8 center-col">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Contact me</div>
+                        <div class="panel-body">
+                            <form class="form-horizontal">
+
+                                
+                                <h4 class="col-sm-offset-2 col-sm-10">Background</h4>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">File</label>
+                                    <div class="col-sm-10">
+                                        <input name='contact-me-background-image' class="form-control" type="file" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">Alignment</label>
+                                    <div class="col-sm-10">
+                                        <select name='contact-me-background-image-alignment' class="form-control axis">
+                                        <optgroup label="Axis">
+                                            <option>top</option>
+                                            <option>left</option>
+                                            <option>right</option>
+                                            <option>bottom</option>
+                                        <optgroup>
+                                        <optgroup label="Diagonal">
+                                            <option>top left</option>
+                                            <option>top right</option>
+                                            <option>bottom left</option>
+                                            <option>bottom right</option>
+                                        </optgroup>
+                                    </select>
+                                    </div>
+                                </div>
+
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-8 center-col">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Hire me</div>
+                        <div class="panel-body">
+                            Panel content
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+</body>
+
 </html>
