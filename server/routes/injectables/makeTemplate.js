@@ -16,7 +16,6 @@ exports.pageClasses = pageClasses;
 function injectTemplate() {
     return (function (id, cb) {
         if (this.template === id) {
-            console.log("RAN");
             cb();
         }
     })

@@ -46,7 +46,7 @@ function createFolderTree($) {
                                         data-description="${photo.description}"
                                         data-index="${photo.index}"
                                         data-public="${photo.enable}"
-                                        class='editor-collection-photo'/>`;
+                                        class='editor-collection-photo ${photo.orientation}'/>`;
         }).join("")}
                 </div>
 
@@ -108,7 +108,8 @@ ${collection.description.replace(/^\s+|\s+$/g, '')}</textarea>
                                 data-description="${photo.description}"
                                 data-index="${photo.index}"
                                 data-public="${photo.enable}"
-                                class='tile photo-tile'></div>`;
+                                
+                                class='tile photo-tile orientation-${photo.orientation}'></div>`;
         }).join("")}
                         </main>
                         <footer class="modal-footer col-xs-10" class="clearfix">

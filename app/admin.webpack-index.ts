@@ -15,6 +15,5 @@ import "./scripts/admin-page-collections/editor";
 import "./scripts/admin-pages/admin-toolbar";
 import "./scripts/admin-pages/autosave-notification";
 import "./scripts/user-page/remember-login";
-import "./scripts/user-page/profile";
 
 import "./scripts/admin-page-design/collections-select";

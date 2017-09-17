@@ -18,4 +18,9 @@ export class Photo {
     */
     @Column()
     ref: string;
+    /**
+     * orientation of the image
+    */
+    @Column()
+    orientation: string;
 }

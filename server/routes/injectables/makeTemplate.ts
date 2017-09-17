@@ -14,7 +14,6 @@ export function pageClasses($){
 export function injectTemplate(){
     return (function(id:string,cb:Function){
         if (this.template === id) {
-            console.log("RAN")
             cb();
         }
     })

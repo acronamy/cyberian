@@ -8,6 +8,13 @@ body.page-editor{
 }
 body.page-design{
 
+    .modal-autosave{
+        height:0px!important;
+    }
+    .modal-autosave.in{
+        height:50px!important;
+    }
+
     .carousel-speed-selector{
         width: 100px;
         float:left;
@@ -193,6 +200,21 @@ body.page-design{
 
 body.editor{
     background-color:#111;
+
+    .photo-tile{
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: #000!important;
+        &.orientation-landscape{
+            background-size: contain;
+        }
+        &.orientation-portrait{
+            background-size: cover;
+        }
+        &.orientation-even{
+            background-size: cover;
+        }   
+    }
     
     .sidebar{
         overflow: hidden;
@@ -390,6 +412,7 @@ body.editor{
                 background-color: rgba(17, 17, 17, 0.80);
             }
             .editor-collection-name{
+                white-space: pre;
                 color: #f1f1f1;
                 text-transform: capitalize;
                 display: table;
@@ -572,7 +595,16 @@ body.editor{
                             background-position: center;
                             background-repeat: no-repeat;
                             background-color: #111;
-                            background-size:cover;       
+                            background-size:cover;
+                            &.orientation-landscape{
+                                background-size: contain;
+                            }
+                            &.orientation-portrait{
+                                background-size: cover;
+                            }
+                            &.orientation-even{
+                                background-size: cover;
+                            }   
                         }
                         &.portrait{
                             background-size:contain;
@@ -643,6 +675,7 @@ body.editor{
                                 top: 50%;
                                 left: 50%;
                                 transform: translate(-50%, -50%);
+                                white-space:nowrap;
                             }
                             .photo-upload-target{
                                 position: absolute;
@@ -655,7 +688,6 @@ body.editor{
                                 opacity: .1;
                                 cursor: pointer;
                                 width:100%;
-
                             }
                         }
                         header{

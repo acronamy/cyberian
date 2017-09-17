@@ -15,12 +15,13 @@ const collection_entity_1 = require("../../entities/collection.entity");
 const photo_entity_1 = require("../../entities/photo.entity");
 const jsHash = require("jshashes");
 const MD5 = new jsHash.MD5;
-const saveFileDirDropbox = path.resolve(__dirname, "../uploads", "dropbox");
+const saveFileDirDropbox = path.resolve(__dirname, "../../uploads", "dropbox");
 function postCollection(mount, connection) {
     mount.post("/save/collection", (req, res) => __awaiter(this, void 0, void 0, function* () {
         if (utils_1.isLoggedIn(req)) {
             const collection = new collection_entity_1.Collection();
             const data = req.body;
+            console.log(data);
             collection.description = data.description;
             collection.enabled = data.enabled;
             collection.name = data.name;
@@ -94,7 +95,6 @@ function postCollection(mount, connection) {
             const photo = new photo_entity_1.Photo();
             photo.ref = MD5.hex(name);
             photo.url = "/uploads/dropbox/" + name;
-            console.log(photo);
             yield connection.manager.persist(photo)
                 .then(() => {
                 console.log("saved photo");
@@ -149,12 +149,13 @@ function postCollectionPhoto(mount, connection) {
     mount.post("/save/collection/photo", (req, res) => __awaiter(this, void 0, void 0, function* () {
         if (utils_1.isLoggedIn(req)) {
             const collectionPhoto = req.files.file;
-            const filename = path.resolve(__dirname, "../uploads", collectionPhoto.name);
+            const filename = path.resolve(__dirname, "../../uploads", collectionPhoto.name);
             const url = "/uploads/" + collectionPhoto.name;
             //prepare to save
             const photo = new photo_entity_1.Photo();
             photo.ref = MD5.hex(collectionPhoto.name);
             photo.url = "/uploads/" + collectionPhoto.name;
+            photo.orientation = req.body.orientation.replace("orientation-", "");
             yield connection.manager.persist(photo)
                 .then(() => {
                 console.log("saved photo");

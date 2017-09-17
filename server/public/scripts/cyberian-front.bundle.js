@@ -64,7 +64,7 @@ var cyberian =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 72);
+/******/ 	return __webpack_require__(__webpack_require__.s = 70);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -280,7 +280,7 @@ if(false) {
 
 /***/ }),
 
-/***/ 123:
+/***/ 120:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -295,7 +295,7 @@ exports.push([module.i, "@-webkit-keyframes spaceboots {\n  0% {\n    -webkit-tr
 
 /***/ }),
 
-/***/ 125:
+/***/ 121:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -303,7 +303,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".site-content {\n  font-family: 'Lato', sans-serif;\n}\n\n.site-content h1,\n.site-content h2,\n.site-content h3,\n.site-content h4,\n.site-content h5 {\n  color: #2E3192;\n}\n\n.site-content .btn {\n  border-radius: 2px;\n  text-transform: uppercase;\n}\n\n.site-content input,\n.site-content textarea {\n  border-radius: 2px;\n}\n\n.site-content nav.navbar {\n  border: 0;\n  background-color: #fff;\n  margin-bottom: 0;\n}\n\n.site-content nav.navbar.navbar-center .navbar-nav {\n  width: 100%;\n  text-align: center;\n}\n\n.site-content nav.navbar.navbar-center .navbar-nav > li {\n  float: none;\n  display: inline-block;\n}\n\n.site-content nav.navbar.navbar-center .nav > li > a.navbar-brand {\n  text-transform: uppercase;\n  padding: 0;\n  margin-top: 3px;\n  background-color: transparent;\n  line-height: 1;\n  text-align: center;\n}\n\n.site-content nav.navbar.navbar-center .nav > li > a.navbar-brand span {\n  display: block;\n}\n\n.site-content nav.navbar.navbar-center .nav > li > a.navbar-brand span:first-child {\n  font-weight: 400;\n  letter-spacing: 5px;\n  margin-left: 5px;\n  font-size: 1.8em;\n}\n\n.site-content nav.navbar.navbar-center .nav > li > a.navbar-brand span:last-child {\n  font-weight: 300;\n}\n\n.site-content #hero {\n  background-color: #808080;\n  height: 700px;\n}\n\n.site-content #hero .carousel-control {\n  width: 35px;\n  display: table;\n}\n\n.site-content #hero .carousel-control span {\n  display: table-cell;\n  vertical-align: middle;\n  color: rgba(0, 0, 0, 0.8);\n}\n\n.site-content #hero .carousel-control,\n.site-content #hero .item,\n.site-content #hero .carousel-inner {\n  height: 100%;\n}\n\n.site-content #hero .carousel-indicators {\n  display: none;\n}\n\n.site-content #hero .call-to-action-continue {\n  font-size: 20px;\n  position: absolute;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  z-index: 10;\n  text-align: center;\n}\n\n.site-content #hero .call-to-action-continue .next-action {\n  display: block;\n  font-size: .8em;\n}\n\n.site-content .carousel-fade .carousel-inner .item {\n  transition-property: opacity;\n}\n\n.site-content .carousel-fade .carousel-inner .item,\n.site-content .carousel-fade .carousel-inner .active.left,\n.site-content .carousel-fade .carousel-inner .active.right {\n  opacity: 0;\n}\n\n.site-content .carousel-fade .carousel-inner .active,\n.site-content .carousel-fade .carousel-inner .next.left,\n.site-content .carousel-fade .carousel-inner .prev.right {\n  opacity: 1;\n}\n\n.site-content .carousel-fade .carousel-inner .next,\n.site-content .carousel-fade .carousel-inner .prev,\n.site-content .carousel-fade .carousel-inner .active.left,\n.site-content .carousel-fade .carousel-inner .active.right {\n  left: 0;\n  transform: translate3d(0, 0, 0);\n}\n\n.site-content .carousel-fade .carousel-control {\n  z-index: 2;\n}\n\n.site-content #photo-gallery h2 {\n  margin-top: 60px;\n}\n\n.site-content #photo-gallery .btn-group-justified {\n  padding-top: 40px;\n}\n\n.site-content #photo-gallery .btn-group-justified .btn {\n  border: 0;\n  outline: 0;\n}\n\n.site-content .overspan-gallery {\n  overflow: hidden;\n}\n\n.site-content .overspan-gallery .tier {\n  table-layout: fixed;\n  display: table;\n  margin-top: 40px;\n}\n\n.site-content .overspan-gallery .tier .photo {\n  box-sizing: border-box;\n  border-left: 20px solid #fff;\n  display: table-cell;\n  width: 300px;\n  height: 300px;\n  background-color: #ededed;\n}\n\n.site-content .overspan-gallery .tier .photo:nth-child(odd) {\n  background-color: silver;\n}\n\n.site-content .overspan-gallery .top-tier {\n  width: 150%;\n  margin-left: -25%;\n}\n\n.site-content .overspan-gallery .bottom-tier {\n  width: 200%;\n  margin-left: -50%;\n}\n\n.site-content #about-me {\n  margin-top: 60px;\n  padding: 17px;\n}\n\n.site-content #about-me h2 {\n  color: #2E3192;\n}\n\n.site-content #about-me .headshot-wrapper {\n  position: relative;\n  min-height: inherit;\n  height: 420px;\n}\n\n.site-content #about-me p {\n  font-size: 1.2em;\n  line-height: 1.7;\n  margin: 0 0 40px;\n}\n\n.site-content #contact-me {\n  margin-top: 60px;\n  height: 650px;\n  background-color: #808080;\n  position: relative;\n  display: flex;\n  align-items: center;\n}\n\n.site-content #contact-me .panel-body {\n  position: relative;\n  z-index: 3;\n  padding-left: 22px;\n  padding-right: 22px;\n  padding-top: 26px;\n  padding-bottom: 26px;\n}\n\n.site-content #contact-me .panel-body input,\n.site-content #contact-me .panel-body textarea {\n  background-color: rgba(255, 255, 255, 0.8);\n}\n\n.site-content #contact-me .form-controls {\n  margin-top: 50px;\n}\n\n.site-content #contact-me h3 {\n  padding-left: 30px;\n  color: #fff;\n  margin-top: 30px;\n  margin-bottom: 30px;\n}\n\n.site-content #hire-me {\n  margin-top: 60px;\n  width: 100%;\n  position: relative;\n  height: 650px;\n  background-color: #808080;\n  display: flex;\n  align-items: center;\n  background-image: url(" + __webpack_require__(175) + ");\n}\n\n.site-content .border-corner {\n  position: relative;\n  display: inline-block;\n  border: 3px solid black;\n  width: 100%;\n  min-height: 150px;\n}\n\n.site-content .border-corner::before {\n  content: \"\";\n  position: absolute;\n  height: calc(100% + 10px);\n  width: 100%;\n  width: calc(100% - 40px);\n  border-top: 5px solid white;\n  border-bottom: 5px solid white;\n  top: -5px;\n  left: 0;\n  left: calc(20px);\n}\n\n.site-content .border-corner::after {\n  content: \"\";\n  position: absolute;\n  height: 100%;\n  height: calc(100% - 40px);\n  width: calc(100% + 10px);\n  border-left: 5px solid white;\n  border-right: 5px solid white;\n  top: 0;\n  top: calc(20px);\n  left: -5px;\n}\n\n.site-content .border-corner.light {\n  border: 5px solid #fff;\n}\n\n.site-content .border-corner.light::after {\n  border-color: #000;\n}\n\n.site-content .border-corner.light::before {\n  border-color: #000;\n}", ""]);
+exports.push([module.i, ".site-content {\n  font-family: 'Lato', sans-serif;\n}\n\n.site-content h1,\n.site-content h2,\n.site-content h3,\n.site-content h4,\n.site-content h5 {\n  color: #2E3192;\n}\n\n.site-content .btn {\n  border-radius: 2px;\n  text-transform: uppercase;\n}\n\n.site-content input,\n.site-content textarea {\n  border-radius: 2px;\n}\n\n.site-content nav.navbar {\n  border: 0;\n  background-color: #fff;\n  margin-bottom: 0;\n}\n\n.site-content nav.navbar.navbar-center .navbar-nav {\n  width: 100%;\n  text-align: center;\n}\n\n.site-content nav.navbar.navbar-center .navbar-nav > li {\n  float: none;\n  display: inline-block;\n}\n\n.site-content nav.navbar.navbar-center .nav > li > a.navbar-brand {\n  text-transform: uppercase;\n  padding: 0;\n  margin-top: 3px;\n  background-color: transparent;\n  line-height: 1;\n  text-align: center;\n}\n\n.site-content nav.navbar.navbar-center .nav > li > a.navbar-brand span {\n  display: block;\n}\n\n.site-content nav.navbar.navbar-center .nav > li > a.navbar-brand span:first-child {\n  font-weight: 400;\n  letter-spacing: 5px;\n  margin-left: 5px;\n  font-size: 1.8em;\n}\n\n.site-content nav.navbar.navbar-center .nav > li > a.navbar-brand span:last-child {\n  font-weight: 300;\n}\n\n.site-content #hero {\n  background-color: #808080;\n  height: 700px;\n}\n\n.site-content #hero .carousel-control {\n  width: 35px;\n  display: table;\n}\n\n.site-content #hero .carousel-control span {\n  display: table-cell;\n  vertical-align: middle;\n  color: rgba(0, 0, 0, 0.8);\n}\n\n.site-content #hero .carousel-control,\n.site-content #hero .item,\n.site-content #hero .carousel-inner {\n  height: 100%;\n}\n\n.site-content #hero .carousel-indicators {\n  display: none;\n}\n\n.site-content #hero .call-to-action-continue {\n  font-size: 20px;\n  position: absolute;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  z-index: 10;\n  text-align: center;\n}\n\n.site-content #hero .call-to-action-continue .next-action {\n  display: block;\n  font-size: .8em;\n}\n\n.site-content .carousel-fade .carousel-inner .item {\n  transition-property: opacity;\n}\n\n.site-content .carousel-fade .carousel-inner .item,\n.site-content .carousel-fade .carousel-inner .active.left,\n.site-content .carousel-fade .carousel-inner .active.right {\n  opacity: 0;\n}\n\n.site-content .carousel-fade .carousel-inner .active,\n.site-content .carousel-fade .carousel-inner .next.left,\n.site-content .carousel-fade .carousel-inner .prev.right {\n  opacity: 1;\n}\n\n.site-content .carousel-fade .carousel-inner .next,\n.site-content .carousel-fade .carousel-inner .prev,\n.site-content .carousel-fade .carousel-inner .active.left,\n.site-content .carousel-fade .carousel-inner .active.right {\n  left: 0;\n  transform: translate3d(0, 0, 0);\n}\n\n.site-content .carousel-fade .carousel-control {\n  z-index: 2;\n}\n\n.site-content #photo-gallery h2 {\n  margin-top: 60px;\n}\n\n.site-content #photo-gallery .btn-group-justified {\n  padding-top: 40px;\n}\n\n.site-content #photo-gallery .btn-group-justified .btn {\n  border: 0;\n  outline: 0;\n}\n\n.site-content .overspan-gallery {\n  overflow: hidden;\n}\n\n.site-content .overspan-gallery .tier {\n  table-layout: fixed;\n  display: table;\n  margin-top: 40px;\n}\n\n.site-content .overspan-gallery .tier .photo {\n  box-sizing: border-box;\n  border-left: 20px solid #fff;\n  display: table-cell;\n  width: 300px;\n  height: 300px;\n  background-color: #ededed;\n}\n\n.site-content .overspan-gallery .tier .photo:nth-child(odd) {\n  background-color: silver;\n}\n\n.site-content .overspan-gallery .top-tier {\n  width: 150%;\n  margin-left: -25%;\n}\n\n.site-content .overspan-gallery .bottom-tier {\n  width: 200%;\n  margin-left: -50%;\n}\n\n.site-content #about-me {\n  margin-top: 60px;\n  padding: 17px;\n}\n\n.site-content #about-me h2 {\n  color: #2E3192;\n}\n\n.site-content #about-me .headshot-wrapper {\n  position: relative;\n  min-height: inherit;\n  height: 420px;\n}\n\n.site-content #about-me p {\n  font-size: 1.2em;\n  line-height: 1.7;\n  margin: 0 0 40px;\n}\n\n.site-content #contact-me {\n  margin-top: 60px;\n  height: 650px;\n  background-color: #808080;\n  position: relative;\n  display: flex;\n  align-items: center;\n}\n\n.site-content #contact-me .panel-body {\n  position: relative;\n  z-index: 3;\n  padding-left: 22px;\n  padding-right: 22px;\n  padding-top: 26px;\n  padding-bottom: 26px;\n}\n\n.site-content #contact-me .panel-body input,\n.site-content #contact-me .panel-body textarea {\n  background-color: rgba(255, 255, 255, 0.8);\n}\n\n.site-content #contact-me .form-controls {\n  margin-top: 50px;\n}\n\n.site-content #contact-me h3 {\n  padding-left: 30px;\n  color: #fff;\n  margin-top: 30px;\n  margin-bottom: 30px;\n}\n\n.site-content #hire-me {\n  margin-top: 60px;\n  width: 100%;\n  position: relative;\n  height: 650px;\n  background-color: #808080;\n  display: flex;\n  align-items: center;\n  background-image: url(" + __webpack_require__(170) + ");\n}\n\n.site-content .border-corner {\n  position: relative;\n  display: inline-block;\n  border: 3px solid black;\n  width: 100%;\n  min-height: 150px;\n}\n\n.site-content .border-corner::before {\n  content: \"\";\n  position: absolute;\n  height: calc(100% + 10px);\n  width: 100%;\n  width: calc(100% - 40px);\n  border-top: 5px solid white;\n  border-bottom: 5px solid white;\n  top: -5px;\n  left: 0;\n  left: calc(20px);\n}\n\n.site-content .border-corner::after {\n  content: \"\";\n  position: absolute;\n  height: 100%;\n  height: calc(100% - 40px);\n  width: calc(100% + 10px);\n  border-left: 5px solid white;\n  border-right: 5px solid white;\n  top: 0;\n  top: calc(20px);\n  left: -5px;\n}\n\n.site-content .border-corner.light {\n  border: 5px solid #fff;\n}\n\n.site-content .border-corner.light::after {\n  border-color: #000;\n}\n\n.site-content .border-corner.light::before {\n  border-color: #000;\n}", ""]);
 
 // exports
 
@@ -374,7 +374,7 @@ if(false) {
 
 /***/ }),
 
-/***/ 175:
+/***/ 170:
 /***/ (function(module, exports) {
 
 module.exports = "data:image/jpeg;base64,bW9kdWxlLmV4cG9ydHMgPSBfX3dlYnBhY2tfcHVibGljX3BhdGhfXyArICI3ZGI5ODlkNjZlZWQ0ODEwNmM4YjkzM2ZhOGM3NGE0Ny5qcGciOw=="
@@ -786,13 +786,13 @@ exports.push([module.i, "[data-toggleswitch] input[type='checkbox'] {\n  positio
 
 /***/ }),
 
-/***/ 54:
+/***/ 55:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(123);
+var content = __webpack_require__(120);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -824,7 +824,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(125);
+var content = __webpack_require__(121);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -850,7 +850,7 @@ if(false) {
 
 /***/ }),
 
-/***/ 72:
+/***/ 70:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -859,7 +859,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__admin_toolbar_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__admin_toolbar_scss__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_scss__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__common_scss__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__login_scss__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__login_scss__ = __webpack_require__(55);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__login_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__login_scss__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__toggle_scss__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__toggle_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__toggle_scss__);

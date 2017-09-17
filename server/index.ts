@@ -7,7 +7,6 @@ import { configure } from "./config/middleware.config";
 
 //App: Routing
 import { frontRoute } from "./routes/front/front.get";
-import { postCoverPhoto } from "./routes/cover-photo.post";
 import { collectionsRoute } from "./routes/editor.get";
 import { 
     postCollection, 
@@ -49,7 +48,6 @@ database.then(async connection=>{
     
     //Routes index
     frontRoute(main, connection);
-    postCoverPhoto(main, connection);
     collectionsRoute(editor, connection);
     postCollection(main, connection);
     postCollectionPhoto(main, connection);
@@ -60,6 +58,7 @@ database.then(async connection=>{
     userRegisterPostRoute(main, connection);
     userLoginPostRoute(main, connection);
     userLogoutPostRoute(main, connection);
+    userLogoutPostRoute(editor, connection);
     userCheckPostRoute(main, connection);
     designGet(editor, connection);
     collectionFeed(main, connection);

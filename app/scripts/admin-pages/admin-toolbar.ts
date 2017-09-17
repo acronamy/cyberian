@@ -41,7 +41,7 @@ const template = (userInstance)=> `
           </a>
           <ul class="dropdown-menu">
             <li role="separator" class="divider"></li>
-            <li><a href="#">Log out</a></li>
+            <li><a href="#logout">Log out</a></li>
           </ul>
         </li>
       </ul>
@@ -85,9 +85,10 @@ $(function(){
         //Actions
         $("[href='#logout']").click(function(e){
             e.preventDefault();
+            
             $.post("/user/logout",function(){
 
-                window.location = "/";
+                window.location.href = "/";
             })
         })
 

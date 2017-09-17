@@ -16,7 +16,6 @@ const install_1 = require("./install");
 const middleware_config_1 = require("./config/middleware.config");
 //App: Routing
 const front_get_1 = require("./routes/front/front.get");
-const cover_photo_post_1 = require("./routes/cover-photo.post");
 const editor_get_1 = require("./routes/editor.get");
 const collection_post_1 = require("./routes/collections/collection.post");
 const user_get_1 = require("./routes/user/user.get");
@@ -37,7 +36,6 @@ database_1.database.then((connection) => __awaiter(this, void 0, void 0, functio
     middleware_config_1.configure(mounts_index_1.main, mounts_index_1.editor);
     //Routes index
     front_get_1.frontRoute(mounts_index_1.main, connection);
-    cover_photo_post_1.postCoverPhoto(mounts_index_1.main, connection);
     editor_get_1.collectionsRoute(mounts_index_1.editor, connection);
     collection_post_1.postCollection(mounts_index_1.main, connection);
     collection_post_1.postCollectionPhoto(mounts_index_1.main, connection);
@@ -48,6 +46,7 @@ database_1.database.then((connection) => __awaiter(this, void 0, void 0, functio
     user_post_1.userRegisterPostRoute(mounts_index_1.main, connection);
     user_post_1.userLoginPostRoute(mounts_index_1.main, connection);
     user_post_1.userLogoutPostRoute(mounts_index_1.main, connection);
+    user_post_1.userLogoutPostRoute(mounts_index_1.editor, connection);
     user_post_1.userCheckPostRoute(mounts_index_1.main, connection);
     design_get_1.designGet(mounts_index_1.editor, connection);
     collection_feed_1.collectionFeed(mounts_index_1.main, connection);

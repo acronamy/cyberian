@@ -8,7 +8,7 @@ import {Photo} from "../../entities/photo.entity";
 import * as jsHash from "jshashes";
 const MD5 = new jsHash.MD5;
 
-const saveFileDirDropbox = path.resolve(__dirname, "../uploads","dropbox");
+const saveFileDirDropbox = path.resolve(__dirname, "../../uploads","dropbox");
 
 interface RequestWithFiles extends Request {
     files: any;
@@ -22,6 +22,8 @@ export function postCollection(mount:Application, connection:Connection) {
             const collection = new Collection();
 
             const data = req.body;
+
+            console.log(data)
 
             collection.description = data.description;
             collection.enabled = data.enabled;
@@ -110,9 +112,6 @@ export function postCollection(mount:Application, connection:Connection) {
             photo.ref = MD5.hex(name);
             photo.url = "/uploads/dropbox/"+name;
 
-
-            console.log(photo);
-
             await connection.manager.persist(photo)
                 .then(()=>{
                     console.log("saved photo")
@@ -176,13 +175,14 @@ export function postCollectionPhoto(mount:Application, connection:Connection) {
     mount.post("/save/collection/photo", async (req: RequestWithFiles, res) => {
         if (isLoggedIn(req)) {
             const collectionPhoto = req.files.file;
-            const filename = path.resolve(__dirname, "../uploads", collectionPhoto.name);
+            const filename = path.resolve(__dirname, "../../uploads", collectionPhoto.name);
             const url = "/uploads/"+collectionPhoto.name
             
             //prepare to save
             const photo = new Photo()
             photo.ref = MD5.hex(collectionPhoto.name);
             photo.url = "/uploads/"+collectionPhoto.name;
+            photo.orientation = req.body.orientation.replace("orientation-","");
             
             await connection.manager.persist(photo)
                 .then(()=>{

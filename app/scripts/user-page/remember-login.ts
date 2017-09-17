@@ -14,7 +14,7 @@ $(function () {
                 $.post("/user/login", {username:$("#username").val(), password:$("#password").val()}, function(userInstance) {
                     if(userInstance){
                         rememberMe(userInstance)
-                        window.location = "/"
+                        window.location.href = "/"
                     }
                     else{
                         $(".pos-vert .form-group").addClass("animated shake")
@@ -152,7 +152,7 @@ $(function () {
                 password:$("#password").val()
             }, function(pass){
                 if(pass){
-                    
+                    window.location.href = "/";
                 }
                 else{
 

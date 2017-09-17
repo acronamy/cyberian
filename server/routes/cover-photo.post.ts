@@ -14,7 +14,7 @@ export function postCoverPhoto(mount:Application, connection:Connection) {
     mount.post("/upload/cover-photo", (req: RequestWithFiles, res) => {
         if (isLoggedIn(req)) {
             const coverPhoto = req.files.file;
-            const filename = path.resolve(__dirname, "../uploads", coverPhoto.name);
+            const filename = path.resolve(__dirname, "../../uploads", coverPhoto.name);
 
             coverPhoto.mv(filename, function (err) {
                 if (err) {

@@ -1,5 +1,5 @@
 export function isLoggedIn(){
-    if(this.hasOwnProperty("session")){
+    if(this.hasOwnProperty("session") && this.session){
         return true;
     }
     return false;

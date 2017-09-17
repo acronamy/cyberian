@@ -1,4 +1,5 @@
 import * as $ from "jquery";
+import { imageOrientation } from "./portrait-landscape";
 
 function isSVGAvatar(str) {
     //we need a really really basic and fast way to determine the avatar type
@@ -25,18 +26,25 @@ Upload.prototype.getSize = function() {
 Upload.prototype.getName = function() {
     return this.file.name;
 };
-Upload.prototype.doUpload = function (cb) {
+Upload.prototype.doUpload = async function (cb) {
     var that = this;
     var formData = new FormData();
 
     // add assoc key values, this will be posts values
     formData.append("file", this.file, this.getName());
-    $(".progress").addClass("active")
-    
-    formData.append("upload_file", true);
 
-    console.log(formData.keys().next())
-    console.log(formData.values().next())
+    var readFile = await new Promise((resolve,reject)=>{
+        var reader = new FileReader();
+        reader.readAsDataURL(that.file);
+        reader.onload = function () {
+            resolve(reader.result)
+        };
+    })
+    var orientation = await imageOrientation(readFile);
+
+    formData.append("orientation", orientation);   
+    formData.append("upload_file", true);
+    $(".progress").addClass("active");
 
     $.ajax({
         type: "POST",

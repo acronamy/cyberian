@@ -24,6 +24,10 @@ __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
 ], Photo.prototype, "ref", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], Photo.prototype, "orientation", void 0);
 Photo = __decorate([
     typeorm_1.Entity()
 ], Photo);
