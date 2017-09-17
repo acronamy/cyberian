@@ -6,7 +6,7 @@ import { saveDropbox } from "./sidebar/save-dropbox";
 
 import { singleSelect, multiSelectIndidual, multiSelectMultiple } from "./sidebar/sidebar-selection";
 import { contextMenus } from "./sidebar/sidebar-context-menu";
-
+import * as dragula from 'dragula';
 
 
 export function sidebar() {
@@ -20,9 +20,12 @@ export function sidebar() {
     //SIDEBAR: Selection
     singleSelect();
     multiSelectIndidual();
-    
-
     multiSelectMultiple();
+
+
+    $(".collection-photo-list").each(function(){
+        dragula([ $(this)[0] ])
+    })
     
 
     //SIDEBAR: Context right click menus

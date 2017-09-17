@@ -14,7 +14,12 @@
 
             <div class="sidebar col-xs-3">
                 <header class="clearfix">
-                    <button class="btn btn-primary pull-right" type="button" data-toggle="modal" data-target=".add-collection"><span class="glyphicon glyphicon-plus"></span> Add</button>
+                    <div class="input-group">
+                        <input id="quick-add-collection" placeholder="Collection Name" class="form-control"/>
+                        <span class="input-group-btn">
+                            <button disabled class="btn btn-primary pull-right" type="button"><span class="glyphicon glyphicon-plus"></span> Add</button>
+                        </span>
+                    </div>
                 </header>
                 <main class="folder-tree clearfix">
                     <h5>Collections</h5>
@@ -40,7 +45,7 @@
                                         <input id="collection-name" novalidate class="form-control collection-name" type="text" placeholder="Collection name" />
                                         <textarea id="collection-description" novalidate class="form-control collection-description" placeholder="Description" size="2"></textarea>
                                         <h5>Tags</h5>
-                                        <input novalidate id="collection-tags" class="form-control" data-role="tagsinput" />
+                                        <input novalidate id="collection-tags" class="form-control hide" data-role="tagsinput" />
                                     </div>
                                 
                             </aside>

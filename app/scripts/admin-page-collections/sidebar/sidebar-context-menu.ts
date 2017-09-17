@@ -17,76 +17,6 @@ export function contextMenus(clipboard) {
             return $rowElem;
         },
         actions: {
-            copy: {
-                name: "Copy",
-                onClick(el) {
-                    $(".list-group-item.selected").each(function (index) {
-                        clipboard[index] = {
-                            id: $(this).data("id"),
-                            html: $(this)[0].outerHTML
-                        };
-                    })
-                    console.log($(".list-group-item.selected"))
-
-                }
-            },
-            paste: {
-                name: "Paste",
-                isEnabled: (el) => {
-                    if (clipboard.length > 0) {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                },
-                onClick(el) {
-                    
-                    var pasteContent = clipboard.map(function (item) {
-                        return item.html;
-                    })
-
-                    $(el).parent().find(".selected").remove();
-
-                    pasteContent.forEach(function (item) {
-                        $(el).parent().append(item);
-                    })
-                    clipboard = [];
-                    
-
-                    if(pasteFromDropbox){
-                        var collectionId = $(el).parent().prev(".folder-row").data("id");
-
-                        console.log(collectionId)
-
-                        setTimeout(function(){
-                            $(el).parent().find(".saved .status").remove();
-                            $(el).parent().find(".saved").addClass("save-from-dropbox");
-                            $(el).parent().find(".saved").removeClass("saved")
-                            unselectAdjacentFolder($(el))
-
-                            var updateData = []
-                            $(el).parent().find(".save-from-dropbox").each(function(i){
-                                updateData.push({
-                                    ref:$(this).data("name"),
-                                    index:$(this).index()+1,
-                                    enable:true,
-                                    description:""
-                                })
-                            })
-
-                            console.log(updateData)
-
-                            $.post("/update/collection/dropbox-photo", {
-                                collectionId:collectionId,
-                                newContent:JSON.stringify(updateData)
-                            },function(res){
-                                location.reload();
-                            })
-                        },1000)
-                    }
-                }
-            },
             delete: {
                 name: "Delete",
                 onClick(el) {
@@ -198,22 +128,6 @@ export function contextMenus(clipboard) {
                         unselectAdjacentFolder($(el).next(".collection-photo-list").find(".selected").first())
                     },100)
                 }
-            },
-            edit: {
-                name: "Edit",
-                onClick(el) {
-                    var selector = "#edit-collection-"+$(el).data("id");
-
-                    $(selector).modal()
-                },
-                isShown(el) {
-                    if (!$(el).hasClass("dropbox")) {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                },
             },
             delete: {
                 name: "Delete",

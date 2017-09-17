@@ -235,6 +235,12 @@ body.editor{
         .collection-photo-list{
             width: 100%;
             clear:both;
+            &:empty:before{
+                content: "Lets get started, copy your photos from Dropbox.";
+                margin: 10px 15px;
+                display: list-item;
+                list-style: none;
+            }
         }
         .list-group-item{
             opacity: .3;
@@ -267,8 +273,8 @@ body.editor{
             }
             .photo-thumbnail{
                 display: none;
-                width: 20px;
-                height: 20px;
+                width: 40px;
+                height: 40px;
                 float: left;
                 background-size: cover;
                 margin-right: 15px;
@@ -367,6 +373,7 @@ body.editor{
     }
 
     .editor-collection-panel{
+        position: relative;
         width:100%;
         min-height: 400px;
         overflow: hidden;
@@ -460,6 +467,9 @@ body.editor{
             }
         }
         footer{
+            position: absolute;
+            bottom: 0;
+            width: 100%;
             .carousel-ctrl{
                 background-color: transparent;
                 border:0;

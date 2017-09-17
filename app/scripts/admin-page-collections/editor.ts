@@ -6,140 +6,40 @@ import * as ps from "perfect-scrollbar";
 import { imageOrientation } from "../common/portrait-landscape";
 
 
-const CardCarousel = require("../common/image-slider.js");
+var CardCarousel = require("../common/image-slider.js");
 
 import {sidebar} from "./editor.sidebar";
+import "./editor.init";
+import { orderByWeight, saveForm, stagePhoto } from "./editor.common";
+import {postSimpleSaveMode} from "./editor.save";
 
 $(function () {
     require('bootstrap-tagsinput')
 
-    if($("[data-slider]").length >0){
-        $("[data-slider]").each(function(){
-            new CardCarousel("#"+$(this).attr("id"));
+   
+    $("#quick-add-collection").on("keyup change", function(e){
+        if($(this).val() !== ""){
+            $(this).siblings().find("button").removeAttr("disabled");
+        }
+        else{
+            $(this).siblings().find("button").attr("disabled","disabled");
+        }
+    })
+
+    $("#quick-add-collection").siblings().find("button").click(function(){
+        var data = postSimpleSaveMode()
+        console.log(data)
+        $.post("/save/collection", data, function (data) {
+            if (data) {
+                console.log(collection)
+                location.reload();
+            }
         })
-    }
+    })
+
 
     // to collections
     var collection = []
-
-    function orderByWeight() {
-        collection.sort(function (a, b) {
-            return parseFloat(a.index) - parseFloat(b.index);
-        });
-        return collection;
-    }
-
-    function stagePhoto(e) {
-        if (!e.target.hasClass("add-placeholder")) {
-            //photo reference
-            var ref = e.target.data("ref");
-            var index = e.target.index();
-            if (e.event === "upload") {
-                collection.push({
-                    ref: ref,
-                    index: index,
-                    enable: true,
-                    description: "",
-                })
-            }
-            if (e.event === "remove") {
-                var deleteRef = e.target.data("ref");
-
-                collection = collection.map(photo => {
-                    if (photo.ref === deleteRef) {
-                        return false;
-                    }
-                    else {
-                        return photo;
-                    }
-                }).filter(Boolean)
-
-                collection = orderByWeight();
-                console.log(collection)
-            }
-            if (e.event === "move") {
-                if (e.value.moved) {
-                    var photoMatch = collection.find(photo => photo.ref === ref);
-                    var siblings = collection.filter(photo => photo.ref !== ref);
-                    photoMatch.index = e.value.newIndex
-                    siblings.map(function (photo) {
-                        photo.index = $("[data-ref='" + photo.ref + "']").index()
-                    })
-                }
-                collection = orderByWeight();
-
-                console.log(collection)
-            }
-            if (e.event === "enabled") {
-                var photoMatch = collection.find(photo => photo.ref === ref);
-                photoMatch.enable = e.value;
-            }
-            if (e.event === "description") {
-                var photoMatch = collection.find(photo => photo.ref === ref);
-                photoMatch.description = e.value;
-
-                
-            }
-            console.log(collection)
-        }
-    }
-
-
-    function saveForm(mode){
-
-        var url;
-        var data;
-        var parent = $(this);
-        if(mode === "save"){
-            url = "/save/collection";
-            //to save (ps interfaces are not working front end for me, I cba to fix, not time!)
-            console.log(collection)
-            data = {
-                name: $("#collection-name").val(),
-                description: $("#collection-description").val(),
-                tags: $("#collection-tags").val(),
-                photoContents: JSON.stringify(collection),
-                enabled: true
-            };
-        }
-        else if(mode==="update"){
-            url = "/update/collection";
-
-            parent.find(".photo-tile").each(function(index){
-                var data = $(this).data()
-
-
-                //if not already in collection then save it
-                if( !collection.find(photo=>photo.ref != data.ref)||false ){
-                    collection.push({
-                        ref: data.ref,
-                        index: index,
-                        enable: true,
-                        description: "",
-                    })
-                }
-
-            })
-
-            data = {
-                id:parent.data().id,
-                name: parent.find("[id^='collection-name']").val(),
-                description: $("[id^='collection-description']").val(),
-                tags: $("[id^='collection-tags']").val(),
-                photoContents: JSON.stringify(collection),
-                enabled: true
-            };
-        }
-
-        
-        $.post(url, data, function (data) {
-            if (data) {
-                console.log("collection saved in "+ mode+" mode.")
-                console.log(collection)
-                //location.reload();
-            }
-        })
-    }
 
     //Selectors and state
     var validationCriteria = [
@@ -158,7 +58,6 @@ $(function () {
         }
         $(selector).each(validateInput);
         $(selector).keyup(validateInput);
-        
     })
 
     $(document).on("submit","#save-collection, #edit-collection",function(e){
@@ -209,62 +108,6 @@ $(function () {
         dragula(modalOptions);
         sidebar()
         
-
-
-
-        //MAIN BODY
-
-        $(".photo-upload-target").on("change", function (e) {
-            var self = $(this)
-            var file = $(this)[0].files[0];
-
-            console.log(file)
-
-            var upload = new Upload("/save/collection/photo", file);
-            // execute upload
-            var MD5 = new jsHash.MD5;
-            //Photo ref same as DB
-            var ref = MD5.hex(file.name);
-            upload.doUpload(async function (uploaded) {
-
-
-                if (uploaded.success) {
-                    var orientation = await imageOrientation(uploaded.data);
-                    //visualize new photo
-                    self.closest("main").append([
-                        "<div data-ref='" + ref + "' class='tile photo-tile'>",
-                            "<header class='clearfix'>",
-                                '<button type="button" title="Delete photo from this collection" class="close" aria-label="Close"><span class="close-x" aria-hidden="true">×</span></button>',
-                                '<div class="input-group toggle-group">',
-                                    '<label title="Enable / Disable photo in this collection." class="small" data-toggleswitch="data-toggle" id="for-photo-enabled">',
-                                        '<input checked type="checkbox" name="for-photo-enabled"/>',
-                                    '<div class="inner"></div>',
-                                "</label>",
-                                    "<small class='photo-enebled-text'>",
-                                        "<span class='enabled-text'>Public</span>",
-                                        "<span class='hide disabled-text'>Private</span>",
-                                    "</small>",
-                                "</div>",
-                            "</header>",
-                            "<footer>",
-                                "<textarea size='2' placeholder='Description'></textarea>",
-                            "</footer>",
-                            `<div class='photo-tile-photo ${orientation}' style='background-image:url("${uploaded.data}");'></div>`,
-                        "</div>"
-                    ].join(""))
-
-                    stagePhoto({
-                        target: self.closest("main").children(":last-child"),
-                        event: "upload",
-                        value: true,
-                        ref: ref
-                    })
-
-                }//end upload
-            });
-        })
-
-
         //EVENTS
         var dragClickPoll;
         $(document).on("mousedown", ".tile", function (e) {
@@ -350,12 +193,6 @@ $(function () {
             console.log($(".add-placeholder").siblings().length)
             //validate collection form requirements
         })
-
-
-
-        
-
-
 
         //Edit delete collections
 

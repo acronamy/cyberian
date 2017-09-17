@@ -6,9 +6,6 @@ export function createFolderTree($){
             <div data-toggle="collapse" data-target="#collection-folder-list-${collection.id}" data-length="${collection.photoContents.length}" class="folder"></div> <h4 data-toggle="collapse" data-target="#collection-folder-list-${collection.id}">${collection.name}</h4>
 
             <div class="dropdown pull-right">
-                <button class="btn btn-default dropdown-toggle" type="button" id="collection-folder-context-${collection.id}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    <span class="glyphicon glyphicon-option-horizontal"></span>
-                </button>
                 <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="collection-folder-context-${collection.id}">
                     <li><a data-toggle="modal" data-target="#edit-collection-${collection.id}" data-action="edit" href="#">Edit</a></li>
                     <li role="separator" class="divider"></li>
@@ -16,12 +13,9 @@ export function createFolderTree($){
                 </ul>
             </div>
         </div>
-        <ul id="collection-folder-list-${collection.id}" class="list-group  collapse collection-photo-list">
-            ${collection.photoContents.map(photo => {
-                return `<li class="list-group-item valid" data-id='${photo.ref}'><div style="background-image:url('${photo.url}');" class="photo-thumbnail"></div> ${photo.url.split("/").pop()}</li>`
-            }).join("")}
-        </ul>
-        `
+<ul id="collection-folder-list-${collection.id}" class="list-group collapse collection-photo-list">${collection.photoContents.map(photo => {
+    return `<li class="list-group-item valid" data-id='${photo.ref}'><div style="background-image:url('${photo.url}');" class="photo-thumbnail"></div> ${photo.url.split("/").pop()}</li>`
+}).join("")}</ul>`
         )
 
         $(".collections-real").append(
@@ -96,14 +90,14 @@ export function createFolderTree($){
                                 <input novalidate id="collection-name-${collection.id}" class="form-control collection-name" type="text" value="${collection.name}" placeholder="Collection name"/>
                                 <textarea novalidate id="collection-description-${collection.id}" class="form-control collection-description" placeholder="Description" size="2">
 ${collection.description.replace(/^\s+|\s+$/g,'')}</textarea>
-                                <h5>Tags</h5>
-                                <input value="${collection.tags}" id="collection-tags" class="form-control" data-role="tagsinput" />
+                                
+                                <input value="${collection.tags}" id="collection-tags" class="form-control hide" data-role="tagsinput" />
                             </div>
                         </aside>
                         <main class="col-xs-10">
-                            <div class="add-placeholder tile">
+                            <!-- <div class="add-placeholder tile">
                                 <input type="file" class='photo-upload-target'/>
-                            </div>
+                            </div> -->
                             ${collection.photoContents.map(photo => {
                     return `<div style="background-image:url('${photo.url}');" title='${photo.description}'
                                 data-url="${photo.url}"

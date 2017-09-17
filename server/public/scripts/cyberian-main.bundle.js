@@ -64,14 +64,14 @@ var cyberian =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 57);
+/******/ 	return __webpack_require__(__webpack_require__.s = 60);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["$"] = __webpack_require__(138);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["$"] = __webpack_require__(141);
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ }),
@@ -203,7 +203,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(11);
+var	fixUrls = __webpack_require__(12);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -523,11 +523,11 @@ function updateLink (link, options, obj) {
 
 
 var _ = __webpack_require__(4);
-var cls = __webpack_require__(18);
-var defaultSettings = __webpack_require__(144);
+var cls = __webpack_require__(20);
+var defaultSettings = __webpack_require__(146);
 var dom = __webpack_require__(8);
-var EventManager = __webpack_require__(141);
-var guid = __webpack_require__(142);
+var EventManager = __webpack_require__(143);
+var guid = __webpack_require__(144);
 
 var instances = {};
 
@@ -636,7 +636,7 @@ exports.get = function (element) {
 "use strict";
 
 
-var cls = __webpack_require__(18);
+var cls = __webpack_require__(20);
 var dom = __webpack_require__(8);
 
 var toInt = exports.toInt = function (x) {
@@ -723,7 +723,7 @@ exports.env = {
 
 
 var _ = __webpack_require__(4);
-var cls = __webpack_require__(18);
+var cls = __webpack_require__(20);
 var dom = __webpack_require__(8);
 var instances = __webpack_require__(3);
 var updateScroll = __webpack_require__(6);
@@ -1095,6 +1095,51 @@ module.exports = isLength;
 
 /***/ }),
 /* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = imageOrientation;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
+
+
+
+async function imageOrientation(src) {
+    var orientation,
+        img = new Image();
+    img.src = src;
+    var o = await new Promise((resolve,reject)=>{
+        img.onload = function(){
+            if (img.naturalWidth > img.naturalHeight) {
+                orientation = 'orientation-landscape';
+            } else if (img.naturalWidth < img.naturalHeight) {
+                orientation = 'orientation-portrait';
+            } else {
+                orientation = 'orientation-even';
+            }
+            resolve(orientation);
+        }
+    })
+    return o;
+}
+
+__WEBPACK_IMPORTED_MODULE_0_jquery__(function () {
+    __WEBPACK_IMPORTED_MODULE_0_jquery__["fn"].orientation = function () {
+        var bg = this.css("background-image");
+        var self = this;
+        if(/"/.test(bg)){
+            bg = bg.split('"')[1];
+        }
+        else if(/'/.test(bg)){
+            bg = bg.split("'")[1];
+        }
+        __WEBPACK_IMPORTED_MODULE_0_jquery__(self).addClass(imageOrientation(bg));
+        return imageOrientation(bg);
+    }
+})
+
+/***/ }),
+/* 11 */
 /***/ (function(module, exports) {
 
 /**
@@ -1128,7 +1173,7 @@ module.exports = isObject;
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports) {
 
 
@@ -1223,10 +1268,134 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 12 */,
 /* 13 */,
 /* 14 */,
-/* 15 */
+/* 15 */,
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return isSVGAvatar; });
+/* unused harmony export Upload */
+/* unused harmony export active */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__portrait_landscape__ = __webpack_require__(10);
+
+
+
+function isSVGAvatar(str) {
+    //we need a really really basic and fast way to determine the avatar type
+    return [
+        str[0]==="<",
+        str[1]==="s",
+        str[2]==="v",
+        str[3]==="g"
+    ]
+    .every(test=>test===true);
+}
+
+var Upload = function (url, file) {
+    this.file = file;
+    this.url = url;
+};
+
+Upload.prototype.getType = function() {
+    return this.file.type;
+};
+Upload.prototype.getSize = function() {
+    return this.file.size;
+};
+Upload.prototype.getName = function() {
+    return this.file.name;
+};
+Upload.prototype.doUpload = async function (cb) {
+    var that = this;
+    var formData = new FormData();
+
+    // add assoc key values, this will be posts values
+    formData.append("file", this.file, this.getName());
+
+    var readFile = await new Promise((resolve,reject)=>{
+        var reader = new FileReader();
+        reader.readAsDataURL(that.file);
+        reader.onload = function () {
+            resolve(reader.result)
+        };
+    })
+    var orientation = await __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__portrait_landscape__["a" /* imageOrientation */])(readFile);
+
+    formData.append("orientation", orientation);   
+    formData.append("upload_file", true);
+    __WEBPACK_IMPORTED_MODULE_0_jquery__(".progress").addClass("active");
+
+    __WEBPACK_IMPORTED_MODULE_0_jquery__["ajax"]({
+        type: "POST",
+        url: that.url,
+        xhr: function () {
+            var myXhr = __WEBPACK_IMPORTED_MODULE_0_jquery__["ajaxSettings"].xhr();
+            if (myXhr.upload) {
+                myXhr.upload.addEventListener('progress', that.progressHandling, false);
+            }
+            return myXhr;
+        },
+        success: function (data) {
+            setTimeout(function(){
+                __WEBPACK_IMPORTED_MODULE_0_jquery__(".progress").removeClass("active")
+                if(typeof cb === "function"){
+                    cb({
+                        success:true,
+                        data:data
+                    })
+                }
+            },1000)
+
+            
+        },
+        error: function (error) {
+            setTimeout(function(){
+                __WEBPACK_IMPORTED_MODULE_0_jquery__(".progress").removeClass("active")
+                if(typeof cb === "function"){
+                    cb({
+                        success:false,
+                    })
+                }
+            },1000)
+            
+        },
+        async: true,
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        timeout: 60000
+    });
+};
+
+Upload.prototype.progressHandling = function (event) {
+    var percent = 0;
+    var position = event.loaded || event.position;
+    var total = event.total;
+    var progressBar = ".progress";
+    if (event.lengthComputable) {
+        percent = Math.ceil(position / total * 100);
+    }
+    // update progress bars classes so it fits your code
+    __WEBPACK_IMPORTED_MODULE_0_jquery__(progressBar + " .progress-bar").css("width", +percent + "%");
+    //$(progressBar + " .status").text(percent + "%");
+};
+
+
+function active(base,toActive){
+    __WEBPACK_IMPORTED_MODULE_0_jquery__(base).find(".active").removeClass("active");
+    __WEBPACK_IMPORTED_MODULE_0_jquery__(base).find(toActive).addClass("active");
+}
+
+
+
+
+/***/ }),
+/* 17 */
 /***/ (function(module, exports) {
 
 /**
@@ -1244,12 +1413,12 @@ module.exports = isObjectLike;
 
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(38),
+var getNative = __webpack_require__(41),
     isLength = __webpack_require__(9),
-    isObjectLike = __webpack_require__(15);
+    isObjectLike = __webpack_require__(17);
 
 /** `Object#toString` result references. */
 var arrayTag = '[object Array]';
@@ -1290,13 +1459,13 @@ module.exports = isArray;
 
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(38),
-    isArrayLike = __webpack_require__(22),
-    isObject = __webpack_require__(10),
-    shimKeys = __webpack_require__(93);
+var getNative = __webpack_require__(41),
+    isArrayLike = __webpack_require__(23),
+    isObject = __webpack_require__(11),
+    shimKeys = __webpack_require__(96);
 
 /* Native method references for those with the same name as other `lodash` methods. */
 var nativeKeys = getNative(Object, 'keys');
@@ -1341,7 +1510,7 @@ module.exports = keys;
 
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1390,13 +1559,13 @@ exports.list = function (element) {
 
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["b"] = loadDropboxFolderContent;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return dbx; });
-var Dropbox = __webpack_require__(129);
+var Dropbox = __webpack_require__(132);
 var dbx = new Dropbox({ accessToken: '9x3oXu1QUfAAAAAAAAAQhpuxPKAV8iQfdN3ZljlNfCaf9WCY2TBxWly8WymlraLV' });
 
 async function loadDropboxFolderContent(path){
@@ -1408,55 +1577,10 @@ async function loadDropboxFolderContent(path){
 
 
 /***/ }),
-/* 20 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = imageOrientation;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-
-
-
-async function imageOrientation(src) {
-    var orientation,
-        img = new Image();
-    img.src = src;
-    var o = await new Promise((resolve,reject)=>{
-        img.onload = function(){
-            if (img.naturalWidth > img.naturalHeight) {
-                orientation = 'orientation-landscape';
-            } else if (img.naturalWidth < img.naturalHeight) {
-                orientation = 'orientation-portrait';
-            } else {
-                orientation = 'orientation-even';
-            }
-            resolve(orientation);
-        }
-    })
-    return o;
-}
-
-__WEBPACK_IMPORTED_MODULE_0_jquery__(function () {
-    __WEBPACK_IMPORTED_MODULE_0_jquery__["fn"].orientation = function () {
-        var bg = this.css("background-image");
-        var self = this;
-        if(/"/.test(bg)){
-            bg = bg.split('"')[1];
-        }
-        else if(/'/.test(bg)){
-            bg = bg.split("'")[1];
-        }
-        __WEBPACK_IMPORTED_MODULE_0_jquery__(self).addClass(imageOrientation(bg));
-        return imageOrientation(bg);
-    }
-})
-
-/***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseProperty = __webpack_require__(85);
+var baseProperty = __webpack_require__(88);
 
 /**
  * Gets the "length" property value of `object`.
@@ -1474,10 +1598,10 @@ module.exports = getLength;
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getLength = __webpack_require__(21),
+var getLength = __webpack_require__(22),
     isLength = __webpack_require__(9);
 
 /**
@@ -1495,7 +1619,7 @@ module.exports = isArrayLike;
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports) {
 
 /** Used to detect unsigned integer values. */
@@ -1525,10 +1649,10 @@ module.exports = isIndex;
 
 
 /***/ }),
-/* 24 */,
 /* 25 */,
 /* 26 */,
-/* 27 */
+/* 27 */,
+/* 28 */
 /***/ (function(module, exports) {
 
 function getBaseURL(host) {
@@ -1539,7 +1663,7 @@ module.exports = getBaseURL;
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process, global) {var require;/*!
@@ -1674,7 +1798,7 @@ function flush() {
 function attemptVertx() {
   try {
     var r = require;
-    var vertx = __webpack_require__(171);
+    var vertx = __webpack_require__(173);
     vertxNext = vertx.runOnLoop || vertx.runOnContext;
     return useVertxTimer();
   } catch (e) {
@@ -2696,10 +2820,1783 @@ return Promise;
 
 })));
 //# sourceMappingURL=es6-promise.map
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(44), __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(47), __webpack_require__(7)))
 
 /***/ }),
-/* 29 */
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
+ * jshashes - https://github.com/h2non/jshashes
+ * Released under the "New BSD" license
+ *
+ * Algorithms specification:
+ *
+ * MD5 - http://www.ietf.org/rfc/rfc1321.txt
+ * RIPEMD-160 - http://homes.esat.kuleuven.be/~bosselae/ripemd160.html
+ * SHA1   - http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf
+ * SHA256 - http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf
+ * SHA512 - http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf
+ * HMAC - http://www.ietf.org/rfc/rfc2104.txt
+ */
+(function() {
+  var Hashes;
+
+  function utf8Encode(str) {
+    var x, y, output = '',
+      i = -1,
+      l;
+
+    if (str && str.length) {
+      l = str.length;
+      while ((i += 1) < l) {
+        /* Decode utf-16 surrogate pairs */
+        x = str.charCodeAt(i);
+        y = i + 1 < l ? str.charCodeAt(i + 1) : 0;
+        if (0xD800 <= x && x <= 0xDBFF && 0xDC00 <= y && y <= 0xDFFF) {
+          x = 0x10000 + ((x & 0x03FF) << 10) + (y & 0x03FF);
+          i += 1;
+        }
+        /* Encode output as utf-8 */
+        if (x <= 0x7F) {
+          output += String.fromCharCode(x);
+        } else if (x <= 0x7FF) {
+          output += String.fromCharCode(0xC0 | ((x >>> 6) & 0x1F),
+            0x80 | (x & 0x3F));
+        } else if (x <= 0xFFFF) {
+          output += String.fromCharCode(0xE0 | ((x >>> 12) & 0x0F),
+            0x80 | ((x >>> 6) & 0x3F),
+            0x80 | (x & 0x3F));
+        } else if (x <= 0x1FFFFF) {
+          output += String.fromCharCode(0xF0 | ((x >>> 18) & 0x07),
+            0x80 | ((x >>> 12) & 0x3F),
+            0x80 | ((x >>> 6) & 0x3F),
+            0x80 | (x & 0x3F));
+        }
+      }
+    }
+    return output;
+  }
+
+  function utf8Decode(str) {
+    var i, ac, c1, c2, c3, arr = [],
+      l;
+    i = ac = c1 = c2 = c3 = 0;
+
+    if (str && str.length) {
+      l = str.length;
+      str += '';
+
+      while (i < l) {
+        c1 = str.charCodeAt(i);
+        ac += 1;
+        if (c1 < 128) {
+          arr[ac] = String.fromCharCode(c1);
+          i += 1;
+        } else if (c1 > 191 && c1 < 224) {
+          c2 = str.charCodeAt(i + 1);
+          arr[ac] = String.fromCharCode(((c1 & 31) << 6) | (c2 & 63));
+          i += 2;
+        } else {
+          c2 = str.charCodeAt(i + 1);
+          c3 = str.charCodeAt(i + 2);
+          arr[ac] = String.fromCharCode(((c1 & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+          i += 3;
+        }
+      }
+    }
+    return arr.join('');
+  }
+
+  /**
+   * Add integers, wrapping at 2^32. This uses 16-bit operations internally
+   * to work around bugs in some JS interpreters.
+   */
+
+  function safe_add(x, y) {
+    var lsw = (x & 0xFFFF) + (y & 0xFFFF),
+      msw = (x >> 16) + (y >> 16) + (lsw >> 16);
+    return (msw << 16) | (lsw & 0xFFFF);
+  }
+
+  /**
+   * Bitwise rotate a 32-bit number to the left.
+   */
+
+  function bit_rol(num, cnt) {
+    return (num << cnt) | (num >>> (32 - cnt));
+  }
+
+  /**
+   * Convert a raw string to a hex string
+   */
+
+  function rstr2hex(input, hexcase) {
+    var hex_tab = hexcase ? '0123456789ABCDEF' : '0123456789abcdef',
+      output = '',
+      x, i = 0,
+      l = input.length;
+    for (; i < l; i += 1) {
+      x = input.charCodeAt(i);
+      output += hex_tab.charAt((x >>> 4) & 0x0F) + hex_tab.charAt(x & 0x0F);
+    }
+    return output;
+  }
+
+  /**
+   * Encode a string as utf-16
+   */
+
+  function str2rstr_utf16le(input) {
+    var i, l = input.length,
+      output = '';
+    for (i = 0; i < l; i += 1) {
+      output += String.fromCharCode(input.charCodeAt(i) & 0xFF, (input.charCodeAt(i) >>> 8) & 0xFF);
+    }
+    return output;
+  }
+
+  function str2rstr_utf16be(input) {
+    var i, l = input.length,
+      output = '';
+    for (i = 0; i < l; i += 1) {
+      output += String.fromCharCode((input.charCodeAt(i) >>> 8) & 0xFF, input.charCodeAt(i) & 0xFF);
+    }
+    return output;
+  }
+
+  /**
+   * Convert an array of big-endian words to a string
+   */
+
+  function binb2rstr(input) {
+    var i, l = input.length * 32,
+      output = '';
+    for (i = 0; i < l; i += 8) {
+      output += String.fromCharCode((input[i >> 5] >>> (24 - i % 32)) & 0xFF);
+    }
+    return output;
+  }
+
+  /**
+   * Convert an array of little-endian words to a string
+   */
+
+  function binl2rstr(input) {
+    var i, l = input.length * 32,
+      output = '';
+    for (i = 0; i < l; i += 8) {
+      output += String.fromCharCode((input[i >> 5] >>> (i % 32)) & 0xFF);
+    }
+    return output;
+  }
+
+  /**
+   * Convert a raw string to an array of little-endian words
+   * Characters >255 have their high-byte silently ignored.
+   */
+
+  function rstr2binl(input) {
+    var i, l = input.length * 8,
+      output = Array(input.length >> 2),
+      lo = output.length;
+    for (i = 0; i < lo; i += 1) {
+      output[i] = 0;
+    }
+    for (i = 0; i < l; i += 8) {
+      output[i >> 5] |= (input.charCodeAt(i / 8) & 0xFF) << (i % 32);
+    }
+    return output;
+  }
+
+  /**
+   * Convert a raw string to an array of big-endian words
+   * Characters >255 have their high-byte silently ignored.
+   */
+
+  function rstr2binb(input) {
+    var i, l = input.length * 8,
+      output = Array(input.length >> 2),
+      lo = output.length;
+    for (i = 0; i < lo; i += 1) {
+      output[i] = 0;
+    }
+    for (i = 0; i < l; i += 8) {
+      output[i >> 5] |= (input.charCodeAt(i / 8) & 0xFF) << (24 - i % 32);
+    }
+    return output;
+  }
+
+  /**
+   * Convert a raw string to an arbitrary string encoding
+   */
+
+  function rstr2any(input, encoding) {
+    var divisor = encoding.length,
+      remainders = Array(),
+      i, q, x, ld, quotient, dividend, output, full_length;
+
+    /* Convert to an array of 16-bit big-endian values, forming the dividend */
+    dividend = Array(Math.ceil(input.length / 2));
+    ld = dividend.length;
+    for (i = 0; i < ld; i += 1) {
+      dividend[i] = (input.charCodeAt(i * 2) << 8) | input.charCodeAt(i * 2 + 1);
+    }
+
+    /**
+     * Repeatedly perform a long division. The binary array forms the dividend,
+     * the length of the encoding is the divisor. Once computed, the quotient
+     * forms the dividend for the next step. We stop when the dividend is zerHashes.
+     * All remainders are stored for later use.
+     */
+    while (dividend.length > 0) {
+      quotient = Array();
+      x = 0;
+      for (i = 0; i < dividend.length; i += 1) {
+        x = (x << 16) + dividend[i];
+        q = Math.floor(x / divisor);
+        x -= q * divisor;
+        if (quotient.length > 0 || q > 0) {
+          quotient[quotient.length] = q;
+        }
+      }
+      remainders[remainders.length] = x;
+      dividend = quotient;
+    }
+
+    /* Convert the remainders to the output string */
+    output = '';
+    for (i = remainders.length - 1; i >= 0; i--) {
+      output += encoding.charAt(remainders[i]);
+    }
+
+    /* Append leading zero equivalents */
+    full_length = Math.ceil(input.length * 8 / (Math.log(encoding.length) / Math.log(2)));
+    for (i = output.length; i < full_length; i += 1) {
+      output = encoding[0] + output;
+    }
+    return output;
+  }
+
+  /**
+   * Convert a raw string to a base-64 string
+   */
+
+  function rstr2b64(input, b64pad) {
+    var tab = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
+      output = '',
+      len = input.length,
+      i, j, triplet;
+    b64pad = b64pad || '=';
+    for (i = 0; i < len; i += 3) {
+      triplet = (input.charCodeAt(i) << 16) | (i + 1 < len ? input.charCodeAt(i + 1) << 8 : 0) | (i + 2 < len ? input.charCodeAt(i + 2) : 0);
+      for (j = 0; j < 4; j += 1) {
+        if (i * 8 + j * 6 > input.length * 8) {
+          output += b64pad;
+        } else {
+          output += tab.charAt((triplet >>> 6 * (3 - j)) & 0x3F);
+        }
+      }
+    }
+    return output;
+  }
+
+  Hashes = {
+    /**
+     * @property {String} version
+     * @readonly
+     */
+    VERSION: '1.0.6',
+    /**
+     * @member Hashes
+     * @class Base64
+     * @constructor
+     */
+    Base64: function() {
+      // private properties
+      var tab = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
+        pad = '=', // default pad according with the RFC standard
+        url = false, // URL encoding support @todo
+        utf8 = true; // by default enable UTF-8 support encoding
+
+      // public method for encoding
+      this.encode = function(input) {
+        var i, j, triplet,
+          output = '',
+          len = input.length;
+
+        pad = pad || '=';
+        input = (utf8) ? utf8Encode(input) : input;
+
+        for (i = 0; i < len; i += 3) {
+          triplet = (input.charCodeAt(i) << 16) | (i + 1 < len ? input.charCodeAt(i + 1) << 8 : 0) | (i + 2 < len ? input.charCodeAt(i + 2) : 0);
+          for (j = 0; j < 4; j += 1) {
+            if (i * 8 + j * 6 > len * 8) {
+              output += pad;
+            } else {
+              output += tab.charAt((triplet >>> 6 * (3 - j)) & 0x3F);
+            }
+          }
+        }
+        return output;
+      };
+
+      // public method for decoding
+      this.decode = function(input) {
+        // var b64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+        var i, o1, o2, o3, h1, h2, h3, h4, bits, ac,
+          dec = '',
+          arr = [];
+        if (!input) {
+          return input;
+        }
+
+        i = ac = 0;
+        input = input.replace(new RegExp('\\' + pad, 'gi'), ''); // use '='
+        //input += '';
+
+        do { // unpack four hexets into three octets using index points in b64
+          h1 = tab.indexOf(input.charAt(i += 1));
+          h2 = tab.indexOf(input.charAt(i += 1));
+          h3 = tab.indexOf(input.charAt(i += 1));
+          h4 = tab.indexOf(input.charAt(i += 1));
+
+          bits = h1 << 18 | h2 << 12 | h3 << 6 | h4;
+
+          o1 = bits >> 16 & 0xff;
+          o2 = bits >> 8 & 0xff;
+          o3 = bits & 0xff;
+          ac += 1;
+
+          if (h3 === 64) {
+            arr[ac] = String.fromCharCode(o1);
+          } else if (h4 === 64) {
+            arr[ac] = String.fromCharCode(o1, o2);
+          } else {
+            arr[ac] = String.fromCharCode(o1, o2, o3);
+          }
+        } while (i < input.length);
+
+        dec = arr.join('');
+        dec = (utf8) ? utf8Decode(dec) : dec;
+
+        return dec;
+      };
+
+      // set custom pad string
+      this.setPad = function(str) {
+        pad = str || pad;
+        return this;
+      };
+      // set custom tab string characters
+      this.setTab = function(str) {
+        tab = str || tab;
+        return this;
+      };
+      this.setUTF8 = function(bool) {
+        if (typeof bool === 'boolean') {
+          utf8 = bool;
+        }
+        return this;
+      };
+    },
+
+    /**
+     * CRC-32 calculation
+     * @member Hashes
+     * @method CRC32
+     * @static
+     * @param {String} str Input String
+     * @return {String}
+     */
+    CRC32: function(str) {
+      var crc = 0,
+        x = 0,
+        y = 0,
+        table, i, iTop;
+      str = utf8Encode(str);
+
+      table = [
+        '00000000 77073096 EE0E612C 990951BA 076DC419 706AF48F E963A535 9E6495A3 0EDB8832 ',
+        '79DCB8A4 E0D5E91E 97D2D988 09B64C2B 7EB17CBD E7B82D07 90BF1D91 1DB71064 6AB020F2 F3B97148 ',
+        '84BE41DE 1ADAD47D 6DDDE4EB F4D4B551 83D385C7 136C9856 646BA8C0 FD62F97A 8A65C9EC 14015C4F ',
+        '63066CD9 FA0F3D63 8D080DF5 3B6E20C8 4C69105E D56041E4 A2677172 3C03E4D1 4B04D447 D20D85FD ',
+        'A50AB56B 35B5A8FA 42B2986C DBBBC9D6 ACBCF940 32D86CE3 45DF5C75 DCD60DCF ABD13D59 26D930AC ',
+        '51DE003A C8D75180 BFD06116 21B4F4B5 56B3C423 CFBA9599 B8BDA50F 2802B89E 5F058808 C60CD9B2 ',
+        'B10BE924 2F6F7C87 58684C11 C1611DAB B6662D3D 76DC4190 01DB7106 98D220BC EFD5102A 71B18589 ',
+        '06B6B51F 9FBFE4A5 E8B8D433 7807C9A2 0F00F934 9609A88E E10E9818 7F6A0DBB 086D3D2D 91646C97 ',
+        'E6635C01 6B6B51F4 1C6C6162 856530D8 F262004E 6C0695ED 1B01A57B 8208F4C1 F50FC457 65B0D9C6 ',
+        '12B7E950 8BBEB8EA FCB9887C 62DD1DDF 15DA2D49 8CD37CF3 FBD44C65 4DB26158 3AB551CE A3BC0074 ',
+        'D4BB30E2 4ADFA541 3DD895D7 A4D1C46D D3D6F4FB 4369E96A 346ED9FC AD678846 DA60B8D0 44042D73 ',
+        '33031DE5 AA0A4C5F DD0D7CC9 5005713C 270241AA BE0B1010 C90C2086 5768B525 206F85B3 B966D409 ',
+        'CE61E49F 5EDEF90E 29D9C998 B0D09822 C7D7A8B4 59B33D17 2EB40D81 B7BD5C3B C0BA6CAD EDB88320 ',
+        '9ABFB3B6 03B6E20C 74B1D29A EAD54739 9DD277AF 04DB2615 73DC1683 E3630B12 94643B84 0D6D6A3E ',
+        '7A6A5AA8 E40ECF0B 9309FF9D 0A00AE27 7D079EB1 F00F9344 8708A3D2 1E01F268 6906C2FE F762575D ',
+        '806567CB 196C3671 6E6B06E7 FED41B76 89D32BE0 10DA7A5A 67DD4ACC F9B9DF6F 8EBEEFF9 17B7BE43 ',
+        '60B08ED5 D6D6A3E8 A1D1937E 38D8C2C4 4FDFF252 D1BB67F1 A6BC5767 3FB506DD 48B2364B D80D2BDA ',
+        'AF0A1B4C 36034AF6 41047A60 DF60EFC3 A867DF55 316E8EEF 4669BE79 CB61B38C BC66831A 256FD2A0 ',
+        '5268E236 CC0C7795 BB0B4703 220216B9 5505262F C5BA3BBE B2BD0B28 2BB45A92 5CB36A04 C2D7FFA7 ',
+        'B5D0CF31 2CD99E8B 5BDEAE1D 9B64C2B0 EC63F226 756AA39C 026D930A 9C0906A9 EB0E363F 72076785 ',
+        '05005713 95BF4A82 E2B87A14 7BB12BAE 0CB61B38 92D28E9B E5D5BE0D 7CDCEFB7 0BDBDF21 86D3D2D4 ',
+        'F1D4E242 68DDB3F8 1FDA836E 81BE16CD F6B9265B 6FB077E1 18B74777 88085AE6 FF0F6A70 66063BCA ',
+        '11010B5C 8F659EFF F862AE69 616BFFD3 166CCF45 A00AE278 D70DD2EE 4E048354 3903B3C2 A7672661 ',
+        'D06016F7 4969474D 3E6E77DB AED16A4A D9D65ADC 40DF0B66 37D83BF0 A9BCAE53 DEBB9EC5 47B2CF7F ',
+        '30B5FFE9 BDBDF21C CABAC28A 53B39330 24B4A3A6 BAD03605 CDD70693 54DE5729 23D967BF B3667A2E ',
+        'C4614AB8 5D681B02 2A6F2B94 B40BBE37 C30C8EA1 5A05DF1B 2D02EF8D'
+      ].join('');
+
+      crc = crc ^ (-1);
+      for (i = 0, iTop = str.length; i < iTop; i += 1) {
+        y = (crc ^ str.charCodeAt(i)) & 0xFF;
+        x = '0x' + table.substr(y * 9, 8);
+        crc = (crc >>> 8) ^ x;
+      }
+      // always return a positive number (that's what >>> 0 does)
+      return (crc ^ (-1)) >>> 0;
+    },
+    /**
+     * @member Hashes
+     * @class MD5
+     * @constructor
+     * @param {Object} [config]
+     *
+     * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
+     * Digest Algorithm, as defined in RFC 1321.
+     * Version 2.2 Copyright (C) Paul Johnston 1999 - 2009
+     * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
+     * See <http://pajhome.org.uk/crypt/md5> for more infHashes.
+     */
+    MD5: function(options) {
+      /**
+       * Private config properties. You may need to tweak these to be compatible with
+       * the server-side, but the defaults work in most cases.
+       * See {@link Hashes.MD5#method-setUpperCase} and {@link Hashes.SHA1#method-setUpperCase}
+       */
+      var hexcase = (options && typeof options.uppercase === 'boolean') ? options.uppercase : false, // hexadecimal output case format. false - lowercase; true - uppercase
+        b64pad = (options && typeof options.pad === 'string') ? options.pad : '=', // base-64 pad character. Defaults to '=' for strict RFC compliance
+        utf8 = (options && typeof options.utf8 === 'boolean') ? options.utf8 : true; // enable/disable utf8 encoding
+
+      // privileged (public) methods
+      this.hex = function(s) {
+        return rstr2hex(rstr(s, utf8), hexcase);
+      };
+      this.b64 = function(s) {
+        return rstr2b64(rstr(s), b64pad);
+      };
+      this.any = function(s, e) {
+        return rstr2any(rstr(s, utf8), e);
+      };
+      this.raw = function(s) {
+        return rstr(s, utf8);
+      };
+      this.hex_hmac = function(k, d) {
+        return rstr2hex(rstr_hmac(k, d), hexcase);
+      };
+      this.b64_hmac = function(k, d) {
+        return rstr2b64(rstr_hmac(k, d), b64pad);
+      };
+      this.any_hmac = function(k, d, e) {
+        return rstr2any(rstr_hmac(k, d), e);
+      };
+      /**
+       * Perform a simple self-test to see if the VM is working
+       * @return {String} Hexadecimal hash sample
+       */
+      this.vm_test = function() {
+        return hex('abc').toLowerCase() === '900150983cd24fb0d6963f7d28e17f72';
+      };
+      /**
+       * Enable/disable uppercase hexadecimal returned string
+       * @param {Boolean}
+       * @return {Object} this
+       */
+      this.setUpperCase = function(a) {
+        if (typeof a === 'boolean') {
+          hexcase = a;
+        }
+        return this;
+      };
+      /**
+       * Defines a base64 pad string
+       * @param {String} Pad
+       * @return {Object} this
+       */
+      this.setPad = function(a) {
+        b64pad = a || b64pad;
+        return this;
+      };
+      /**
+       * Defines a base64 pad string
+       * @param {Boolean}
+       * @return {Object} [this]
+       */
+      this.setUTF8 = function(a) {
+        if (typeof a === 'boolean') {
+          utf8 = a;
+        }
+        return this;
+      };
+
+      // private methods
+
+      /**
+       * Calculate the MD5 of a raw string
+       */
+
+      function rstr(s) {
+        s = (utf8) ? utf8Encode(s) : s;
+        return binl2rstr(binl(rstr2binl(s), s.length * 8));
+      }
+
+      /**
+       * Calculate the HMAC-MD5, of a key and some data (raw strings)
+       */
+
+      function rstr_hmac(key, data) {
+        var bkey, ipad, opad, hash, i;
+
+        key = (utf8) ? utf8Encode(key) : key;
+        data = (utf8) ? utf8Encode(data) : data;
+        bkey = rstr2binl(key);
+        if (bkey.length > 16) {
+          bkey = binl(bkey, key.length * 8);
+        }
+
+        ipad = Array(16), opad = Array(16);
+        for (i = 0; i < 16; i += 1) {
+          ipad[i] = bkey[i] ^ 0x36363636;
+          opad[i] = bkey[i] ^ 0x5C5C5C5C;
+        }
+        hash = binl(ipad.concat(rstr2binl(data)), 512 + data.length * 8);
+        return binl2rstr(binl(opad.concat(hash), 512 + 128));
+      }
+
+      /**
+       * Calculate the MD5 of an array of little-endian words, and a bit length.
+       */
+
+      function binl(x, len) {
+        var i, olda, oldb, oldc, oldd,
+          a = 1732584193,
+          b = -271733879,
+          c = -1732584194,
+          d = 271733878;
+
+        /* append padding */
+        x[len >> 5] |= 0x80 << ((len) % 32);
+        x[(((len + 64) >>> 9) << 4) + 14] = len;
+
+        for (i = 0; i < x.length; i += 16) {
+          olda = a;
+          oldb = b;
+          oldc = c;
+          oldd = d;
+
+          a = md5_ff(a, b, c, d, x[i + 0], 7, -680876936);
+          d = md5_ff(d, a, b, c, x[i + 1], 12, -389564586);
+          c = md5_ff(c, d, a, b, x[i + 2], 17, 606105819);
+          b = md5_ff(b, c, d, a, x[i + 3], 22, -1044525330);
+          a = md5_ff(a, b, c, d, x[i + 4], 7, -176418897);
+          d = md5_ff(d, a, b, c, x[i + 5], 12, 1200080426);
+          c = md5_ff(c, d, a, b, x[i + 6], 17, -1473231341);
+          b = md5_ff(b, c, d, a, x[i + 7], 22, -45705983);
+          a = md5_ff(a, b, c, d, x[i + 8], 7, 1770035416);
+          d = md5_ff(d, a, b, c, x[i + 9], 12, -1958414417);
+          c = md5_ff(c, d, a, b, x[i + 10], 17, -42063);
+          b = md5_ff(b, c, d, a, x[i + 11], 22, -1990404162);
+          a = md5_ff(a, b, c, d, x[i + 12], 7, 1804603682);
+          d = md5_ff(d, a, b, c, x[i + 13], 12, -40341101);
+          c = md5_ff(c, d, a, b, x[i + 14], 17, -1502002290);
+          b = md5_ff(b, c, d, a, x[i + 15], 22, 1236535329);
+
+          a = md5_gg(a, b, c, d, x[i + 1], 5, -165796510);
+          d = md5_gg(d, a, b, c, x[i + 6], 9, -1069501632);
+          c = md5_gg(c, d, a, b, x[i + 11], 14, 643717713);
+          b = md5_gg(b, c, d, a, x[i + 0], 20, -373897302);
+          a = md5_gg(a, b, c, d, x[i + 5], 5, -701558691);
+          d = md5_gg(d, a, b, c, x[i + 10], 9, 38016083);
+          c = md5_gg(c, d, a, b, x[i + 15], 14, -660478335);
+          b = md5_gg(b, c, d, a, x[i + 4], 20, -405537848);
+          a = md5_gg(a, b, c, d, x[i + 9], 5, 568446438);
+          d = md5_gg(d, a, b, c, x[i + 14], 9, -1019803690);
+          c = md5_gg(c, d, a, b, x[i + 3], 14, -187363961);
+          b = md5_gg(b, c, d, a, x[i + 8], 20, 1163531501);
+          a = md5_gg(a, b, c, d, x[i + 13], 5, -1444681467);
+          d = md5_gg(d, a, b, c, x[i + 2], 9, -51403784);
+          c = md5_gg(c, d, a, b, x[i + 7], 14, 1735328473);
+          b = md5_gg(b, c, d, a, x[i + 12], 20, -1926607734);
+
+          a = md5_hh(a, b, c, d, x[i + 5], 4, -378558);
+          d = md5_hh(d, a, b, c, x[i + 8], 11, -2022574463);
+          c = md5_hh(c, d, a, b, x[i + 11], 16, 1839030562);
+          b = md5_hh(b, c, d, a, x[i + 14], 23, -35309556);
+          a = md5_hh(a, b, c, d, x[i + 1], 4, -1530992060);
+          d = md5_hh(d, a, b, c, x[i + 4], 11, 1272893353);
+          c = md5_hh(c, d, a, b, x[i + 7], 16, -155497632);
+          b = md5_hh(b, c, d, a, x[i + 10], 23, -1094730640);
+          a = md5_hh(a, b, c, d, x[i + 13], 4, 681279174);
+          d = md5_hh(d, a, b, c, x[i + 0], 11, -358537222);
+          c = md5_hh(c, d, a, b, x[i + 3], 16, -722521979);
+          b = md5_hh(b, c, d, a, x[i + 6], 23, 76029189);
+          a = md5_hh(a, b, c, d, x[i + 9], 4, -640364487);
+          d = md5_hh(d, a, b, c, x[i + 12], 11, -421815835);
+          c = md5_hh(c, d, a, b, x[i + 15], 16, 530742520);
+          b = md5_hh(b, c, d, a, x[i + 2], 23, -995338651);
+
+          a = md5_ii(a, b, c, d, x[i + 0], 6, -198630844);
+          d = md5_ii(d, a, b, c, x[i + 7], 10, 1126891415);
+          c = md5_ii(c, d, a, b, x[i + 14], 15, -1416354905);
+          b = md5_ii(b, c, d, a, x[i + 5], 21, -57434055);
+          a = md5_ii(a, b, c, d, x[i + 12], 6, 1700485571);
+          d = md5_ii(d, a, b, c, x[i + 3], 10, -1894986606);
+          c = md5_ii(c, d, a, b, x[i + 10], 15, -1051523);
+          b = md5_ii(b, c, d, a, x[i + 1], 21, -2054922799);
+          a = md5_ii(a, b, c, d, x[i + 8], 6, 1873313359);
+          d = md5_ii(d, a, b, c, x[i + 15], 10, -30611744);
+          c = md5_ii(c, d, a, b, x[i + 6], 15, -1560198380);
+          b = md5_ii(b, c, d, a, x[i + 13], 21, 1309151649);
+          a = md5_ii(a, b, c, d, x[i + 4], 6, -145523070);
+          d = md5_ii(d, a, b, c, x[i + 11], 10, -1120210379);
+          c = md5_ii(c, d, a, b, x[i + 2], 15, 718787259);
+          b = md5_ii(b, c, d, a, x[i + 9], 21, -343485551);
+
+          a = safe_add(a, olda);
+          b = safe_add(b, oldb);
+          c = safe_add(c, oldc);
+          d = safe_add(d, oldd);
+        }
+        return Array(a, b, c, d);
+      }
+
+      /**
+       * These functions implement the four basic operations the algorithm uses.
+       */
+
+      function md5_cmn(q, a, b, x, s, t) {
+        return safe_add(bit_rol(safe_add(safe_add(a, q), safe_add(x, t)), s), b);
+      }
+
+      function md5_ff(a, b, c, d, x, s, t) {
+        return md5_cmn((b & c) | ((~b) & d), a, b, x, s, t);
+      }
+
+      function md5_gg(a, b, c, d, x, s, t) {
+        return md5_cmn((b & d) | (c & (~d)), a, b, x, s, t);
+      }
+
+      function md5_hh(a, b, c, d, x, s, t) {
+        return md5_cmn(b ^ c ^ d, a, b, x, s, t);
+      }
+
+      function md5_ii(a, b, c, d, x, s, t) {
+        return md5_cmn(c ^ (b | (~d)), a, b, x, s, t);
+      }
+    },
+    /**
+     * @member Hashes
+     * @class Hashes.SHA1
+     * @param {Object} [config]
+     * @constructor
+     *
+     * A JavaScript implementation of the Secure Hash Algorithm, SHA-1, as defined in FIPS 180-1
+     * Version 2.2 Copyright Paul Johnston 2000 - 2009.
+     * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
+     * See http://pajhome.org.uk/crypt/md5 for details.
+     */
+    SHA1: function(options) {
+      /**
+       * Private config properties. You may need to tweak these to be compatible with
+       * the server-side, but the defaults work in most cases.
+       * See {@link Hashes.MD5#method-setUpperCase} and {@link Hashes.SHA1#method-setUpperCase}
+       */
+      var hexcase = (options && typeof options.uppercase === 'boolean') ? options.uppercase : false, // hexadecimal output case format. false - lowercase; true - uppercase
+        b64pad = (options && typeof options.pad === 'string') ? options.pad : '=', // base-64 pad character. Defaults to '=' for strict RFC compliance
+        utf8 = (options && typeof options.utf8 === 'boolean') ? options.utf8 : true; // enable/disable utf8 encoding
+
+      // public methods
+      this.hex = function(s) {
+        return rstr2hex(rstr(s, utf8), hexcase);
+      };
+      this.b64 = function(s) {
+        return rstr2b64(rstr(s, utf8), b64pad);
+      };
+      this.any = function(s, e) {
+        return rstr2any(rstr(s, utf8), e);
+      };
+      this.raw = function(s) {
+        return rstr(s, utf8);
+      };
+      this.hex_hmac = function(k, d) {
+        return rstr2hex(rstr_hmac(k, d));
+      };
+      this.b64_hmac = function(k, d) {
+        return rstr2b64(rstr_hmac(k, d), b64pad);
+      };
+      this.any_hmac = function(k, d, e) {
+        return rstr2any(rstr_hmac(k, d), e);
+      };
+      /**
+       * Perform a simple self-test to see if the VM is working
+       * @return {String} Hexadecimal hash sample
+       * @public
+       */
+      this.vm_test = function() {
+        return hex('abc').toLowerCase() === '900150983cd24fb0d6963f7d28e17f72';
+      };
+      /**
+       * @description Enable/disable uppercase hexadecimal returned string
+       * @param {boolean}
+       * @return {Object} this
+       * @public
+       */
+      this.setUpperCase = function(a) {
+        if (typeof a === 'boolean') {
+          hexcase = a;
+        }
+        return this;
+      };
+      /**
+       * @description Defines a base64 pad string
+       * @param {string} Pad
+       * @return {Object} this
+       * @public
+       */
+      this.setPad = function(a) {
+        b64pad = a || b64pad;
+        return this;
+      };
+      /**
+       * @description Defines a base64 pad string
+       * @param {boolean}
+       * @return {Object} this
+       * @public
+       */
+      this.setUTF8 = function(a) {
+        if (typeof a === 'boolean') {
+          utf8 = a;
+        }
+        return this;
+      };
+
+      // private methods
+
+      /**
+       * Calculate the SHA-512 of a raw string
+       */
+
+      function rstr(s) {
+        s = (utf8) ? utf8Encode(s) : s;
+        return binb2rstr(binb(rstr2binb(s), s.length * 8));
+      }
+
+      /**
+       * Calculate the HMAC-SHA1 of a key and some data (raw strings)
+       */
+
+      function rstr_hmac(key, data) {
+        var bkey, ipad, opad, i, hash;
+        key = (utf8) ? utf8Encode(key) : key;
+        data = (utf8) ? utf8Encode(data) : data;
+        bkey = rstr2binb(key);
+
+        if (bkey.length > 16) {
+          bkey = binb(bkey, key.length * 8);
+        }
+        ipad = Array(16), opad = Array(16);
+        for (i = 0; i < 16; i += 1) {
+          ipad[i] = bkey[i] ^ 0x36363636;
+          opad[i] = bkey[i] ^ 0x5C5C5C5C;
+        }
+        hash = binb(ipad.concat(rstr2binb(data)), 512 + data.length * 8);
+        return binb2rstr(binb(opad.concat(hash), 512 + 160));
+      }
+
+      /**
+       * Calculate the SHA-1 of an array of big-endian words, and a bit length
+       */
+
+      function binb(x, len) {
+        var i, j, t, olda, oldb, oldc, oldd, olde,
+          w = Array(80),
+          a = 1732584193,
+          b = -271733879,
+          c = -1732584194,
+          d = 271733878,
+          e = -1009589776;
+
+        /* append padding */
+        x[len >> 5] |= 0x80 << (24 - len % 32);
+        x[((len + 64 >> 9) << 4) + 15] = len;
+
+        for (i = 0; i < x.length; i += 16) {
+          olda = a;
+          oldb = b;
+          oldc = c;
+          oldd = d;
+          olde = e;
+
+          for (j = 0; j < 80; j += 1) {
+            if (j < 16) {
+              w[j] = x[i + j];
+            } else {
+              w[j] = bit_rol(w[j - 3] ^ w[j - 8] ^ w[j - 14] ^ w[j - 16], 1);
+            }
+            t = safe_add(safe_add(bit_rol(a, 5), sha1_ft(j, b, c, d)),
+              safe_add(safe_add(e, w[j]), sha1_kt(j)));
+            e = d;
+            d = c;
+            c = bit_rol(b, 30);
+            b = a;
+            a = t;
+          }
+
+          a = safe_add(a, olda);
+          b = safe_add(b, oldb);
+          c = safe_add(c, oldc);
+          d = safe_add(d, oldd);
+          e = safe_add(e, olde);
+        }
+        return Array(a, b, c, d, e);
+      }
+
+      /**
+       * Perform the appropriate triplet combination function for the current
+       * iteration
+       */
+
+      function sha1_ft(t, b, c, d) {
+        if (t < 20) {
+          return (b & c) | ((~b) & d);
+        }
+        if (t < 40) {
+          return b ^ c ^ d;
+        }
+        if (t < 60) {
+          return (b & c) | (b & d) | (c & d);
+        }
+        return b ^ c ^ d;
+      }
+
+      /**
+       * Determine the appropriate additive constant for the current iteration
+       */
+
+      function sha1_kt(t) {
+        return (t < 20) ? 1518500249 : (t < 40) ? 1859775393 :
+          (t < 60) ? -1894007588 : -899497514;
+      }
+    },
+    /**
+     * @class Hashes.SHA256
+     * @param {config}
+     *
+     * A JavaScript implementation of the Secure Hash Algorithm, SHA-256, as defined in FIPS 180-2
+     * Version 2.2 Copyright Angel Marin, Paul Johnston 2000 - 2009.
+     * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
+     * See http://pajhome.org.uk/crypt/md5 for details.
+     * Also http://anmar.eu.org/projects/jssha2/
+     */
+    SHA256: function(options) {
+      /**
+       * Private properties configuration variables. You may need to tweak these to be compatible with
+       * the server-side, but the defaults work in most cases.
+       * @see this.setUpperCase() method
+       * @see this.setPad() method
+       */
+      var hexcase = (options && typeof options.uppercase === 'boolean') ? options.uppercase : false, // hexadecimal output case format. false - lowercase; true - uppercase  */
+        b64pad = (options && typeof options.pad === 'string') ? options.pad : '=',
+        /* base-64 pad character. Default '=' for strict RFC compliance   */
+        utf8 = (options && typeof options.utf8 === 'boolean') ? options.utf8 : true,
+        /* enable/disable utf8 encoding */
+        sha256_K;
+
+      /* privileged (public) methods */
+      this.hex = function(s) {
+        return rstr2hex(rstr(s, utf8));
+      };
+      this.b64 = function(s) {
+        return rstr2b64(rstr(s, utf8), b64pad);
+      };
+      this.any = function(s, e) {
+        return rstr2any(rstr(s, utf8), e);
+      };
+      this.raw = function(s) {
+        return rstr(s, utf8);
+      };
+      this.hex_hmac = function(k, d) {
+        return rstr2hex(rstr_hmac(k, d));
+      };
+      this.b64_hmac = function(k, d) {
+        return rstr2b64(rstr_hmac(k, d), b64pad);
+      };
+      this.any_hmac = function(k, d, e) {
+        return rstr2any(rstr_hmac(k, d), e);
+      };
+      /**
+       * Perform a simple self-test to see if the VM is working
+       * @return {String} Hexadecimal hash sample
+       * @public
+       */
+      this.vm_test = function() {
+        return hex('abc').toLowerCase() === '900150983cd24fb0d6963f7d28e17f72';
+      };
+      /**
+       * Enable/disable uppercase hexadecimal returned string
+       * @param {boolean}
+       * @return {Object} this
+       * @public
+       */
+      this.setUpperCase = function(a) {
+        if (typeof a === 'boolean') {
+          hexcase = a;
+        }
+        return this;
+      };
+      /**
+       * @description Defines a base64 pad string
+       * @param {string} Pad
+       * @return {Object} this
+       * @public
+       */
+      this.setPad = function(a) {
+        b64pad = a || b64pad;
+        return this;
+      };
+      /**
+       * Defines a base64 pad string
+       * @param {boolean}
+       * @return {Object} this
+       * @public
+       */
+      this.setUTF8 = function(a) {
+        if (typeof a === 'boolean') {
+          utf8 = a;
+        }
+        return this;
+      };
+
+      // private methods
+
+      /**
+       * Calculate the SHA-512 of a raw string
+       */
+
+      function rstr(s, utf8) {
+        s = (utf8) ? utf8Encode(s) : s;
+        return binb2rstr(binb(rstr2binb(s), s.length * 8));
+      }
+
+      /**
+       * Calculate the HMAC-sha256 of a key and some data (raw strings)
+       */
+
+      function rstr_hmac(key, data) {
+        key = (utf8) ? utf8Encode(key) : key;
+        data = (utf8) ? utf8Encode(data) : data;
+        var hash, i = 0,
+          bkey = rstr2binb(key),
+          ipad = Array(16),
+          opad = Array(16);
+
+        if (bkey.length > 16) {
+          bkey = binb(bkey, key.length * 8);
+        }
+
+        for (; i < 16; i += 1) {
+          ipad[i] = bkey[i] ^ 0x36363636;
+          opad[i] = bkey[i] ^ 0x5C5C5C5C;
+        }
+
+        hash = binb(ipad.concat(rstr2binb(data)), 512 + data.length * 8);
+        return binb2rstr(binb(opad.concat(hash), 512 + 256));
+      }
+
+      /*
+       * Main sha256 function, with its support functions
+       */
+
+      function sha256_S(X, n) {
+        return (X >>> n) | (X << (32 - n));
+      }
+
+      function sha256_R(X, n) {
+        return (X >>> n);
+      }
+
+      function sha256_Ch(x, y, z) {
+        return ((x & y) ^ ((~x) & z));
+      }
+
+      function sha256_Maj(x, y, z) {
+        return ((x & y) ^ (x & z) ^ (y & z));
+      }
+
+      function sha256_Sigma0256(x) {
+        return (sha256_S(x, 2) ^ sha256_S(x, 13) ^ sha256_S(x, 22));
+      }
+
+      function sha256_Sigma1256(x) {
+        return (sha256_S(x, 6) ^ sha256_S(x, 11) ^ sha256_S(x, 25));
+      }
+
+      function sha256_Gamma0256(x) {
+        return (sha256_S(x, 7) ^ sha256_S(x, 18) ^ sha256_R(x, 3));
+      }
+
+      function sha256_Gamma1256(x) {
+        return (sha256_S(x, 17) ^ sha256_S(x, 19) ^ sha256_R(x, 10));
+      }
+
+      function sha256_Sigma0512(x) {
+        return (sha256_S(x, 28) ^ sha256_S(x, 34) ^ sha256_S(x, 39));
+      }
+
+      function sha256_Sigma1512(x) {
+        return (sha256_S(x, 14) ^ sha256_S(x, 18) ^ sha256_S(x, 41));
+      }
+
+      function sha256_Gamma0512(x) {
+        return (sha256_S(x, 1) ^ sha256_S(x, 8) ^ sha256_R(x, 7));
+      }
+
+      function sha256_Gamma1512(x) {
+        return (sha256_S(x, 19) ^ sha256_S(x, 61) ^ sha256_R(x, 6));
+      }
+
+      sha256_K = [
+        1116352408, 1899447441, -1245643825, -373957723, 961987163, 1508970993, -1841331548, -1424204075, -670586216, 310598401, 607225278, 1426881987,
+        1925078388, -2132889090, -1680079193, -1046744716, -459576895, -272742522,
+        264347078, 604807628, 770255983, 1249150122, 1555081692, 1996064986, -1740746414, -1473132947, -1341970488, -1084653625, -958395405, -710438585,
+        113926993, 338241895, 666307205, 773529912, 1294757372, 1396182291,
+        1695183700, 1986661051, -2117940946, -1838011259, -1564481375, -1474664885, -1035236496, -949202525, -778901479, -694614492, -200395387, 275423344,
+        430227734, 506948616, 659060556, 883997877, 958139571, 1322822218,
+        1537002063, 1747873779, 1955562222, 2024104815, -2067236844, -1933114872, -1866530822, -1538233109, -1090935817, -965641998
+      ];
+
+      function binb(m, l) {
+        var HASH = [1779033703, -1150833019, 1013904242, -1521486534,
+          1359893119, -1694144372, 528734635, 1541459225
+        ];
+        var W = new Array(64);
+        var a, b, c, d, e, f, g, h;
+        var i, j, T1, T2;
+
+        /* append padding */
+        m[l >> 5] |= 0x80 << (24 - l % 32);
+        m[((l + 64 >> 9) << 4) + 15] = l;
+
+        for (i = 0; i < m.length; i += 16) {
+          a = HASH[0];
+          b = HASH[1];
+          c = HASH[2];
+          d = HASH[3];
+          e = HASH[4];
+          f = HASH[5];
+          g = HASH[6];
+          h = HASH[7];
+
+          for (j = 0; j < 64; j += 1) {
+            if (j < 16) {
+              W[j] = m[j + i];
+            } else {
+              W[j] = safe_add(safe_add(safe_add(sha256_Gamma1256(W[j - 2]), W[j - 7]),
+                sha256_Gamma0256(W[j - 15])), W[j - 16]);
+            }
+
+            T1 = safe_add(safe_add(safe_add(safe_add(h, sha256_Sigma1256(e)), sha256_Ch(e, f, g)),
+              sha256_K[j]), W[j]);
+            T2 = safe_add(sha256_Sigma0256(a), sha256_Maj(a, b, c));
+            h = g;
+            g = f;
+            f = e;
+            e = safe_add(d, T1);
+            d = c;
+            c = b;
+            b = a;
+            a = safe_add(T1, T2);
+          }
+
+          HASH[0] = safe_add(a, HASH[0]);
+          HASH[1] = safe_add(b, HASH[1]);
+          HASH[2] = safe_add(c, HASH[2]);
+          HASH[3] = safe_add(d, HASH[3]);
+          HASH[4] = safe_add(e, HASH[4]);
+          HASH[5] = safe_add(f, HASH[5]);
+          HASH[6] = safe_add(g, HASH[6]);
+          HASH[7] = safe_add(h, HASH[7]);
+        }
+        return HASH;
+      }
+
+    },
+
+    /**
+     * @class Hashes.SHA512
+     * @param {config}
+     *
+     * A JavaScript implementation of the Secure Hash Algorithm, SHA-512, as defined in FIPS 180-2
+     * Version 2.2 Copyright Anonymous Contributor, Paul Johnston 2000 - 2009.
+     * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
+     * See http://pajhome.org.uk/crypt/md5 for details.
+     */
+    SHA512: function(options) {
+      /**
+       * Private properties configuration variables. You may need to tweak these to be compatible with
+       * the server-side, but the defaults work in most cases.
+       * @see this.setUpperCase() method
+       * @see this.setPad() method
+       */
+      var hexcase = (options && typeof options.uppercase === 'boolean') ? options.uppercase : false,
+        /* hexadecimal output case format. false - lowercase; true - uppercase  */
+        b64pad = (options && typeof options.pad === 'string') ? options.pad : '=',
+        /* base-64 pad character. Default '=' for strict RFC compliance   */
+        utf8 = (options && typeof options.utf8 === 'boolean') ? options.utf8 : true,
+        /* enable/disable utf8 encoding */
+        sha512_k;
+
+      /* privileged (public) methods */
+      this.hex = function(s) {
+        return rstr2hex(rstr(s));
+      };
+      this.b64 = function(s) {
+        return rstr2b64(rstr(s), b64pad);
+      };
+      this.any = function(s, e) {
+        return rstr2any(rstr(s), e);
+      };
+      this.raw = function(s) {
+        return rstr(s, utf8);
+      };
+      this.hex_hmac = function(k, d) {
+        return rstr2hex(rstr_hmac(k, d));
+      };
+      this.b64_hmac = function(k, d) {
+        return rstr2b64(rstr_hmac(k, d), b64pad);
+      };
+      this.any_hmac = function(k, d, e) {
+        return rstr2any(rstr_hmac(k, d), e);
+      };
+      /**
+       * Perform a simple self-test to see if the VM is working
+       * @return {String} Hexadecimal hash sample
+       * @public
+       */
+      this.vm_test = function() {
+        return hex('abc').toLowerCase() === '900150983cd24fb0d6963f7d28e17f72';
+      };
+      /**
+       * @description Enable/disable uppercase hexadecimal returned string
+       * @param {boolean}
+       * @return {Object} this
+       * @public
+       */
+      this.setUpperCase = function(a) {
+        if (typeof a === 'boolean') {
+          hexcase = a;
+        }
+        return this;
+      };
+      /**
+       * @description Defines a base64 pad string
+       * @param {string} Pad
+       * @return {Object} this
+       * @public
+       */
+      this.setPad = function(a) {
+        b64pad = a || b64pad;
+        return this;
+      };
+      /**
+       * @description Defines a base64 pad string
+       * @param {boolean}
+       * @return {Object} this
+       * @public
+       */
+      this.setUTF8 = function(a) {
+        if (typeof a === 'boolean') {
+          utf8 = a;
+        }
+        return this;
+      };
+
+      /* private methods */
+
+      /**
+       * Calculate the SHA-512 of a raw string
+       */
+
+      function rstr(s) {
+        s = (utf8) ? utf8Encode(s) : s;
+        return binb2rstr(binb(rstr2binb(s), s.length * 8));
+      }
+      /*
+       * Calculate the HMAC-SHA-512 of a key and some data (raw strings)
+       */
+
+      function rstr_hmac(key, data) {
+        key = (utf8) ? utf8Encode(key) : key;
+        data = (utf8) ? utf8Encode(data) : data;
+
+        var hash, i = 0,
+          bkey = rstr2binb(key),
+          ipad = Array(32),
+          opad = Array(32);
+
+        if (bkey.length > 32) {
+          bkey = binb(bkey, key.length * 8);
+        }
+
+        for (; i < 32; i += 1) {
+          ipad[i] = bkey[i] ^ 0x36363636;
+          opad[i] = bkey[i] ^ 0x5C5C5C5C;
+        }
+
+        hash = binb(ipad.concat(rstr2binb(data)), 1024 + data.length * 8);
+        return binb2rstr(binb(opad.concat(hash), 1024 + 512));
+      }
+
+      /**
+       * Calculate the SHA-512 of an array of big-endian dwords, and a bit length
+       */
+
+      function binb(x, len) {
+        var j, i, l,
+          W = new Array(80),
+          hash = new Array(16),
+          //Initial hash values
+          H = [
+            new int64(0x6a09e667, -205731576),
+            new int64(-1150833019, -2067093701),
+            new int64(0x3c6ef372, -23791573),
+            new int64(-1521486534, 0x5f1d36f1),
+            new int64(0x510e527f, -1377402159),
+            new int64(-1694144372, 0x2b3e6c1f),
+            new int64(0x1f83d9ab, -79577749),
+            new int64(0x5be0cd19, 0x137e2179)
+          ],
+          T1 = new int64(0, 0),
+          T2 = new int64(0, 0),
+          a = new int64(0, 0),
+          b = new int64(0, 0),
+          c = new int64(0, 0),
+          d = new int64(0, 0),
+          e = new int64(0, 0),
+          f = new int64(0, 0),
+          g = new int64(0, 0),
+          h = new int64(0, 0),
+          //Temporary variables not specified by the document
+          s0 = new int64(0, 0),
+          s1 = new int64(0, 0),
+          Ch = new int64(0, 0),
+          Maj = new int64(0, 0),
+          r1 = new int64(0, 0),
+          r2 = new int64(0, 0),
+          r3 = new int64(0, 0);
+
+        if (sha512_k === undefined) {
+          //SHA512 constants
+          sha512_k = [
+            new int64(0x428a2f98, -685199838), new int64(0x71374491, 0x23ef65cd),
+            new int64(-1245643825, -330482897), new int64(-373957723, -2121671748),
+            new int64(0x3956c25b, -213338824), new int64(0x59f111f1, -1241133031),
+            new int64(-1841331548, -1357295717), new int64(-1424204075, -630357736),
+            new int64(-670586216, -1560083902), new int64(0x12835b01, 0x45706fbe),
+            new int64(0x243185be, 0x4ee4b28c), new int64(0x550c7dc3, -704662302),
+            new int64(0x72be5d74, -226784913), new int64(-2132889090, 0x3b1696b1),
+            new int64(-1680079193, 0x25c71235), new int64(-1046744716, -815192428),
+            new int64(-459576895, -1628353838), new int64(-272742522, 0x384f25e3),
+            new int64(0xfc19dc6, -1953704523), new int64(0x240ca1cc, 0x77ac9c65),
+            new int64(0x2de92c6f, 0x592b0275), new int64(0x4a7484aa, 0x6ea6e483),
+            new int64(0x5cb0a9dc, -1119749164), new int64(0x76f988da, -2096016459),
+            new int64(-1740746414, -295247957), new int64(-1473132947, 0x2db43210),
+            new int64(-1341970488, -1728372417), new int64(-1084653625, -1091629340),
+            new int64(-958395405, 0x3da88fc2), new int64(-710438585, -1828018395),
+            new int64(0x6ca6351, -536640913), new int64(0x14292967, 0xa0e6e70),
+            new int64(0x27b70a85, 0x46d22ffc), new int64(0x2e1b2138, 0x5c26c926),
+            new int64(0x4d2c6dfc, 0x5ac42aed), new int64(0x53380d13, -1651133473),
+            new int64(0x650a7354, -1951439906), new int64(0x766a0abb, 0x3c77b2a8),
+            new int64(-2117940946, 0x47edaee6), new int64(-1838011259, 0x1482353b),
+            new int64(-1564481375, 0x4cf10364), new int64(-1474664885, -1136513023),
+            new int64(-1035236496, -789014639), new int64(-949202525, 0x654be30),
+            new int64(-778901479, -688958952), new int64(-694614492, 0x5565a910),
+            new int64(-200395387, 0x5771202a), new int64(0x106aa070, 0x32bbd1b8),
+            new int64(0x19a4c116, -1194143544), new int64(0x1e376c08, 0x5141ab53),
+            new int64(0x2748774c, -544281703), new int64(0x34b0bcb5, -509917016),
+            new int64(0x391c0cb3, -976659869), new int64(0x4ed8aa4a, -482243893),
+            new int64(0x5b9cca4f, 0x7763e373), new int64(0x682e6ff3, -692930397),
+            new int64(0x748f82ee, 0x5defb2fc), new int64(0x78a5636f, 0x43172f60),
+            new int64(-2067236844, -1578062990), new int64(-1933114872, 0x1a6439ec),
+            new int64(-1866530822, 0x23631e28), new int64(-1538233109, -561857047),
+            new int64(-1090935817, -1295615723), new int64(-965641998, -479046869),
+            new int64(-903397682, -366583396), new int64(-779700025, 0x21c0c207),
+            new int64(-354779690, -840897762), new int64(-176337025, -294727304),
+            new int64(0x6f067aa, 0x72176fba), new int64(0xa637dc5, -1563912026),
+            new int64(0x113f9804, -1090974290), new int64(0x1b710b35, 0x131c471b),
+            new int64(0x28db77f5, 0x23047d84), new int64(0x32caab7b, 0x40c72493),
+            new int64(0x3c9ebe0a, 0x15c9bebc), new int64(0x431d67c4, -1676669620),
+            new int64(0x4cc5d4be, -885112138), new int64(0x597f299c, -60457430),
+            new int64(0x5fcb6fab, 0x3ad6faec), new int64(0x6c44198c, 0x4a475817)
+          ];
+        }
+
+        for (i = 0; i < 80; i += 1) {
+          W[i] = new int64(0, 0);
+        }
+
+        // append padding to the source string. The format is described in the FIPS.
+        x[len >> 5] |= 0x80 << (24 - (len & 0x1f));
+        x[((len + 128 >> 10) << 5) + 31] = len;
+        l = x.length;
+        for (i = 0; i < l; i += 32) { //32 dwords is the block size
+          int64copy(a, H[0]);
+          int64copy(b, H[1]);
+          int64copy(c, H[2]);
+          int64copy(d, H[3]);
+          int64copy(e, H[4]);
+          int64copy(f, H[5]);
+          int64copy(g, H[6]);
+          int64copy(h, H[7]);
+
+          for (j = 0; j < 16; j += 1) {
+            W[j].h = x[i + 2 * j];
+            W[j].l = x[i + 2 * j + 1];
+          }
+
+          for (j = 16; j < 80; j += 1) {
+            //sigma1
+            int64rrot(r1, W[j - 2], 19);
+            int64revrrot(r2, W[j - 2], 29);
+            int64shr(r3, W[j - 2], 6);
+            s1.l = r1.l ^ r2.l ^ r3.l;
+            s1.h = r1.h ^ r2.h ^ r3.h;
+            //sigma0
+            int64rrot(r1, W[j - 15], 1);
+            int64rrot(r2, W[j - 15], 8);
+            int64shr(r3, W[j - 15], 7);
+            s0.l = r1.l ^ r2.l ^ r3.l;
+            s0.h = r1.h ^ r2.h ^ r3.h;
+
+            int64add4(W[j], s1, W[j - 7], s0, W[j - 16]);
+          }
+
+          for (j = 0; j < 80; j += 1) {
+            //Ch
+            Ch.l = (e.l & f.l) ^ (~e.l & g.l);
+            Ch.h = (e.h & f.h) ^ (~e.h & g.h);
+
+            //Sigma1
+            int64rrot(r1, e, 14);
+            int64rrot(r2, e, 18);
+            int64revrrot(r3, e, 9);
+            s1.l = r1.l ^ r2.l ^ r3.l;
+            s1.h = r1.h ^ r2.h ^ r3.h;
+
+            //Sigma0
+            int64rrot(r1, a, 28);
+            int64revrrot(r2, a, 2);
+            int64revrrot(r3, a, 7);
+            s0.l = r1.l ^ r2.l ^ r3.l;
+            s0.h = r1.h ^ r2.h ^ r3.h;
+
+            //Maj
+            Maj.l = (a.l & b.l) ^ (a.l & c.l) ^ (b.l & c.l);
+            Maj.h = (a.h & b.h) ^ (a.h & c.h) ^ (b.h & c.h);
+
+            int64add5(T1, h, s1, Ch, sha512_k[j], W[j]);
+            int64add(T2, s0, Maj);
+
+            int64copy(h, g);
+            int64copy(g, f);
+            int64copy(f, e);
+            int64add(e, d, T1);
+            int64copy(d, c);
+            int64copy(c, b);
+            int64copy(b, a);
+            int64add(a, T1, T2);
+          }
+          int64add(H[0], H[0], a);
+          int64add(H[1], H[1], b);
+          int64add(H[2], H[2], c);
+          int64add(H[3], H[3], d);
+          int64add(H[4], H[4], e);
+          int64add(H[5], H[5], f);
+          int64add(H[6], H[6], g);
+          int64add(H[7], H[7], h);
+        }
+
+        //represent the hash as an array of 32-bit dwords
+        for (i = 0; i < 8; i += 1) {
+          hash[2 * i] = H[i].h;
+          hash[2 * i + 1] = H[i].l;
+        }
+        return hash;
+      }
+
+      //A constructor for 64-bit numbers
+
+      function int64(h, l) {
+        this.h = h;
+        this.l = l;
+        //this.toString = int64toString;
+      }
+
+      //Copies src into dst, assuming both are 64-bit numbers
+
+      function int64copy(dst, src) {
+        dst.h = src.h;
+        dst.l = src.l;
+      }
+
+      //Right-rotates a 64-bit number by shift
+      //Won't handle cases of shift>=32
+      //The function revrrot() is for that
+
+      function int64rrot(dst, x, shift) {
+        dst.l = (x.l >>> shift) | (x.h << (32 - shift));
+        dst.h = (x.h >>> shift) | (x.l << (32 - shift));
+      }
+
+      //Reverses the dwords of the source and then rotates right by shift.
+      //This is equivalent to rotation by 32+shift
+
+      function int64revrrot(dst, x, shift) {
+        dst.l = (x.h >>> shift) | (x.l << (32 - shift));
+        dst.h = (x.l >>> shift) | (x.h << (32 - shift));
+      }
+
+      //Bitwise-shifts right a 64-bit number by shift
+      //Won't handle shift>=32, but it's never needed in SHA512
+
+      function int64shr(dst, x, shift) {
+        dst.l = (x.l >>> shift) | (x.h << (32 - shift));
+        dst.h = (x.h >>> shift);
+      }
+
+      //Adds two 64-bit numbers
+      //Like the original implementation, does not rely on 32-bit operations
+
+      function int64add(dst, x, y) {
+        var w0 = (x.l & 0xffff) + (y.l & 0xffff);
+        var w1 = (x.l >>> 16) + (y.l >>> 16) + (w0 >>> 16);
+        var w2 = (x.h & 0xffff) + (y.h & 0xffff) + (w1 >>> 16);
+        var w3 = (x.h >>> 16) + (y.h >>> 16) + (w2 >>> 16);
+        dst.l = (w0 & 0xffff) | (w1 << 16);
+        dst.h = (w2 & 0xffff) | (w3 << 16);
+      }
+
+      //Same, except with 4 addends. Works faster than adding them one by one.
+
+      function int64add4(dst, a, b, c, d) {
+        var w0 = (a.l & 0xffff) + (b.l & 0xffff) + (c.l & 0xffff) + (d.l & 0xffff);
+        var w1 = (a.l >>> 16) + (b.l >>> 16) + (c.l >>> 16) + (d.l >>> 16) + (w0 >>> 16);
+        var w2 = (a.h & 0xffff) + (b.h & 0xffff) + (c.h & 0xffff) + (d.h & 0xffff) + (w1 >>> 16);
+        var w3 = (a.h >>> 16) + (b.h >>> 16) + (c.h >>> 16) + (d.h >>> 16) + (w2 >>> 16);
+        dst.l = (w0 & 0xffff) | (w1 << 16);
+        dst.h = (w2 & 0xffff) | (w3 << 16);
+      }
+
+      //Same, except with 5 addends
+
+      function int64add5(dst, a, b, c, d, e) {
+        var w0 = (a.l & 0xffff) + (b.l & 0xffff) + (c.l & 0xffff) + (d.l & 0xffff) + (e.l & 0xffff),
+          w1 = (a.l >>> 16) + (b.l >>> 16) + (c.l >>> 16) + (d.l >>> 16) + (e.l >>> 16) + (w0 >>> 16),
+          w2 = (a.h & 0xffff) + (b.h & 0xffff) + (c.h & 0xffff) + (d.h & 0xffff) + (e.h & 0xffff) + (w1 >>> 16),
+          w3 = (a.h >>> 16) + (b.h >>> 16) + (c.h >>> 16) + (d.h >>> 16) + (e.h >>> 16) + (w2 >>> 16);
+        dst.l = (w0 & 0xffff) | (w1 << 16);
+        dst.h = (w2 & 0xffff) | (w3 << 16);
+      }
+    },
+    /**
+     * @class Hashes.RMD160
+     * @constructor
+     * @param {Object} [config]
+     *
+     * A JavaScript implementation of the RIPEMD-160 Algorithm
+     * Version 2.2 Copyright Jeremy Lin, Paul Johnston 2000 - 2009.
+     * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
+     * See http://pajhome.org.uk/crypt/md5 for details.
+     * Also http://www.ocf.berkeley.edu/~jjlin/jsotp/
+     */
+    RMD160: function(options) {
+      /**
+       * Private properties configuration variables. You may need to tweak these to be compatible with
+       * the server-side, but the defaults work in most cases.
+       * @see this.setUpperCase() method
+       * @see this.setPad() method
+       */
+      var hexcase = (options && typeof options.uppercase === 'boolean') ? options.uppercase : false,
+        /* hexadecimal output case format. false - lowercase; true - uppercase  */
+        b64pad = (options && typeof options.pad === 'string') ? options.pa : '=',
+        /* base-64 pad character. Default '=' for strict RFC compliance   */
+        utf8 = (options && typeof options.utf8 === 'boolean') ? options.utf8 : true,
+        /* enable/disable utf8 encoding */
+        rmd160_r1 = [
+          0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+          7, 4, 13, 1, 10, 6, 15, 3, 12, 0, 9, 5, 2, 14, 11, 8,
+          3, 10, 14, 4, 9, 15, 8, 1, 2, 7, 0, 6, 13, 11, 5, 12,
+          1, 9, 11, 10, 0, 8, 12, 4, 13, 3, 7, 15, 14, 5, 6, 2,
+          4, 0, 5, 9, 7, 12, 2, 10, 14, 1, 3, 8, 11, 6, 15, 13
+        ],
+        rmd160_r2 = [
+          5, 14, 7, 0, 9, 2, 11, 4, 13, 6, 15, 8, 1, 10, 3, 12,
+          6, 11, 3, 7, 0, 13, 5, 10, 14, 15, 8, 12, 4, 9, 1, 2,
+          15, 5, 1, 3, 7, 14, 6, 9, 11, 8, 12, 2, 10, 0, 4, 13,
+          8, 6, 4, 1, 3, 11, 15, 0, 5, 12, 2, 13, 9, 7, 10, 14,
+          12, 15, 10, 4, 1, 5, 8, 7, 6, 2, 13, 14, 0, 3, 9, 11
+        ],
+        rmd160_s1 = [
+          11, 14, 15, 12, 5, 8, 7, 9, 11, 13, 14, 15, 6, 7, 9, 8,
+          7, 6, 8, 13, 11, 9, 7, 15, 7, 12, 15, 9, 11, 7, 13, 12,
+          11, 13, 6, 7, 14, 9, 13, 15, 14, 8, 13, 6, 5, 12, 7, 5,
+          11, 12, 14, 15, 14, 15, 9, 8, 9, 14, 5, 6, 8, 6, 5, 12,
+          9, 15, 5, 11, 6, 8, 13, 12, 5, 12, 13, 14, 11, 8, 5, 6
+        ],
+        rmd160_s2 = [
+          8, 9, 9, 11, 13, 15, 15, 5, 7, 7, 8, 11, 14, 14, 12, 6,
+          9, 13, 15, 7, 12, 8, 9, 11, 7, 7, 12, 7, 6, 15, 13, 11,
+          9, 7, 15, 11, 8, 6, 6, 14, 12, 13, 5, 14, 13, 13, 7, 5,
+          15, 5, 8, 11, 14, 14, 6, 14, 6, 9, 12, 9, 12, 5, 15, 8,
+          8, 5, 12, 9, 12, 5, 14, 6, 8, 13, 6, 5, 15, 13, 11, 11
+        ];
+
+      /* privileged (public) methods */
+      this.hex = function(s) {
+        return rstr2hex(rstr(s, utf8));
+      };
+      this.b64 = function(s) {
+        return rstr2b64(rstr(s, utf8), b64pad);
+      };
+      this.any = function(s, e) {
+        return rstr2any(rstr(s, utf8), e);
+      };
+      this.raw = function(s) {
+        return rstr(s, utf8);
+      };
+      this.hex_hmac = function(k, d) {
+        return rstr2hex(rstr_hmac(k, d));
+      };
+      this.b64_hmac = function(k, d) {
+        return rstr2b64(rstr_hmac(k, d), b64pad);
+      };
+      this.any_hmac = function(k, d, e) {
+        return rstr2any(rstr_hmac(k, d), e);
+      };
+      /**
+       * Perform a simple self-test to see if the VM is working
+       * @return {String} Hexadecimal hash sample
+       * @public
+       */
+      this.vm_test = function() {
+        return hex('abc').toLowerCase() === '900150983cd24fb0d6963f7d28e17f72';
+      };
+      /**
+       * @description Enable/disable uppercase hexadecimal returned string
+       * @param {boolean}
+       * @return {Object} this
+       * @public
+       */
+      this.setUpperCase = function(a) {
+        if (typeof a === 'boolean') {
+          hexcase = a;
+        }
+        return this;
+      };
+      /**
+       * @description Defines a base64 pad string
+       * @param {string} Pad
+       * @return {Object} this
+       * @public
+       */
+      this.setPad = function(a) {
+        if (typeof a !== 'undefined') {
+          b64pad = a;
+        }
+        return this;
+      };
+      /**
+       * @description Defines a base64 pad string
+       * @param {boolean}
+       * @return {Object} this
+       * @public
+       */
+      this.setUTF8 = function(a) {
+        if (typeof a === 'boolean') {
+          utf8 = a;
+        }
+        return this;
+      };
+
+      /* private methods */
+
+      /**
+       * Calculate the rmd160 of a raw string
+       */
+
+      function rstr(s) {
+        s = (utf8) ? utf8Encode(s) : s;
+        return binl2rstr(binl(rstr2binl(s), s.length * 8));
+      }
+
+      /**
+       * Calculate the HMAC-rmd160 of a key and some data (raw strings)
+       */
+
+      function rstr_hmac(key, data) {
+        key = (utf8) ? utf8Encode(key) : key;
+        data = (utf8) ? utf8Encode(data) : data;
+        var i, hash,
+          bkey = rstr2binl(key),
+          ipad = Array(16),
+          opad = Array(16);
+
+        if (bkey.length > 16) {
+          bkey = binl(bkey, key.length * 8);
+        }
+
+        for (i = 0; i < 16; i += 1) {
+          ipad[i] = bkey[i] ^ 0x36363636;
+          opad[i] = bkey[i] ^ 0x5C5C5C5C;
+        }
+        hash = binl(ipad.concat(rstr2binl(data)), 512 + data.length * 8);
+        return binl2rstr(binl(opad.concat(hash), 512 + 160));
+      }
+
+      /**
+       * Convert an array of little-endian words to a string
+       */
+
+      function binl2rstr(input) {
+        var i, output = '',
+          l = input.length * 32;
+        for (i = 0; i < l; i += 8) {
+          output += String.fromCharCode((input[i >> 5] >>> (i % 32)) & 0xFF);
+        }
+        return output;
+      }
+
+      /**
+       * Calculate the RIPE-MD160 of an array of little-endian words, and a bit length.
+       */
+
+      function binl(x, len) {
+        var T, j, i, l,
+          h0 = 0x67452301,
+          h1 = 0xefcdab89,
+          h2 = 0x98badcfe,
+          h3 = 0x10325476,
+          h4 = 0xc3d2e1f0,
+          A1, B1, C1, D1, E1,
+          A2, B2, C2, D2, E2;
+
+        /* append padding */
+        x[len >> 5] |= 0x80 << (len % 32);
+        x[(((len + 64) >>> 9) << 4) + 14] = len;
+        l = x.length;
+
+        for (i = 0; i < l; i += 16) {
+          A1 = A2 = h0;
+          B1 = B2 = h1;
+          C1 = C2 = h2;
+          D1 = D2 = h3;
+          E1 = E2 = h4;
+          for (j = 0; j <= 79; j += 1) {
+            T = safe_add(A1, rmd160_f(j, B1, C1, D1));
+            T = safe_add(T, x[i + rmd160_r1[j]]);
+            T = safe_add(T, rmd160_K1(j));
+            T = safe_add(bit_rol(T, rmd160_s1[j]), E1);
+            A1 = E1;
+            E1 = D1;
+            D1 = bit_rol(C1, 10);
+            C1 = B1;
+            B1 = T;
+            T = safe_add(A2, rmd160_f(79 - j, B2, C2, D2));
+            T = safe_add(T, x[i + rmd160_r2[j]]);
+            T = safe_add(T, rmd160_K2(j));
+            T = safe_add(bit_rol(T, rmd160_s2[j]), E2);
+            A2 = E2;
+            E2 = D2;
+            D2 = bit_rol(C2, 10);
+            C2 = B2;
+            B2 = T;
+          }
+
+          T = safe_add(h1, safe_add(C1, D2));
+          h1 = safe_add(h2, safe_add(D1, E2));
+          h2 = safe_add(h3, safe_add(E1, A2));
+          h3 = safe_add(h4, safe_add(A1, B2));
+          h4 = safe_add(h0, safe_add(B1, C2));
+          h0 = T;
+        }
+        return [h0, h1, h2, h3, h4];
+      }
+
+      // specific algorithm methods
+
+      function rmd160_f(j, x, y, z) {
+        return (0 <= j && j <= 15) ? (x ^ y ^ z) :
+          (16 <= j && j <= 31) ? (x & y) | (~x & z) :
+          (32 <= j && j <= 47) ? (x | ~y) ^ z :
+          (48 <= j && j <= 63) ? (x & z) | (y & ~z) :
+          (64 <= j && j <= 79) ? x ^ (y | ~z) :
+          'rmd160_f: j out of range';
+      }
+
+      function rmd160_K1(j) {
+        return (0 <= j && j <= 15) ? 0x00000000 :
+          (16 <= j && j <= 31) ? 0x5a827999 :
+          (32 <= j && j <= 47) ? 0x6ed9eba1 :
+          (48 <= j && j <= 63) ? 0x8f1bbcdc :
+          (64 <= j && j <= 79) ? 0xa953fd4e :
+          'rmd160_K1: j out of range';
+      }
+
+      function rmd160_K2(j) {
+        return (0 <= j && j <= 15) ? 0x50a28be6 :
+          (16 <= j && j <= 31) ? 0x5c4dd124 :
+          (32 <= j && j <= 47) ? 0x6d703ef3 :
+          (48 <= j && j <= 63) ? 0x7a6d76e9 :
+          (64 <= j && j <= 79) ? 0x00000000 :
+          'rmd160_K2: j out of range';
+      }
+    }
+  };
+
+  // exposes Hashes
+  (function(window, undefined) {
+    var freeExports = false;
+    if (true) {
+      freeExports = exports;
+      if (exports && typeof global === 'object' && global && global === global.global) {
+        window = global;
+      }
+    }
+
+    if (true) {
+      // define as an anonymous module, so, through path mapping, it can be aliased
+      !(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
+        return Hashes;
+      }.call(exports, __webpack_require__, exports, module),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+    } else if (freeExports) {
+      // in Node.js or RingoJS v0.8.0+
+      if (typeof module === 'object' && module && module.exports === freeExports) {
+        module.exports = Hashes;
+      }
+      // in Narwhal or RingoJS v0.7.0-
+      else {
+        freeExports.Hashes = Hashes;
+      }
+    } else {
+      // in a browser or Rhino
+      window.Hashes = Hashes;
+    }
+  }(this));
+}()); // IIFE
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
+
+/***/ }),
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;/*global define:false */
@@ -3750,7 +5647,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*global define:false */
 
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -3767,12 +5664,12 @@ if (typeof window !== 'undefined') { // Browser window
   root = this;
 }
 
-var Emitter = __webpack_require__(107);
-var RequestBase = __webpack_require__(160);
-var isObject = __webpack_require__(31);
-var isFunction = __webpack_require__(159);
-var ResponseBase = __webpack_require__(161);
-var shouldRetry = __webpack_require__(162);
+var Emitter = __webpack_require__(110);
+var RequestBase = __webpack_require__(162);
+var isObject = __webpack_require__(33);
+var isFunction = __webpack_require__(161);
+var ResponseBase = __webpack_require__(163);
+var shouldRetry = __webpack_require__(164);
 
 /**
  * Noop.
@@ -4689,7 +6586,7 @@ request.put = function(url, data, fn){
 
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ (function(module, exports) {
 
 /**
@@ -4708,12 +6605,148 @@ module.exports = isObject;
 
 
 /***/ }),
-/* 32 */
+/* 34 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {/* unused harmony export orderByWeight */
+/* harmony export (immutable) */ __webpack_exports__["b"] = stagePhoto;
+/* harmony export (immutable) */ __webpack_exports__["a"] = saveForm;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common_utils__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jshashes__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jshashes___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jshashes__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_portrait_landscape__ = __webpack_require__(10);
+
+
+
+
+var collection = [];
+
+function orderByWeight() {
+    collection.sort(function (a, b) {
+        return parseFloat(a.index) - parseFloat(b.index);
+    });
+    return collection;
+}
+
+function stagePhoto(e) {
+    if (!e.target.hasClass("add-placeholder")) {
+        //photo reference
+        var ref = e.target.data("ref");
+        var index = e.target.index();
+        if (e.event === "upload") {
+            collection.push({
+                ref: ref,
+                index: index,
+                enable: true,
+                description: "",
+            })
+        }
+        if (e.event === "remove") {
+            var deleteRef = e.target.data("ref");
+            collection = collection.map(photo => {
+                if (photo.ref === deleteRef) {
+                    return false;
+                }
+                else {
+                    return photo;
+                }
+            }).filter(Boolean);
+            collection = orderByWeight();
+        }
+        if (e.event === "move") {
+            if (e.value.moved) {
+                var photoMatch = collection.find(photo => photo.ref === ref);
+                var siblings = collection.filter(photo => photo.ref !== ref);
+                photoMatch.index = e.value.newIndex
+                siblings.map(function (photo) {
+                    photo.index = $("[data-ref='" + photo.ref + "']").index()
+                })
+            }
+            collection = orderByWeight();
+        }
+        if (e.event === "enabled") {
+            var photoMatch = collection.find(photo => photo.ref === ref);
+            photoMatch.enable = e.value;
+        }
+        if (e.event === "description") {
+            var photoMatch = collection.find(photo => photo.ref === ref);
+            photoMatch.description = e.value;
+
+            
+        }
+        console.log(collection)
+    }
+}
+
+
+
+
+
+function saveForm(mode){
+
+    var url;
+    var data;
+    var parent = $(this);
+    if(mode === "save"){
+        url = "/save/collection";
+        //to save (ps interfaces are not working front end for me, I cba to fix, not time!)
+        console.log(collection)
+        data = {
+            name: $("#collection-name").val(),
+            description: $("#collection-description").val(),
+            tags: $("#collection-tags").val(),
+            photoContents: JSON.stringify(collection),
+            enabled: true
+        };
+    }
+    else if(mode==="update"){
+        url = "/update/collection";
+
+        parent.find(".photo-tile").each(function(index){
+            var data = $(this).data()
+
+
+            //if not already in collection then save it
+            if( !collection.find(photo=>photo.ref != data.ref)||false ){
+                collection.push({
+                    ref: data.ref,
+                    index: index,
+                    enable: true,
+                    description: "",
+                })
+            }
+
+        })
+
+        data = {
+            id:parent.data().id,
+            name: parent.find("[id^='collection-name']").val(),
+            description: $("[id^='collection-description']").val(),
+            tags: $("[id^='collection-tags']").val(),
+            photoContents: JSON.stringify(collection),
+            enabled: true
+        };
+    }
+
+    
+    $.post(url, data, function (data) {
+        if (data) {
+            console.log("collection saved in "+ mode+" mode.")
+            console.log(collection)
+            //location.reload();
+        }
+    })
+}
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+
+/***/ }),
+/* 35 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {/* harmony export (immutable) */ __webpack_exports__["a"] = saveDropbox;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__load_dropbox__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__load_dropbox__ = __webpack_require__(21);
 
 
 async function saveDropbox(){
@@ -4796,7 +6829,7 @@ async function saveDropbox(){
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 33 */
+/* 36 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4804,7 +6837,7 @@ async function saveDropbox(){
 /* harmony export (immutable) */ __webpack_exports__["a"] = singleSelect;
 /* harmony export (immutable) */ __webpack_exports__["b"] = multiSelectIndidual;
 /* harmony export (immutable) */ __webpack_exports__["c"] = multiSelectMultiple;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mousetrap__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mousetrap__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mousetrap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_mousetrap__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jquery__);
@@ -4888,7 +6921,7 @@ function multiSelectMultiple(){
 }
 
 /***/ }),
-/* 34 */
+/* 37 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4912,7 +6945,7 @@ function showFolderSpinner(){
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 35 */
+/* 38 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4952,1770 +6985,7 @@ function showFolderSpinner(){
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 36 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return isSVGAvatar; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return Upload; });
-/* unused harmony export active */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__portrait_landscape__ = __webpack_require__(20);
-
-
-
-function isSVGAvatar(str) {
-    //we need a really really basic and fast way to determine the avatar type
-    return [
-        str[0]==="<",
-        str[1]==="s",
-        str[2]==="v",
-        str[3]==="g"
-    ]
-    .every(test=>test===true);
-}
-
-var Upload = function (url, file) {
-    this.file = file;
-    this.url = url;
-};
-
-Upload.prototype.getType = function() {
-    return this.file.type;
-};
-Upload.prototype.getSize = function() {
-    return this.file.size;
-};
-Upload.prototype.getName = function() {
-    return this.file.name;
-};
-Upload.prototype.doUpload = async function (cb) {
-    var that = this;
-    var formData = new FormData();
-
-    // add assoc key values, this will be posts values
-    formData.append("file", this.file, this.getName());
-
-    var readFile = await new Promise((resolve,reject)=>{
-        var reader = new FileReader();
-        reader.readAsDataURL(that.file);
-        reader.onload = function () {
-            resolve(reader.result)
-        };
-    })
-    var orientation = await __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__portrait_landscape__["a" /* imageOrientation */])(readFile);
-
-    formData.append("orientation", orientation);   
-    formData.append("upload_file", true);
-    __WEBPACK_IMPORTED_MODULE_0_jquery__(".progress").addClass("active");
-
-    __WEBPACK_IMPORTED_MODULE_0_jquery__["ajax"]({
-        type: "POST",
-        url: that.url,
-        xhr: function () {
-            var myXhr = __WEBPACK_IMPORTED_MODULE_0_jquery__["ajaxSettings"].xhr();
-            if (myXhr.upload) {
-                myXhr.upload.addEventListener('progress', that.progressHandling, false);
-            }
-            return myXhr;
-        },
-        success: function (data) {
-            setTimeout(function(){
-                __WEBPACK_IMPORTED_MODULE_0_jquery__(".progress").removeClass("active")
-                if(typeof cb === "function"){
-                    cb({
-                        success:true,
-                        data:data
-                    })
-                }
-            },1000)
-
-            
-        },
-        error: function (error) {
-            setTimeout(function(){
-                __WEBPACK_IMPORTED_MODULE_0_jquery__(".progress").removeClass("active")
-                if(typeof cb === "function"){
-                    cb({
-                        success:false,
-                    })
-                }
-            },1000)
-            
-        },
-        async: true,
-        data: formData,
-        cache: false,
-        contentType: false,
-        processData: false,
-        timeout: 60000
-    });
-};
-
-Upload.prototype.progressHandling = function (event) {
-    var percent = 0;
-    var position = event.loaded || event.position;
-    var total = event.total;
-    var progressBar = ".progress";
-    if (event.lengthComputable) {
-        percent = Math.ceil(position / total * 100);
-    }
-    // update progress bars classes so it fits your code
-    __WEBPACK_IMPORTED_MODULE_0_jquery__(progressBar + " .progress-bar").css("width", +percent + "%");
-    //$(progressBar + " .status").text(percent + "%");
-};
-
-
-function active(base,toActive){
-    __WEBPACK_IMPORTED_MODULE_0_jquery__(base).find(".active").removeClass("active");
-    __WEBPACK_IMPORTED_MODULE_0_jquery__(base).find(toActive).addClass("active");
-}
-
-
-
-
-/***/ }),
-/* 37 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var identity = __webpack_require__(100);
-
-/**
- * A specialized version of `baseCallback` which only supports `this` binding
- * and specifying the number of arguments to provide to `func`.
- *
- * @private
- * @param {Function} func The function to bind.
- * @param {*} thisArg The `this` binding of `func`.
- * @param {number} [argCount] The number of arguments to provide to `func`.
- * @returns {Function} Returns the callback.
- */
-function bindCallback(func, thisArg, argCount) {
-  if (typeof func != 'function') {
-    return identity;
-  }
-  if (thisArg === undefined) {
-    return func;
-  }
-  switch (argCount) {
-    case 1: return function(value) {
-      return func.call(thisArg, value);
-    };
-    case 3: return function(value, index, collection) {
-      return func.call(thisArg, value, index, collection);
-    };
-    case 4: return function(accumulator, value, index, collection) {
-      return func.call(thisArg, accumulator, value, index, collection);
-    };
-    case 5: return function(value, other, key, object, source) {
-      return func.call(thisArg, value, other, key, object, source);
-    };
-  }
-  return function() {
-    return func.apply(thisArg, arguments);
-  };
-}
-
-module.exports = bindCallback;
-
-
-/***/ }),
-/* 38 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var isNative = __webpack_require__(94);
-
-/**
- * Gets the native function at `key` of `object`.
- *
- * @private
- * @param {Object} object The object to query.
- * @param {string} key The key of the method to get.
- * @returns {*} Returns the function if it's native, else `undefined`.
- */
-function getNative(object, key) {
-  var value = object == null ? undefined : object[key];
-  return isNative(value) ? value : undefined;
-}
-
-module.exports = getNative;
-
-
-/***/ }),
 /* 39 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var isArrayLike = __webpack_require__(22),
-    isIndex = __webpack_require__(23),
-    isObject = __webpack_require__(10);
-
-/**
- * Checks if the provided arguments are from an iteratee call.
- *
- * @private
- * @param {*} value The potential iteratee value argument.
- * @param {*} index The potential iteratee index or key argument.
- * @param {*} object The potential iteratee object argument.
- * @returns {boolean} Returns `true` if the arguments are from an iteratee call, else `false`.
- */
-function isIterateeCall(value, index, object) {
-  if (!isObject(object)) {
-    return false;
-  }
-  var type = typeof index;
-  if (type == 'number'
-      ? (isArrayLike(object) && isIndex(index, object.length))
-      : (type == 'string' && index in object)) {
-    var other = object[index];
-    return value === value ? (value === other) : (other !== other);
-  }
-  return false;
-}
-
-module.exports = isIterateeCall;
-
-
-/***/ }),
-/* 40 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var isObject = __webpack_require__(10);
-
-/**
- * Converts `value` to an object if it's not one.
- *
- * @private
- * @param {*} value The value to process.
- * @returns {Object} Returns the object.
- */
-function toObject(value) {
-  return isObject(value) ? value : Object(value);
-}
-
-module.exports = toObject;
-
-
-/***/ }),
-/* 41 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var isArrayLike = __webpack_require__(22),
-    isObjectLike = __webpack_require__(15);
-
-/** Used for native method references. */
-var objectProto = Object.prototype;
-
-/** Used to check objects for own properties. */
-var hasOwnProperty = objectProto.hasOwnProperty;
-
-/** Native method references. */
-var propertyIsEnumerable = objectProto.propertyIsEnumerable;
-
-/**
- * Checks if `value` is classified as an `arguments` object.
- *
- * @static
- * @memberOf _
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
- * @example
- *
- * _.isArguments(function() { return arguments; }());
- * // => true
- *
- * _.isArguments([1, 2, 3]);
- * // => false
- */
-function isArguments(value) {
-  return isObjectLike(value) && isArrayLike(value) &&
-    hasOwnProperty.call(value, 'callee') && !propertyIsEnumerable.call(value, 'callee');
-}
-
-module.exports = isArguments;
-
-
-/***/ }),
-/* 42 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var isObject = __webpack_require__(10);
-
-/** `Object#toString` result references. */
-var funcTag = '[object Function]';
-
-/** Used for native method references. */
-var objectProto = Object.prototype;
-
-/**
- * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
- * of values.
- */
-var objToString = objectProto.toString;
-
-/**
- * Checks if `value` is classified as a `Function` object.
- *
- * @static
- * @memberOf _
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
- * @example
- *
- * _.isFunction(_);
- * // => true
- *
- * _.isFunction(/abc/);
- * // => false
- */
-function isFunction(value) {
-  // The use of `Object#toString` avoids issues with the `typeof` operator
-  // in older versions of Chrome and Safari which return 'function' for regexes
-  // and Safari 8 which returns 'object' for typed array constructors.
-  return isObject(value) && objToString.call(value) == funcTag;
-}
-
-module.exports = isFunction;
-
-
-/***/ }),
-/* 43 */
-/***/ (function(module, exports) {
-
-// source https://www.dropboxforum.com/t5/API-support/HTTP-header-quot-Dropbox-API-Arg-quot-could-not-decode-input-as/m-p/173823/highlight/true#M6786
-var charsToEncode = /[\u007f-\uffff]/g;
-
-function httpHeaderSafeJson(args) {
-  return JSON.stringify(args).replace(charsToEncode, function (c) {
-    return '\\u' + ('000' + c.charCodeAt(0).toString(16)).slice(-4);
-  });
-}
-
-module.exports = httpHeaderSafeJson;
-
-
-/***/ }),
-/* 44 */
-/***/ (function(module, exports) {
-
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-
-/***/ }),
-/* 45 */
-/***/ (function(module, exports) {
-
-module.exports = "data:image/png;base64,bW9kdWxlLmV4cG9ydHMgPSAiZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFCQUFBQUFRQVFNQUFBQWxQVzBpQUFBQUJsQk1WRVZBUUVCL2YzOWVhSlV1QUFBQUNYQklXWE1BQUFzVEFBQUxFd0VBbXB3WUFBQUFCM1JKVFVVSDNRWVJCRGdLOWRLZE1nQUFBQmwwUlZoMFEyOXRiV1Z1ZEFCRGNtVmhkR1ZrSUhkcGRHZ2dSMGxOVUZlQkRoY0FBQUFSU1VSQlZBalhZL2pQd0lBVllSZjlEd0IrdncveDZ2TVQxd0FBQUFCSlJVNUVya0pnZ2c9PSI="
-
-/***/ }),
-/* 46 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_select2_dist_js_select2_full_min_js__ = __webpack_require__(155);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_select2_dist_js_select2_full_min_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_select2_dist_js_select2_full_min_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_select2_dist_css_select2_min_css__ = __webpack_require__(158);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_select2_dist_css_select2_min_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_select2_dist_css_select2_min_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_jquery_wheelcolorpicker_css_wheelcolorpicker_css__ = __webpack_require__(157);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_jquery_wheelcolorpicker_css_wheelcolorpicker_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_jquery_wheelcolorpicker_css_wheelcolorpicker_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_jquery_wheelcolorpicker_jquery_wheelcolorpicker_2_5_0_min_js__ = __webpack_require__(137);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_jquery_wheelcolorpicker_jquery_wheelcolorpicker_2_5_0_min_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_jquery_wheelcolorpicker_jquery_wheelcolorpicker_2_5_0_min_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_bootstrap_dist_js_bootstrap__ = __webpack_require__(105);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_bootstrap_dist_js_bootstrap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_bootstrap_dist_js_bootstrap__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__scripts_common_sticky__ = __webpack_require__(66);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__scripts_common_portrait_landscape__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__scripts_admin_page_collections_editor__ = __webpack_require__(59);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__scripts_admin_pages_admin_toolbar__ = __webpack_require__(64);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__scripts_admin_pages_autosave_notification__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__scripts_user_page_remember_login__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__scripts_admin_page_design_collections_select__ = __webpack_require__(63);
-//Libs (probably needs addressing)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/***/ }),
-/* 47 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scripts_front_pages_carousel__ = __webpack_require__(67);
-
-
-
-
-/***/ }),
-/* 48 */,
-/* 49 */,
-/* 50 */,
-/* 51 */,
-/* 52 */,
-/* 53 */,
-/* 54 */,
-/* 55 */,
-/* 56 */,
-/* 57 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__admin_webpack_index__ = __webpack_require__(46);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__front_webpack_index__ = __webpack_require__(47);
-
-
-
-/***/ }),
-/* 58 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = sidebar;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mousetrap__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mousetrap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_mousetrap__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__sidebar_spinner__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__sidebar_sidebar_populate__ = __webpack_require__(62);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__sidebar_save_dropbox__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__sidebar_sidebar_selection__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__sidebar_sidebar_context_menu__ = __webpack_require__(61);
-
-
-
-
-
-
-
-
-
-
-
-function sidebar() {
-
-    //preload dropbox content
-    
-    __WEBPACK_IMPORTED_MODULE_0_jquery__(".folder-row.dropbox").click( __WEBPACK_IMPORTED_MODULE_3__sidebar_sidebar_populate__["a" /* loadDropboxPhotos */] )
-
-    __WEBPACK_IMPORTED_MODULE_0_jquery__(document).on("click",".list-group-item .download", __WEBPACK_IMPORTED_MODULE_4__sidebar_save_dropbox__["a" /* saveDropbox */]);
-
-    //SIDEBAR: Selection
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__sidebar_sidebar_selection__["a" /* singleSelect */])();
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__sidebar_sidebar_selection__["b" /* multiSelectIndidual */])();
-    
-
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__sidebar_sidebar_selection__["c" /* multiSelectMultiple */])();
-    
-
-    //SIDEBAR: Context right click menus
-    var clipboard = [];
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_6__sidebar_sidebar_context_menu__["a" /* contextMenus */])(clipboard)
-}
-
-/***/ }),
-/* 59 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_dragula__ = __webpack_require__(125);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_dragula___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_dragula__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_utils__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_jshashes__ = __webpack_require__(139);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_jshashes___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_jshashes__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_perfect_scrollbar__ = __webpack_require__(140);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_perfect_scrollbar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_perfect_scrollbar__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__common_portrait_landscape__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__editor_sidebar__ = __webpack_require__(58);
-
-
-
-
-
-
-
-
-const CardCarousel = __webpack_require__(65);
-
-
-
-__WEBPACK_IMPORTED_MODULE_0_jquery__(function () {
-    __webpack_require__(104)
-
-    if(__WEBPACK_IMPORTED_MODULE_0_jquery__("[data-slider]").length >0){
-        __WEBPACK_IMPORTED_MODULE_0_jquery__("[data-slider]").each(function(){
-            new CardCarousel("#"+__WEBPACK_IMPORTED_MODULE_0_jquery__(this).attr("id"));
-        })
-    }
-
-    // to collections
-    var collection = []
-
-    function orderByWeight() {
-        collection.sort(function (a, b) {
-            return parseFloat(a.index) - parseFloat(b.index);
-        });
-        return collection;
-    }
-
-    function stagePhoto(e) {
-        if (!e.target.hasClass("add-placeholder")) {
-            //photo reference
-            var ref = e.target.data("ref");
-            var index = e.target.index();
-            if (e.event === "upload") {
-                collection.push({
-                    ref: ref,
-                    index: index,
-                    enable: true,
-                    description: "",
-                })
-            }
-            if (e.event === "remove") {
-                var deleteRef = e.target.data("ref");
-
-                collection = collection.map(photo => {
-                    if (photo.ref === deleteRef) {
-                        return false;
-                    }
-                    else {
-                        return photo;
-                    }
-                }).filter(Boolean)
-
-                collection = orderByWeight();
-                console.log(collection)
-            }
-            if (e.event === "move") {
-                if (e.value.moved) {
-                    var photoMatch = collection.find(photo => photo.ref === ref);
-                    var siblings = collection.filter(photo => photo.ref !== ref);
-                    photoMatch.index = e.value.newIndex
-                    siblings.map(function (photo) {
-                        photo.index = __WEBPACK_IMPORTED_MODULE_0_jquery__("[data-ref='" + photo.ref + "']").index()
-                    })
-                }
-                collection = orderByWeight();
-
-                console.log(collection)
-            }
-            if (e.event === "enabled") {
-                var photoMatch = collection.find(photo => photo.ref === ref);
-                photoMatch.enable = e.value;
-            }
-            if (e.event === "description") {
-                var photoMatch = collection.find(photo => photo.ref === ref);
-                photoMatch.description = e.value;
-
-                
-            }
-            console.log(collection)
-        }
-    }
-
-
-    function saveForm(mode){
-
-        var url;
-        var data;
-        var parent = __WEBPACK_IMPORTED_MODULE_0_jquery__(this);
-        if(mode === "save"){
-            url = "/save/collection";
-            //to save (ps interfaces are not working front end for me, I cba to fix, not time!)
-            console.log(collection)
-            data = {
-                name: __WEBPACK_IMPORTED_MODULE_0_jquery__("#collection-name").val(),
-                description: __WEBPACK_IMPORTED_MODULE_0_jquery__("#collection-description").val(),
-                tags: __WEBPACK_IMPORTED_MODULE_0_jquery__("#collection-tags").val(),
-                photoContents: JSON.stringify(collection),
-                enabled: true
-            };
-        }
-        else if(mode==="update"){
-            url = "/update/collection";
-
-            parent.find(".photo-tile").each(function(index){
-                var data = __WEBPACK_IMPORTED_MODULE_0_jquery__(this).data()
-
-
-                //if not already in collection then save it
-                if( !collection.find(photo=>photo.ref != data.ref)||false ){
-                    collection.push({
-                        ref: data.ref,
-                        index: index,
-                        enable: true,
-                        description: "",
-                    })
-                }
-
-            })
-
-            data = {
-                id:parent.data().id,
-                name: parent.find("[id^='collection-name']").val(),
-                description: __WEBPACK_IMPORTED_MODULE_0_jquery__("[id^='collection-description']").val(),
-                tags: __WEBPACK_IMPORTED_MODULE_0_jquery__("[id^='collection-tags']").val(),
-                photoContents: JSON.stringify(collection),
-                enabled: true
-            };
-        }
-
-        
-        __WEBPACK_IMPORTED_MODULE_0_jquery__["post"](url, data, function (data) {
-            if (data) {
-                console.log("collection saved in "+ mode+" mode.")
-                console.log(collection)
-                //location.reload();
-            }
-        })
-    }
-
-    //Selectors and state
-    var validationCriteria = [
-        "collection-name",
-        "collection-description"
-    ]
-    .map(function(selector){
-        return "[id^="+selector+"]"
-    })
-    var validationStatus = {};
-    validationCriteria.forEach(function(selector){
-        function validateInput(){
-            validationStatus[__WEBPACK_IMPORTED_MODULE_0_jquery__(this).attr("id")] = {
-                valid:__WEBPACK_IMPORTED_MODULE_0_jquery__(this).val() !== ""
-            }
-        }
-        __WEBPACK_IMPORTED_MODULE_0_jquery__(selector).each(validateInput);
-        __WEBPACK_IMPORTED_MODULE_0_jquery__(selector).keyup(validateInput);
-        
-    })
-
-    __WEBPACK_IMPORTED_MODULE_0_jquery__(document).on("submit","#save-collection, #edit-collection",function(e){
-        e.preventDefault()
-        var self = __WEBPACK_IMPORTED_MODULE_0_jquery__(this);
-
-        var validResults = [];
-        Object.keys(validationStatus).forEach(function(key){
-            var id = "#"+key;
-            self.find(id).each(function(){
-                validResults.push(validationStatus[__WEBPACK_IMPORTED_MODULE_0_jquery__(this).attr("id")].valid)
-            })
-        })
-        if(validResults.every(result=>result===true)){
-            console.log("Valid")
-            
-            if(self.attr("id")==="save-collection"){
-                saveForm.bind(self)("save");
-            }
-            else{
-                saveForm.bind(self)("update");
-            }
-            
-            __WEBPACK_IMPORTED_MODULE_0_jquery__(".modal").modal("hide");
-            // setTimeout(function(){
-            //     window.location.reload()
-            // },1000)
-        }
-        else{
-            console.log("Invalid")
-        }
-    });
-
-    var modalOptions = {
-        containers: [
-            document.querySelector(".modal-dialog main"),
-        ],
-        direction: 'horizontal',
-        moves(el) {
-            return true;
-        },
-        ignoreInputTextSelection: true
-    }
-
-
-    if (location.pathname.split("/")[1] === "editor" && __WEBPACK_IMPORTED_MODULE_0_jquery__(".gridstack").length >= 0) {
-        //editor
-        __WEBPACK_IMPORTED_MODULE_1_dragula__(modalOptions);
-        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_6__editor_sidebar__["a" /* sidebar */])()
-        
-
-
-
-        //MAIN BODY
-
-        __WEBPACK_IMPORTED_MODULE_0_jquery__(".photo-upload-target").on("change", function (e) {
-            var self = __WEBPACK_IMPORTED_MODULE_0_jquery__(this)
-            var file = __WEBPACK_IMPORTED_MODULE_0_jquery__(this)[0].files[0];
-
-            console.log(file)
-
-            var upload = new __WEBPACK_IMPORTED_MODULE_2__common_utils__["b" /* Upload */]("/save/collection/photo", file);
-            // execute upload
-            var MD5 = new __WEBPACK_IMPORTED_MODULE_3_jshashes__["MD5"];
-            //Photo ref same as DB
-            var ref = MD5.hex(file.name);
-            upload.doUpload(async function (uploaded) {
-
-
-                if (uploaded.success) {
-                    var orientation = await __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__common_portrait_landscape__["a" /* imageOrientation */])(uploaded.data);
-                    //visualize new photo
-                    self.closest("main").append([
-                        "<div data-ref='" + ref + "' class='tile photo-tile'>",
-                            "<header class='clearfix'>",
-                                '<button type="button" title="Delete photo from this collection" class="close" aria-label="Close"><span class="close-x" aria-hidden="true">×</span></button>',
-                                '<div class="input-group toggle-group">',
-                                    '<label title="Enable / Disable photo in this collection." class="small" data-toggleswitch="data-toggle" id="for-photo-enabled">',
-                                        '<input checked type="checkbox" name="for-photo-enabled"/>',
-                                    '<div class="inner"></div>',
-                                "</label>",
-                                    "<small class='photo-enebled-text'>",
-                                        "<span class='enabled-text'>Public</span>",
-                                        "<span class='hide disabled-text'>Private</span>",
-                                    "</small>",
-                                "</div>",
-                            "</header>",
-                            "<footer>",
-                                "<textarea size='2' placeholder='Description'></textarea>",
-                            "</footer>",
-                            `<div class='photo-tile-photo ${orientation}' style='background-image:url("${uploaded.data}");'></div>`,
-                        "</div>"
-                    ].join(""))
-
-                    stagePhoto({
-                        target: self.closest("main").children(":last-child"),
-                        event: "upload",
-                        value: true,
-                        ref: ref
-                    })
-
-                }//end upload
-            });
-        })
-
-
-        //EVENTS
-        var dragClickPoll;
-        __WEBPACK_IMPORTED_MODULE_0_jquery__(document).on("mousedown", ".tile", function (e) {
-            e.stopPropagation();
-            if (__WEBPACK_IMPORTED_MODULE_0_jquery__(e.target).hasClass("photo-tile")) {
-                var self = __WEBPACK_IMPORTED_MODULE_0_jquery__(this);
-                var oldIndex = self.index();
-                dragClickPoll = setInterval(function () {
-                    if (!self.hasClass("gu-transit")) {
-                        clearInterval(dragClickPoll);
-                        stagePhoto({
-                            target: self,
-                            event: "move",
-                            get value() {
-                                //moved?
-                                return {
-                                    moved: !(self.index() === oldIndex),
-                                    newIndex: self.index()
-                                }
-                            }
-                        })
-                    }
-                }, 100)
-            }
-
-        })
-
-        //enable disable toggle
-        __WEBPACK_IMPORTED_MODULE_0_jquery__(document).on("mouseup", "[data-toggleswitch]", function () {
-            var state = !__WEBPACK_IMPORTED_MODULE_0_jquery__(this).find("input[type='checkbox']").is(":checked");
-
-            if (state === false) {
-                __WEBPACK_IMPORTED_MODULE_0_jquery__(".photo-enebled-text").find(".disabled-text").removeClass("hide")
-                __WEBPACK_IMPORTED_MODULE_0_jquery__(".photo-enebled-text").find(".enabled-text").addClass("hide")
-                __WEBPACK_IMPORTED_MODULE_0_jquery__(this).closest(".tile").addClass("disabled")
-            }
-            else {
-                __WEBPACK_IMPORTED_MODULE_0_jquery__(".photo-enebled-text").find(".disabled-text").addClass("hide")
-                __WEBPACK_IMPORTED_MODULE_0_jquery__(".photo-enebled-text").find(".enabled-text").removeClass("hide")
-                __WEBPACK_IMPORTED_MODULE_0_jquery__(this).closest(".tile").removeClass("disabled")
-            }
-
-            stagePhoto({
-                target: __WEBPACK_IMPORTED_MODULE_0_jquery__(this).closest(".tile"),
-                event: "enabled",
-                value: state
-            })
-        })
-        //fade controls
-        var timer;
-        function setControlFade(target) {
-            timer = setTimeout(function () {
-                target.removeClass("show-controls")
-                target.find("textarea").blur();
-            }, 3000)
-        }
-        __WEBPACK_IMPORTED_MODULE_0_jquery__(document).on("keyup", ".tile textarea", function () {
-            clearTimeout(timer)
-            stagePhoto({
-                target: __WEBPACK_IMPORTED_MODULE_0_jquery__(this).closest(".tile"),
-                event: "description",
-                value: __WEBPACK_IMPORTED_MODULE_0_jquery__(this).val()
-            })
-        })
-        __WEBPACK_IMPORTED_MODULE_0_jquery__(document).on("mousemove", ".tile", function (e) {
-            clearTimeout(timer)
-            __WEBPACK_IMPORTED_MODULE_0_jquery__(this).addClass("show-controls")
-            setControlFade(__WEBPACK_IMPORTED_MODULE_0_jquery__(this))
-        })
-        __WEBPACK_IMPORTED_MODULE_0_jquery__(document).on("mouseout", ".tile", function () {
-            __WEBPACK_IMPORTED_MODULE_0_jquery__(this).removeClass("show-controls")
-            __WEBPACK_IMPORTED_MODULE_0_jquery__(this).find("textarea").blur();
-        })
-
-        __WEBPACK_IMPORTED_MODULE_0_jquery__(document).on("click", ".tile .close", function () {
-            __WEBPACK_IMPORTED_MODULE_0_jquery__(this).closest(".tile").remove();
-            stagePhoto({
-                target: __WEBPACK_IMPORTED_MODULE_0_jquery__(this).closest(".tile"),
-                event: "remove",
-                value: true
-            })
-
-            console.log(__WEBPACK_IMPORTED_MODULE_0_jquery__(".add-placeholder").siblings().length)
-            //validate collection form requirements
-        })
-
-
-
-        
-
-
-
-        //Edit delete collections
-
-        __WEBPACK_IMPORTED_MODULE_0_jquery__(document).on("click", ".editor-collection-controls .btn", function () {
-            var action = __WEBPACK_IMPORTED_MODULE_0_jquery__(this).data("action");
-            var collectionId = __WEBPACK_IMPORTED_MODULE_0_jquery__(this).data("collection");
-            console.log(action, collectionId)
-        })
-
-        __WEBPACK_IMPORTED_MODULE_0_jquery__(document).on("click", ".modal-delete-collection .btn", function () {
-            var action = __WEBPACK_IMPORTED_MODULE_0_jquery__(this).data("action");
-            var collectionId = __WEBPACK_IMPORTED_MODULE_0_jquery__(this).data("collection");
-
-            __WEBPACK_IMPORTED_MODULE_0_jquery__["post"]("/delete/collection", { id: collectionId }, function (data) {
-                if (data) {
-                    console.log(collectionId, "deleted!");
-                    __WEBPACK_IMPORTED_MODULE_0_jquery__("#collection-" + collectionId).remove();
-                    location.reload();
-                }
-            })
-        })
-
-    }
-})
-
-
-
-
-/***/ }),
-/* 60 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function($) {/* harmony export (immutable) */ __webpack_exports__["a"] = forgetDropbox;
-async function forgetDropbox(){
-    
-    var id = $(this).data("id");
-    var filename = $(this).data("name");
-
-    //set headers issue, perhaps stager the delete action await complete the psuod sequential next
-    
-    $.post("/delete/dropbox-photo",{filename:filename},(res)=>{
-        if(res){
-            $(this).removeClass("saved");
-            $(this).find(".download").removeClass("hide");
-            $(this).find(".local-copy").addClass("hide");
-            localStorage.removeItem(id+"_saved");
-            console.log(filename,"deleted!")
-        }
-        else{
-
-        }
-    })
-    .fail(function(){
-
-    })
-
-}
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
-
-/***/ }),
-/* 61 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function($) {/* harmony export (immutable) */ __webpack_exports__["a"] = contextMenus;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__load_dropbox__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__save_dropbox__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__sidebar_selection__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__forget_dropbox__ = __webpack_require__(60);
-var BootstrapMenu = __webpack_require__(103);
-
-
-
-
-
-
-let pasteFromDropbox = false;
-function contextMenus(clipboard) {
-    //SIDEBAR
-    const menu = new BootstrapMenu('.collection-photo-list .list-group-item', {
-        actionGroups: [
-            ["copy", "paste"],
-            ["delete"]
-        ],
-        fetchElementData: function ($rowElem) {
-            return $rowElem;
-        },
-        actions: {
-            copy: {
-                name: "Copy",
-                onClick(el) {
-                    $(".list-group-item.selected").each(function (index) {
-                        clipboard[index] = {
-                            id: $(this).data("id"),
-                            html: $(this)[0].outerHTML
-                        };
-                    })
-                    console.log($(".list-group-item.selected"))
-
-                }
-            },
-            paste: {
-                name: "Paste",
-                isEnabled: (el) => {
-                    if (clipboard.length > 0) {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                },
-                onClick(el) {
-                    
-                    var pasteContent = clipboard.map(function (item) {
-                        return item.html;
-                    })
-
-                    $(el).parent().find(".selected").remove();
-
-                    pasteContent.forEach(function (item) {
-                        $(el).parent().append(item);
-                    })
-                    clipboard = [];
-                    
-
-                    if(pasteFromDropbox){
-                        var collectionId = $(el).parent().prev(".folder-row").data("id");
-
-                        console.log(collectionId)
-
-                        setTimeout(function(){
-                            $(el).parent().find(".saved .status").remove();
-                            $(el).parent().find(".saved").addClass("save-from-dropbox");
-                            $(el).parent().find(".saved").removeClass("saved")
-                            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__sidebar_selection__["d" /* unselectAdjacentFolder */])($(el))
-
-                            var updateData = []
-                            $(el).parent().find(".save-from-dropbox").each(function(i){
-                                updateData.push({
-                                    ref:$(this).data("name"),
-                                    index:$(this).index()+1,
-                                    enable:true,
-                                    description:""
-                                })
-                            })
-
-                            console.log(updateData)
-
-                            $.post("/update/collection/dropbox-photo", {
-                                collectionId:collectionId,
-                                newContent:JSON.stringify(updateData)
-                            },function(res){
-                                location.reload();
-                            })
-                        },1000)
-                    }
-                }
-            },
-            delete: {
-                name: "Delete",
-                onClick(el) {
-                    $(".list-group-item.selected").remove();
-                }
-            }
-        }
-    });
-
-    /**
-     * DROPBOX
-    */
-    const dropboxMenu = new BootstrapMenu('.dropbox-photo-list .list-group-item', {
-        fetchElementData: function ($rowElem) {
-            return $rowElem;
-        },
-        actions: {
-            save: {
-                name: "Download",
-                onClick(el) {
-                    clipboard = []
-                    $(el).siblings(".saved").removeClass("selected");
-                    $(".list-group-item.selected").each(function (index) {
-                        
-                        __WEBPACK_IMPORTED_MODULE_1__save_dropbox__["a" /* saveDropbox */].bind($(this).find(".download"))()
-                    })
-
-                },
-                isShown: function(el) {
-                    
-                    return !$(el).hasClass("saved")
-                }
-            },
-            copy: {
-                name: "Copy",
-                onClick(el) {
-                    pasteFromDropbox = true;
-                    clipboard = []
-                    //clear non saved items, they cannot be coppied in this way
-                    $(el).siblings().not(".saved").removeClass("selected");
-                    $(".list-group-item.selected.saved").each(function (index) {
-                        clipboard[index] = {
-                            id: $(el).data("id"),
-                            html: $(this)[0].outerHTML
-                        };
-                    })
-                    console.log(clipboard)
-
-                    
-                },
-                isShown: function(el) {
-                    //disallow if selecting non downloaded items
-                    var saveSelected = $(el).parent().find(".selected.saved");
-                    var someSavedSelected = saveSelected.length > 0;
-                    return $(el).hasClass("saved") || someSavedSelected;
-                },
-                isEnabled: function(el) {
-                    //disallow if selecting non downloaded items
-                    var saveSelected = $(el).parent().find(".selected.saved");
-                    var noSavedSelected = saveSelected.length < 0;
-                    return $(el).hasClass("saved") || noSavedSelected;
-                }
-            },
-            forget:{
-                name:"Delete",
-                isShown(el){
-                    return $(el).hasClass("saved");
-                },
-                onClick(el){
-                    var saveSelected = $(el).parent().find(".selected.saved");
-                    saveSelected.each(function(){
-                        __WEBPACK_IMPORTED_MODULE_3__forget_dropbox__["a" /* forgetDropbox */].bind($(this))()
-                    })
-                }
-            }
-        }
-    });
-
-    const folderMenu = new BootstrapMenu('.folder-row', {
-        fetchElementData: function ($rowElem) {
-            return $rowElem;
-        },
-        actions: {
-            paste: {
-                name: "Paste",
-                isShown(el) {
-                    if (clipboard.length > 0 && !$(el).hasClass("dropbox")) {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                },
-                onClick(el) {
-                    var pasteContent = clipboard.map(function (item) {
-                        return item.html;
-                    })
-
-                    $(el).next().find(".selected").remove();
-
-                    pasteContent.forEach(function (item) {
-                        $(el).next().append(item);
-                    })
-                    clipboard = [];
-
-                    setTimeout(function(){
-                        $(el).next(".collection-photo-list").find(".saved .status").remove();
-                        $(el).next(".collection-photo-list").find(".saved").removeClass("saved")
-                        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__sidebar_selection__["d" /* unselectAdjacentFolder */])($(el).next(".collection-photo-list").find(".selected").first())
-                    },100)
-                }
-            },
-            edit: {
-                name: "Edit",
-                onClick(el) {
-                    var selector = "#edit-collection-"+$(el).data("id");
-
-                    $(selector).modal()
-                },
-                isShown(el) {
-                    if (!$(el).hasClass("dropbox")) {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                },
-            },
-            delete: {
-                name: "Delete",
-                onClick(el) {
-                    var selector = "#modal-collection-delete-"+$(el).data("id");
-
-                    $(selector).modal()
-                },
-                isShown(el) {
-                    if (!$(el).hasClass("dropbox")) {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                },
-            },
-            dowloadAll: {
-                name: "Download all",
-                onClick(el) {
-                    var unsaved = $(el).next(".dropbox-photo-list").find(".list-group-item").not(".saved");
-                    unsaved.each(function(){
-                        __WEBPACK_IMPORTED_MODULE_1__save_dropbox__["a" /* saveDropbox */].bind($(this).find(".download"))()
-                    })
-                },
-                isShown(el) {
-                    var savedItemsLen = $(el).next(".dropbox-photo-list").find(".list-group-item.saved").length;
-                    var allItemsLen = $(el).next(".dropbox-photo-list").find(".list-group-item").length;
-                    var canDownloadAll = savedItemsLen !== allItemsLen
-                    if ($(el).hasClass("dropbox") && canDownloadAll) {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                },
-            }
-        }
-    })
-}
-
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
-
-/***/ }),
-/* 62 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function($) {/* harmony export (immutable) */ __webpack_exports__["a"] = loadDropboxPhotos;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__load_dropbox__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__spinner__ = __webpack_require__(34);
-
-
-
-
-async function loadDropboxPhotos(){
-
-    
-
-    if($(this).hasClass("pending")){
-        var self = $(this);
-        var path = $(this).data("path");
-        var previousCache = localStorage.getItem(path);
-        self.removeClass("pending");
-        self.addClass("loaded");
-        //load content
-        __WEBPACK_IMPORTED_MODULE_1__spinner__["a" /* spinner */].show(self);
-        var cache = {};
-        var filesRes = await __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__load_dropbox__["b" /* loadDropboxFolderContent */])(path);
-        
-        if(filesRes.length === 0){
-            $(this).next("ul").addClass("no-content")
-        }
-
-        filesRes.forEach(async file => {
-            var ext = file.name.split(".").pop()
-            var usable = (ext === "jpg" || ext === "jpeg" || ext === "png");
-            var saved = localStorage.getItem(file.id+"_saved")||false;
-
-            $(this).next("ul").append(`
-<li data-name="${file.name}" data-path="${file.path_display}" data-id="${file.id}" class="list-group-item ${saved?"saved":""} ${usable?"valid":"invalid"}">
-    <div class="loader"></div> <div class="photo-thumbnail"></div>
-    ${file.name} 
-    <span class="status pull-right"> 
-        <span title="Download" class="fa fa-cloud-download download"></span>
-        <i title="File saved" class="text-success local-copy hide fa fa-check" aria-hidden="true"></i>
-        <i title="File unreachable" class="warning hide fa text-warning fa-exclamation-triangle" aria-hidden="true"></i>
-    </span>
-</li>`)
-            var item = $("[data-id='"+file.id+"']")
-
-            var thumb = await __WEBPACK_IMPORTED_MODULE_0__load_dropbox__["a" /* dbx */].filesGetThumbnail({path:file.path_display});
-            var img = document.createElement('img');
-            var reader = new FileReader();
-            reader.readAsDataURL(thumb.fileBlob);
-
-            reader.onloadend = function() {
-                var base64data = reader.result;
-                cache[file.id] = base64data;
-                item.addClass("valid")
-                
-                item.find(".photo-thumbnail").css({backgroundImage:`url('${base64data}')`})
-            }
-        });
-
-        __WEBPACK_IMPORTED_MODULE_1__spinner__["a" /* spinner */].hide(self);
-    }
-    
-}
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
-
-/***/ }),
-/* 63 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tinycolor2__ = __webpack_require__(166);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tinycolor2___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_tinycolor2__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__admin_pages_autosave_notification__ = __webpack_require__(35);
-
-
-
-
-if($("body").hasClass("page-design")){
-
-    var autosave = new __WEBPACK_IMPORTED_MODULE_1__admin_pages_autosave_notification__["a" /* autosaveNotify */]()
-    var postUrl = "/design/update";
-    var demo = $(".demo");
-    var fields = {
-        //about me
-        aboutMeBackgroundImage:$("[name='about-me-background-image']"),
-        aboutMeBackgroundImageAlignment:$("[name='about-me-background-image-alignment']"),
-        aboutMeHeading:$("[name='about-me-heading']"),
-        aboutMeTextAlignment:$("[name='about-me-bio-alignment']"),
-        aboutMeTextBio:$("[name='about-me-bio']"),
-        //carousel
-        carouselAutoScroll:$("[name='carousel-autoscroll']"),
-        carouselIncludes:$("[name='carousel-includes']"),
-        carouselSpeed:$("[name='carousel-speed']"),
-        //contact me
-        contactMeBackgroundImage:$("[name='contact-me-background-image']"),
-        contactMeBackgroundImageAlignment:$("[name='contact-me-background-image-alignment']"),
-        //photo galleries
-        photoGaleryincludes:$("[name='photo-gallery-includes']"),
-        //theme
-        themeGeneralColor: $("#primary-color"),
-        themePrimaryColor: $("#theme-color"),
-        themeTextColor: $("#text-color")
-    }
-
-    console.log(fields)
-
-    //Selects
-    
-    $(".axis").select2();
-    $([
-        fields.photoGaleryincludes,
-        fields.carouselIncludes
-    ]).attr("multiple","multiple")
-
-    setTimeout(function(){
-        console.log(window.CyberianPrepopulate)        
-        $.get("/feed/collection",function(data){
-            var data = data.map(function(collection){
-                return {
-                    text:collection.name,
-                    id:collection.id
-                }
-            })
-            $(".collection-select").each(function(){
-                var prepopData = [];
-                if($(this).attr("name") === "carousel-includes" ){
-
-                    var toInclude = window.CyberianPrepopulate["carousel-includes"];
-
-                    toInclude.split(",").forEach(function(id){
-                        prepopData.push(data.find(item=>parseInt(item.id) === parseInt(id)))
-                    });
-                }
-                if($(this).attr("name") === "photo-gallery-includes" ){
-                    var toInclude = window.CyberianPrepopulate["photo-gallery-includes"];
-
-                    toInclude.split(",").forEach(function(id){
-                        prepopData.push(data.find(item=>parseInt(item.id) === parseInt(id)))
-                    });
-                }
-
-                $(this).select2({
-                    data:data,
-                    initSelection: function (element, callback) {
-                         //you can replace this by a second ajax call to get your initial data
-                        if(prepopData.filter(Boolean).length > 0){
-                            callback(prepopData);
-                        }
-                    }
-                });
-            })
-        })
-    })
-
-    
-    
-    //Colors: on load or change
-    $([
-        fields.themePrimaryColor,
-        fields.themeGeneralColor,
-        fields.themeTextColor
-    ])
-    .each(function(){
-        updateDemo.bind($(this))();
-        $(this).change(updateDemo)
-    })
-
-    function saveField(target){
-        //multiple values
-        if( Array.isArray( target.val() ) ){
-            return {
-                name:target.attr("name"),
-                value:target.val().join(",")
-            }
-        }
-        else{
-            return {
-                name:target.attr("name"),
-                value:target.val()
-            }
-        }
-    }
-
-    function updateDemo(e){
-        var id = $(this).attr("id");
-        if(id === "primary-color"){
-            demo.find("h1").css({
-                color: $(this).val()
-            })
-        }
-        else if(id === "theme-color"){
-            
-            demo.css({
-                background: $(this).val()
-            })
-            demo.find("p").css({
-                color: lumColor($(this).val())
-            })
-            fields.themeTextColor.val(lumColor($(this).val()));
-            fields.themeTextColor.trigger("change");
-        }
-
-        if(e){
-            var self = $(this);
-            $.post(postUrl,saveField(self),function(res){
-                console.log(self.attr("name")+" saved");
-            })
-        }
-    }
-
-    function lumColor(target){
-
-        var isReadable = __WEBPACK_IMPORTED_MODULE_0_tinycolor2__["isReadable"](target, "#ffffff",{level:"AA"});
-            
-        if(isReadable){
-            return "#ffffff";
-        }
-        else{
-            return "#000000";
-        }
-
-    }
-
-
-    // //set primary color
-    // function primary(){
-    //     $(".demo").find("h1").css({
-    //         color:$("#primary-color").val()
-    //     })
-    // }
-
-    // //setup demo
-    // function demoMake(){
-    //     $(".demo").css({
-    //         backgroundColor: $("#theme-color").val(),
-    //         color: $("#text-color").val()
-    //     })
-    //     primary()
-    // }
-
-    
-
-    // primary()
-    // autoColor.bind($("#primary-color"))();
-    // fields.themePrimaryColor.on("change",function(){
-    //     primary();
-    //     var self = $(this);
-    //     //POST
-    //     $.post(postUrl,saveField($(self)),function(res){
-    //         console.log($(self).attr("name")+" saved");
-    //     })
-    //     autosave.show();
-    // });
-    // fields.themeGeneralColor.on("change",function(){
-    //     var self = $(this);
-    //     autoColor(self);
-    //     //POST
-    //     $.post(postUrl,saveField($(self)),function(res){
-    //         console.log($(self).attr("name")+" saved");
-    //     })
-    //     autosave.show();
-    // });
-
-    // //set colors on load
-    // demoMake()
-
-
-    $("input, select, textarea").on("change",function(){
-        var self = $(this);
-        autosave.show()
-
-        //checkboxes
-        if(self.attr("type") === 'checkbox'){
-            $.post(postUrl,Object.assign(saveField(self),{value:self.is(":checked")}),function(res){
-                console.log(self.attr("name")+" saved");
-            })
-        }
-        //anything else
-        else{
-            $.post(postUrl,saveField(self),function(res){
-                console.log(self.attr("name")+" saved");
-            })
-        }
-    })
-
-
-}
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
-
-/***/ }),
-/* 64 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_utils__ = __webpack_require__(36);
-
-
-
-const avatarTemplate = (avatar)=>{
-    if(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__common_utils__["a" /* isSVGAvatar */])(avatar)){
-        return "url('data:image/svg+xml;utf8,"+avatar+"')";
-    }
-    else{
-        return `${avatar}`;
-    }
-}
-
-const template = (userInstance)=> `
-<div class="sticky-placeholder">
-<nav id="admin-toolbar" class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-    </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        ${window.location.pathname!=="/"? '<li id="back-to-site" title="back to site"><a href="/"><span class="glyphicon glyphicon-menu-left"></span></a></li>':""}
-        <li><a href="/editor/collections">Collections</a></li>
-        <li><a href="/editor/design">Design</a></li>
-      </ul>
-
-      <!--USER-->
-      <ul class="nav navbar-nav navbar-right navbar-user">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle clearfix" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> 
-            <span class="toolbar-username">${userInstance.first_name} ${userInstance.last_name}</span>
-            <span class="toolbar-avatar"></span>
-          </a>
-          <ul class="dropdown-menu">
-            <li role="separator" class="divider"></li>
-            <li><a href="#logout">Log out</a></li>
-          </ul>
-        </li>
-      </ul>
-
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
-
-<div class="progress">
-  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-    <span class="sr-only">60% Complete</span>
-  </div>
-</div>
-
-</div>
-
-`
-
-window.addEventListener("load", function(){
-    setTimeout(function(){
-        __WEBPACK_IMPORTED_MODULE_0_jquery__("#page-top").find(".sticky-placeholder").css({
-            height:__WEBPACK_IMPORTED_MODULE_0_jquery__("#page-top").find("#admin-toolbar").outerHeight()+"px",
-            position:"relative",
-            width:"100%"
-        })
-    },1)
-});
-
-__WEBPACK_IMPORTED_MODULE_0_jquery__(function(){
-    
-    if(__WEBPACK_IMPORTED_MODULE_0_jquery__("#page-top").length>0){
-        var userInstance = JSON.parse(localStorage.getItem("user"));
-
-        __WEBPACK_IMPORTED_MODULE_0_jquery__("#page-top").append(template(userInstance));
-
-
-        __WEBPACK_IMPORTED_MODULE_0_jquery__("#page-top").find(".toolbar-avatar").css({
-            backgroundImage: avatarTemplate(userInstance.avatar)
-        })
-        
-        //Actions
-        __WEBPACK_IMPORTED_MODULE_0_jquery__("[href='#logout']").click(function(e){
-            e.preventDefault();
-            
-            __WEBPACK_IMPORTED_MODULE_0_jquery__["post"]("/user/logout",function(){
-
-                window.location.href = "/";
-            })
-        })
-
-
-    }
-})
-
-/***/ }),
-/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7030,7 +7300,1484 @@ module.exports = CardCarousel;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var identity = __webpack_require__(103);
+
+/**
+ * A specialized version of `baseCallback` which only supports `this` binding
+ * and specifying the number of arguments to provide to `func`.
+ *
+ * @private
+ * @param {Function} func The function to bind.
+ * @param {*} thisArg The `this` binding of `func`.
+ * @param {number} [argCount] The number of arguments to provide to `func`.
+ * @returns {Function} Returns the callback.
+ */
+function bindCallback(func, thisArg, argCount) {
+  if (typeof func != 'function') {
+    return identity;
+  }
+  if (thisArg === undefined) {
+    return func;
+  }
+  switch (argCount) {
+    case 1: return function(value) {
+      return func.call(thisArg, value);
+    };
+    case 3: return function(value, index, collection) {
+      return func.call(thisArg, value, index, collection);
+    };
+    case 4: return function(accumulator, value, index, collection) {
+      return func.call(thisArg, accumulator, value, index, collection);
+    };
+    case 5: return function(value, other, key, object, source) {
+      return func.call(thisArg, value, other, key, object, source);
+    };
+  }
+  return function() {
+    return func.apply(thisArg, arguments);
+  };
+}
+
+module.exports = bindCallback;
+
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isNative = __webpack_require__(97);
+
+/**
+ * Gets the native function at `key` of `object`.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @param {string} key The key of the method to get.
+ * @returns {*} Returns the function if it's native, else `undefined`.
+ */
+function getNative(object, key) {
+  var value = object == null ? undefined : object[key];
+  return isNative(value) ? value : undefined;
+}
+
+module.exports = getNative;
+
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isArrayLike = __webpack_require__(23),
+    isIndex = __webpack_require__(24),
+    isObject = __webpack_require__(11);
+
+/**
+ * Checks if the provided arguments are from an iteratee call.
+ *
+ * @private
+ * @param {*} value The potential iteratee value argument.
+ * @param {*} index The potential iteratee index or key argument.
+ * @param {*} object The potential iteratee object argument.
+ * @returns {boolean} Returns `true` if the arguments are from an iteratee call, else `false`.
+ */
+function isIterateeCall(value, index, object) {
+  if (!isObject(object)) {
+    return false;
+  }
+  var type = typeof index;
+  if (type == 'number'
+      ? (isArrayLike(object) && isIndex(index, object.length))
+      : (type == 'string' && index in object)) {
+    var other = object[index];
+    return value === value ? (value === other) : (other !== other);
+  }
+  return false;
+}
+
+module.exports = isIterateeCall;
+
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(11);
+
+/**
+ * Converts `value` to an object if it's not one.
+ *
+ * @private
+ * @param {*} value The value to process.
+ * @returns {Object} Returns the object.
+ */
+function toObject(value) {
+  return isObject(value) ? value : Object(value);
+}
+
+module.exports = toObject;
+
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isArrayLike = __webpack_require__(23),
+    isObjectLike = __webpack_require__(17);
+
+/** Used for native method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/** Native method references. */
+var propertyIsEnumerable = objectProto.propertyIsEnumerable;
+
+/**
+ * Checks if `value` is classified as an `arguments` object.
+ *
+ * @static
+ * @memberOf _
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+ * @example
+ *
+ * _.isArguments(function() { return arguments; }());
+ * // => true
+ *
+ * _.isArguments([1, 2, 3]);
+ * // => false
+ */
+function isArguments(value) {
+  return isObjectLike(value) && isArrayLike(value) &&
+    hasOwnProperty.call(value, 'callee') && !propertyIsEnumerable.call(value, 'callee');
+}
+
+module.exports = isArguments;
+
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(11);
+
+/** `Object#toString` result references. */
+var funcTag = '[object Function]';
+
+/** Used for native method references. */
+var objectProto = Object.prototype;
+
+/**
+ * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var objToString = objectProto.toString;
+
+/**
+ * Checks if `value` is classified as a `Function` object.
+ *
+ * @static
+ * @memberOf _
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+ * @example
+ *
+ * _.isFunction(_);
+ * // => true
+ *
+ * _.isFunction(/abc/);
+ * // => false
+ */
+function isFunction(value) {
+  // The use of `Object#toString` avoids issues with the `typeof` operator
+  // in older versions of Chrome and Safari which return 'function' for regexes
+  // and Safari 8 which returns 'object' for typed array constructors.
+  return isObject(value) && objToString.call(value) == funcTag;
+}
+
+module.exports = isFunction;
+
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports) {
+
+// source https://www.dropboxforum.com/t5/API-support/HTTP-header-quot-Dropbox-API-Arg-quot-could-not-decode-input-as/m-p/173823/highlight/true#M6786
+var charsToEncode = /[\u007f-\uffff]/g;
+
+function httpHeaderSafeJson(args) {
+  return JSON.stringify(args).replace(charsToEncode, function (c) {
+    return '\\u' + ('000' + c.charCodeAt(0).toString(16)).slice(-4);
+  });
+}
+
+module.exports = httpHeaderSafeJson;
+
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports) {
+
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,bW9kdWxlLmV4cG9ydHMgPSAiZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFCQUFBQUFRQVFNQUFBQWxQVzBpQUFBQUJsQk1WRVZBUUVCL2YzOWVhSlV1QUFBQUNYQklXWE1BQUFzVEFBQUxFd0VBbXB3WUFBQUFCM1JKVFVVSDNRWVJCRGdLOWRLZE1nQUFBQmwwUlZoMFEyOXRiV1Z1ZEFCRGNtVmhkR1ZrSUhkcGRHZ2dSMGxOVUZlQkRoY0FBQUFSU1VSQlZBalhZL2pQd0lBVllSZjlEd0IrdncveDZ2TVQxd0FBQUFCSlJVNUVya0pnZ2c9PSI="
+
+/***/ }),
+/* 49 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_select2_dist_js_select2_full_min_js__ = __webpack_require__(157);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_select2_dist_js_select2_full_min_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_select2_dist_js_select2_full_min_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_select2_dist_css_select2_min_css__ = __webpack_require__(160);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_select2_dist_css_select2_min_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_select2_dist_css_select2_min_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_jquery_wheelcolorpicker_css_wheelcolorpicker_css__ = __webpack_require__(159);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_jquery_wheelcolorpicker_css_wheelcolorpicker_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_jquery_wheelcolorpicker_css_wheelcolorpicker_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_jquery_wheelcolorpicker_jquery_wheelcolorpicker_2_5_0_min_js__ = __webpack_require__(140);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_jquery_wheelcolorpicker_jquery_wheelcolorpicker_2_5_0_min_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_jquery_wheelcolorpicker_jquery_wheelcolorpicker_2_5_0_min_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_bootstrap_dist_js_bootstrap__ = __webpack_require__(108);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_bootstrap_dist_js_bootstrap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_bootstrap_dist_js_bootstrap__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__scripts_common_sticky__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__scripts_common_portrait_landscape__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__scripts_admin_page_collections_editor__ = __webpack_require__(63);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__scripts_admin_pages_admin_toolbar__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__scripts_admin_pages_autosave_notification__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__scripts_user_page_remember_login__ = __webpack_require__(71);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__scripts_admin_page_design_collections_select__ = __webpack_require__(67);
+//Libs (probably needs addressing)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/***/ }),
+/* 50 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scripts_front_pages_carousel__ = __webpack_require__(70);
+
+
+
+
+/***/ }),
+/* 51 */,
+/* 52 */,
+/* 53 */,
+/* 54 */,
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__admin_webpack_index__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__front_webpack_index__ = __webpack_require__(50);
+
+
+
+/***/ }),
+/* 61 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_utils__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jshashes__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jshashes___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_jshashes__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__editor_common__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__common_portrait_landscape__ = __webpack_require__(10);
+
+
+
+
+
+
+//Things to load
+var CardCarousel = __webpack_require__(39);
+
+__WEBPACK_IMPORTED_MODULE_0_jquery__(function () {
+
+    //Create card carousels for collections
+    if(__WEBPACK_IMPORTED_MODULE_0_jquery__("[data-slider]").length >0){
+        __WEBPACK_IMPORTED_MODULE_0_jquery__("[data-slider]").each(function(){
+            new CardCarousel("#"+__WEBPACK_IMPORTED_MODULE_0_jquery__(this).attr("id"));
+        })
+    }
+
+    // $(".photo-upload-target").on("change", function (e) {
+    //     var self = $(this)
+    //     var file = $(this)[0].files[0];
+
+    //     var upload = new Upload("/save/collection/photo", file);
+    //     // execute upload
+    //     var MD5 = new jsHash.MD5;
+    //     //Photo ref same as DB
+    //     var ref = MD5.hex(file.name);
+    //     upload.doUpload(async function (uploaded) {
+
+    //         if (uploaded.success) {
+    //             var orientation = await imageOrientation(uploaded.data);
+    //             //visualize new photo
+    //             self.closest("main").append([
+    //                 "<div data-ref='" + ref + "' class='tile photo-tile'>",
+    //                     "<header class='clearfix'>",
+    //                     '<button type="button" title="Delete photo from this collection" class="close" aria-label="Close"><span class="close-x" aria-hidden="true">×</span></button>',
+    //                         '<div class="input-group toggle-group">',
+    //                             '<label title="Enable / Disable photo in this collection." class="small" data-toggleswitch="data-toggle" id="for-photo-enabled">',
+    //                                 '<input checked type="checkbox" name="for-photo-enabled"/>',
+    //                                 '<div class="inner"></div>',
+    //                             "</label>",
+    //                             "<small class='photo-enebled-text'>",
+    //                                 "<span class='enabled-text'>Public</span>",
+    //                                 "<span class='hide disabled-text'>Private</span>",
+    //                             "</small>",
+    //                         "</div>",
+    //                     "</header>",
+    //                     "<footer>",
+    //                         "<textarea size='2' placeholder='Description'></textarea>",
+    //                     "</footer>",
+    //                     `<div class='photo-tile-photo ${orientation}' style='background-image:url("${uploaded.data}");'></div>`,
+    //                 "</div>"
+    //             ].join(""))
+
+    //             stagePhoto({
+    //                 target: self.closest("main").children(":last-child"),
+    //                 event: "upload",
+    //                 value: true,
+    //                 ref: ref
+    //             })
+
+    //         }
+    //     });
+    // });
+
+});
+
+/***/ }),
+/* 62 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = sidebar;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mousetrap__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mousetrap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_mousetrap__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__sidebar_spinner__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__sidebar_sidebar_populate__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__sidebar_save_dropbox__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__sidebar_sidebar_selection__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__sidebar_sidebar_context_menu__ = __webpack_require__(65);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_dragula__ = __webpack_require__(128);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_dragula___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_dragula__);
+
+
+
+
+
+
+
+
+
+
+
+function sidebar() {
+
+    //preload dropbox content
+    
+    __WEBPACK_IMPORTED_MODULE_0_jquery__(".folder-row.dropbox").click( __WEBPACK_IMPORTED_MODULE_3__sidebar_sidebar_populate__["a" /* loadDropboxPhotos */] )
+
+    __WEBPACK_IMPORTED_MODULE_0_jquery__(document).on("click",".list-group-item .download", __WEBPACK_IMPORTED_MODULE_4__sidebar_save_dropbox__["a" /* saveDropbox */]);
+
+    //SIDEBAR: Selection
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__sidebar_sidebar_selection__["a" /* singleSelect */])();
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__sidebar_sidebar_selection__["b" /* multiSelectIndidual */])();
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__sidebar_sidebar_selection__["c" /* multiSelectMultiple */])();
+
+
+    __WEBPACK_IMPORTED_MODULE_0_jquery__(".collection-photo-list").each(function(){
+        __WEBPACK_IMPORTED_MODULE_7_dragula__([ __WEBPACK_IMPORTED_MODULE_0_jquery__(this)[0] ])
+    })
+    
+
+    //SIDEBAR: Context right click menus
+    var clipboard = [];
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_6__sidebar_sidebar_context_menu__["a" /* contextMenus */])(clipboard)
+}
+
+/***/ }),
+/* 63 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_dragula__ = __webpack_require__(128);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_dragula___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_dragula__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_utils__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_jshashes__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_jshashes___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_jshashes__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_perfect_scrollbar__ = __webpack_require__(142);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_perfect_scrollbar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_perfect_scrollbar__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__common_portrait_landscape__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__editor_sidebar__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__editor_init__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__editor_common__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__editor_save__ = __webpack_require__(174);
+
+
+
+
+
+
+
+
+var CardCarousel = __webpack_require__(39);
+
+
+
+
+
+
+__WEBPACK_IMPORTED_MODULE_0_jquery__(function () {
+    __webpack_require__(107)
+
+   
+    __WEBPACK_IMPORTED_MODULE_0_jquery__("#quick-add-collection").on("keyup change", function(e){
+        if(__WEBPACK_IMPORTED_MODULE_0_jquery__(this).val() !== ""){
+            __WEBPACK_IMPORTED_MODULE_0_jquery__(this).siblings().find("button").removeAttr("disabled");
+        }
+        else{
+            __WEBPACK_IMPORTED_MODULE_0_jquery__(this).siblings().find("button").attr("disabled","disabled");
+        }
+    })
+
+    __WEBPACK_IMPORTED_MODULE_0_jquery__("#quick-add-collection").siblings().find("button").click(function(){
+        var data = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_9__editor_save__["a" /* postSimpleSaveMode */])()
+        console.log(data)
+        __WEBPACK_IMPORTED_MODULE_0_jquery__["post"]("/save/collection", data, function (data) {
+            if (data) {
+                console.log(collection)
+                location.reload();
+            }
+        })
+    })
+
+
+    // to collections
+    var collection = []
+
+    //Selectors and state
+    var validationCriteria = [
+        "collection-name",
+        "collection-description"
+    ]
+    .map(function(selector){
+        return "[id^="+selector+"]"
+    })
+    var validationStatus = {};
+    validationCriteria.forEach(function(selector){
+        function validateInput(){
+            validationStatus[__WEBPACK_IMPORTED_MODULE_0_jquery__(this).attr("id")] = {
+                valid:__WEBPACK_IMPORTED_MODULE_0_jquery__(this).val() !== ""
+            }
+        }
+        __WEBPACK_IMPORTED_MODULE_0_jquery__(selector).each(validateInput);
+        __WEBPACK_IMPORTED_MODULE_0_jquery__(selector).keyup(validateInput);
+    })
+
+    __WEBPACK_IMPORTED_MODULE_0_jquery__(document).on("submit","#save-collection, #edit-collection",function(e){
+        e.preventDefault()
+        var self = __WEBPACK_IMPORTED_MODULE_0_jquery__(this);
+
+        var validResults = [];
+        Object.keys(validationStatus).forEach(function(key){
+            var id = "#"+key;
+            self.find(id).each(function(){
+                validResults.push(validationStatus[__WEBPACK_IMPORTED_MODULE_0_jquery__(this).attr("id")].valid)
+            })
+        })
+        if(validResults.every(result=>result===true)){
+            console.log("Valid")
+            
+            if(self.attr("id")==="save-collection"){
+                __WEBPACK_IMPORTED_MODULE_8__editor_common__["a" /* saveForm */].bind(self)("save");
+            }
+            else{
+                __WEBPACK_IMPORTED_MODULE_8__editor_common__["a" /* saveForm */].bind(self)("update");
+            }
+            
+            __WEBPACK_IMPORTED_MODULE_0_jquery__(".modal").modal("hide");
+            // setTimeout(function(){
+            //     window.location.reload()
+            // },1000)
+        }
+        else{
+            console.log("Invalid")
+        }
+    });
+
+    var modalOptions = {
+        containers: [
+            document.querySelector(".modal-dialog main"),
+        ],
+        direction: 'horizontal',
+        moves(el) {
+            return true;
+        },
+        ignoreInputTextSelection: true
+    }
+
+
+    if (location.pathname.split("/")[1] === "editor" && __WEBPACK_IMPORTED_MODULE_0_jquery__(".gridstack").length >= 0) {
+        //editor
+        __WEBPACK_IMPORTED_MODULE_1_dragula__(modalOptions);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_6__editor_sidebar__["a" /* sidebar */])()
+        
+        //EVENTS
+        var dragClickPoll;
+        __WEBPACK_IMPORTED_MODULE_0_jquery__(document).on("mousedown", ".tile", function (e) {
+            e.stopPropagation();
+            if (__WEBPACK_IMPORTED_MODULE_0_jquery__(e.target).hasClass("photo-tile")) {
+                var self = __WEBPACK_IMPORTED_MODULE_0_jquery__(this);
+                var oldIndex = self.index();
+                dragClickPoll = setInterval(function () {
+                    if (!self.hasClass("gu-transit")) {
+                        clearInterval(dragClickPoll);
+                        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_8__editor_common__["b" /* stagePhoto */])({
+                            target: self,
+                            event: "move",
+                            get value() {
+                                //moved?
+                                return {
+                                    moved: !(self.index() === oldIndex),
+                                    newIndex: self.index()
+                                }
+                            }
+                        })
+                    }
+                }, 100)
+            }
+
+        })
+
+        //enable disable toggle
+        __WEBPACK_IMPORTED_MODULE_0_jquery__(document).on("mouseup", "[data-toggleswitch]", function () {
+            var state = !__WEBPACK_IMPORTED_MODULE_0_jquery__(this).find("input[type='checkbox']").is(":checked");
+
+            if (state === false) {
+                __WEBPACK_IMPORTED_MODULE_0_jquery__(".photo-enebled-text").find(".disabled-text").removeClass("hide")
+                __WEBPACK_IMPORTED_MODULE_0_jquery__(".photo-enebled-text").find(".enabled-text").addClass("hide")
+                __WEBPACK_IMPORTED_MODULE_0_jquery__(this).closest(".tile").addClass("disabled")
+            }
+            else {
+                __WEBPACK_IMPORTED_MODULE_0_jquery__(".photo-enebled-text").find(".disabled-text").addClass("hide")
+                __WEBPACK_IMPORTED_MODULE_0_jquery__(".photo-enebled-text").find(".enabled-text").removeClass("hide")
+                __WEBPACK_IMPORTED_MODULE_0_jquery__(this).closest(".tile").removeClass("disabled")
+            }
+
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_8__editor_common__["b" /* stagePhoto */])({
+                target: __WEBPACK_IMPORTED_MODULE_0_jquery__(this).closest(".tile"),
+                event: "enabled",
+                value: state
+            })
+        })
+        //fade controls
+        var timer;
+        function setControlFade(target) {
+            timer = setTimeout(function () {
+                target.removeClass("show-controls")
+                target.find("textarea").blur();
+            }, 3000)
+        }
+        __WEBPACK_IMPORTED_MODULE_0_jquery__(document).on("keyup", ".tile textarea", function () {
+            clearTimeout(timer)
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_8__editor_common__["b" /* stagePhoto */])({
+                target: __WEBPACK_IMPORTED_MODULE_0_jquery__(this).closest(".tile"),
+                event: "description",
+                value: __WEBPACK_IMPORTED_MODULE_0_jquery__(this).val()
+            })
+        })
+        __WEBPACK_IMPORTED_MODULE_0_jquery__(document).on("mousemove", ".tile", function (e) {
+            clearTimeout(timer)
+            __WEBPACK_IMPORTED_MODULE_0_jquery__(this).addClass("show-controls")
+            setControlFade(__WEBPACK_IMPORTED_MODULE_0_jquery__(this))
+        })
+        __WEBPACK_IMPORTED_MODULE_0_jquery__(document).on("mouseout", ".tile", function () {
+            __WEBPACK_IMPORTED_MODULE_0_jquery__(this).removeClass("show-controls")
+            __WEBPACK_IMPORTED_MODULE_0_jquery__(this).find("textarea").blur();
+        })
+
+        __WEBPACK_IMPORTED_MODULE_0_jquery__(document).on("click", ".tile .close", function () {
+            __WEBPACK_IMPORTED_MODULE_0_jquery__(this).closest(".tile").remove();
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_8__editor_common__["b" /* stagePhoto */])({
+                target: __WEBPACK_IMPORTED_MODULE_0_jquery__(this).closest(".tile"),
+                event: "remove",
+                value: true
+            })
+
+            console.log(__WEBPACK_IMPORTED_MODULE_0_jquery__(".add-placeholder").siblings().length)
+            //validate collection form requirements
+        })
+
+        //Edit delete collections
+
+        __WEBPACK_IMPORTED_MODULE_0_jquery__(document).on("click", ".editor-collection-controls .btn", function () {
+            var action = __WEBPACK_IMPORTED_MODULE_0_jquery__(this).data("action");
+            var collectionId = __WEBPACK_IMPORTED_MODULE_0_jquery__(this).data("collection");
+            console.log(action, collectionId)
+        })
+
+        __WEBPACK_IMPORTED_MODULE_0_jquery__(document).on("click", ".modal-delete-collection .btn", function () {
+            var action = __WEBPACK_IMPORTED_MODULE_0_jquery__(this).data("action");
+            var collectionId = __WEBPACK_IMPORTED_MODULE_0_jquery__(this).data("collection");
+
+            __WEBPACK_IMPORTED_MODULE_0_jquery__["post"]("/delete/collection", { id: collectionId }, function (data) {
+                if (data) {
+                    console.log(collectionId, "deleted!");
+                    __WEBPACK_IMPORTED_MODULE_0_jquery__("#collection-" + collectionId).remove();
+                    location.reload();
+                }
+            })
+        })
+
+    }
+})
+
+
+
+
+/***/ }),
+/* 64 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {/* harmony export (immutable) */ __webpack_exports__["a"] = forgetDropbox;
+async function forgetDropbox(){
+    
+    var id = $(this).data("id");
+    var filename = $(this).data("name");
+
+    //set headers issue, perhaps stager the delete action await complete the psuod sequential next
+    
+    $.post("/delete/dropbox-photo",{filename:filename},(res)=>{
+        if(res){
+            $(this).removeClass("saved");
+            $(this).find(".download").removeClass("hide");
+            $(this).find(".local-copy").addClass("hide");
+            localStorage.removeItem(id+"_saved");
+            console.log(filename,"deleted!")
+        }
+        else{
+
+        }
+    })
+    .fail(function(){
+
+    })
+
+}
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+
+/***/ }),
+/* 65 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {/* harmony export (immutable) */ __webpack_exports__["a"] = contextMenus;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__load_dropbox__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__save_dropbox__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__sidebar_selection__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__forget_dropbox__ = __webpack_require__(64);
+var BootstrapMenu = __webpack_require__(106);
+
+
+
+
+
+
+let pasteFromDropbox = false;
+function contextMenus(clipboard) {
+    //SIDEBAR
+    const menu = new BootstrapMenu('.collection-photo-list .list-group-item', {
+        actionGroups: [
+            ["copy", "paste"],
+            ["delete"]
+        ],
+        fetchElementData: function ($rowElem) {
+            return $rowElem;
+        },
+        actions: {
+            delete: {
+                name: "Delete",
+                onClick(el) {
+                    $(".list-group-item.selected").remove();
+                }
+            }
+        }
+    });
+
+    /**
+     * DROPBOX
+    */
+    const dropboxMenu = new BootstrapMenu('.dropbox-photo-list .list-group-item', {
+        fetchElementData: function ($rowElem) {
+            return $rowElem;
+        },
+        actions: {
+            save: {
+                name: "Download",
+                onClick(el) {
+                    clipboard = []
+                    $(el).siblings(".saved").removeClass("selected");
+                    $(".list-group-item.selected").each(function (index) {
+                        
+                        __WEBPACK_IMPORTED_MODULE_1__save_dropbox__["a" /* saveDropbox */].bind($(this).find(".download"))()
+                    })
+
+                },
+                isShown: function(el) {
+                    
+                    return !$(el).hasClass("saved")
+                }
+            },
+            copy: {
+                name: "Copy",
+                onClick(el) {
+                    pasteFromDropbox = true;
+                    clipboard = []
+                    //clear non saved items, they cannot be coppied in this way
+                    $(el).siblings().not(".saved").removeClass("selected");
+                    $(".list-group-item.selected.saved").each(function (index) {
+                        clipboard[index] = {
+                            id: $(el).data("id"),
+                            html: $(this)[0].outerHTML
+                        };
+                    })
+                    console.log(clipboard)
+
+                    
+                },
+                isShown: function(el) {
+                    //disallow if selecting non downloaded items
+                    var saveSelected = $(el).parent().find(".selected.saved");
+                    var someSavedSelected = saveSelected.length > 0;
+                    return $(el).hasClass("saved") || someSavedSelected;
+                },
+                isEnabled: function(el) {
+                    //disallow if selecting non downloaded items
+                    var saveSelected = $(el).parent().find(".selected.saved");
+                    var noSavedSelected = saveSelected.length < 0;
+                    return $(el).hasClass("saved") || noSavedSelected;
+                }
+            },
+            forget:{
+                name:"Delete",
+                isShown(el){
+                    return $(el).hasClass("saved");
+                },
+                onClick(el){
+                    var saveSelected = $(el).parent().find(".selected.saved");
+                    saveSelected.each(function(){
+                        __WEBPACK_IMPORTED_MODULE_3__forget_dropbox__["a" /* forgetDropbox */].bind($(this))()
+                    })
+                }
+            }
+        }
+    });
+
+    const folderMenu = new BootstrapMenu('.folder-row', {
+        fetchElementData: function ($rowElem) {
+            return $rowElem;
+        },
+        actions: {
+            paste: {
+                name: "Paste",
+                isShown(el) {
+                    if (clipboard.length > 0 && !$(el).hasClass("dropbox")) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                },
+                onClick(el) {
+                    var pasteContent = clipboard.map(function (item) {
+                        return item.html;
+                    })
+
+                    $(el).next().find(".selected").remove();
+
+                    pasteContent.forEach(function (item) {
+                        $(el).next().append(item);
+                    })
+                    clipboard = [];
+
+                    setTimeout(function(){
+                        $(el).next(".collection-photo-list").find(".saved .status").remove();
+                        $(el).next(".collection-photo-list").find(".saved").removeClass("saved")
+                        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__sidebar_selection__["d" /* unselectAdjacentFolder */])($(el).next(".collection-photo-list").find(".selected").first())
+                    },100)
+                }
+            },
+            delete: {
+                name: "Delete",
+                onClick(el) {
+                    var selector = "#modal-collection-delete-"+$(el).data("id");
+
+                    $(selector).modal()
+                },
+                isShown(el) {
+                    if (!$(el).hasClass("dropbox")) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                },
+            },
+            dowloadAll: {
+                name: "Download all",
+                onClick(el) {
+                    var unsaved = $(el).next(".dropbox-photo-list").find(".list-group-item").not(".saved");
+                    unsaved.each(function(){
+                        __WEBPACK_IMPORTED_MODULE_1__save_dropbox__["a" /* saveDropbox */].bind($(this).find(".download"))()
+                    })
+                },
+                isShown(el) {
+                    var savedItemsLen = $(el).next(".dropbox-photo-list").find(".list-group-item.saved").length;
+                    var allItemsLen = $(el).next(".dropbox-photo-list").find(".list-group-item").length;
+                    var canDownloadAll = savedItemsLen !== allItemsLen
+                    if ($(el).hasClass("dropbox") && canDownloadAll) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                },
+            }
+        }
+    })
+}
+
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+
+/***/ }),
 /* 66 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {/* harmony export (immutable) */ __webpack_exports__["a"] = loadDropboxPhotos;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__load_dropbox__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__spinner__ = __webpack_require__(37);
+
+
+
+
+async function loadDropboxPhotos(){
+
+    
+
+    if($(this).hasClass("pending")){
+        var self = $(this);
+        var path = $(this).data("path");
+        var previousCache = localStorage.getItem(path);
+        self.removeClass("pending");
+        self.addClass("loaded");
+        //load content
+        __WEBPACK_IMPORTED_MODULE_1__spinner__["a" /* spinner */].show(self);
+        var cache = {};
+        var filesRes = await __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__load_dropbox__["b" /* loadDropboxFolderContent */])(path);
+        
+        if(filesRes.length === 0){
+            $(this).next("ul").addClass("no-content")
+        }
+
+        filesRes.forEach(async file => {
+            var ext = file.name.split(".").pop()
+            var usable = (ext === "jpg" || ext === "jpeg" || ext === "png");
+            var saved = localStorage.getItem(file.id+"_saved")||false;
+
+            $(this).next("ul").append(`
+<li data-name="${file.name}" data-path="${file.path_display}" data-id="${file.id}" class="list-group-item ${saved?"saved":""} ${usable?"valid":"invalid"}">
+    <div class="loader"></div> <div class="photo-thumbnail"></div>
+    ${file.name} 
+    <span class="status pull-right"> 
+        <span title="Download" class="fa fa-cloud-download download"></span>
+        <i title="File saved" class="text-success local-copy hide fa fa-check" aria-hidden="true"></i>
+        <i title="File unreachable" class="warning hide fa text-warning fa-exclamation-triangle" aria-hidden="true"></i>
+    </span>
+</li>`)
+            var item = $("[data-id='"+file.id+"']")
+
+            var thumb = await __WEBPACK_IMPORTED_MODULE_0__load_dropbox__["a" /* dbx */].filesGetThumbnail({path:file.path_display});
+            var img = document.createElement('img');
+            var reader = new FileReader();
+            reader.readAsDataURL(thumb.fileBlob);
+
+            reader.onloadend = function() {
+                var base64data = reader.result;
+                cache[file.id] = base64data;
+                item.addClass("valid")
+                
+                item.find(".photo-thumbnail").css({backgroundImage:`url('${base64data}')`})
+            }
+        });
+
+        __WEBPACK_IMPORTED_MODULE_1__spinner__["a" /* spinner */].hide(self);
+    }
+    
+}
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+
+/***/ }),
+/* 67 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tinycolor2__ = __webpack_require__(168);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tinycolor2___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_tinycolor2__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__admin_pages_autosave_notification__ = __webpack_require__(38);
+
+
+
+
+if($("body").hasClass("page-design")){
+
+    var autosave = new __WEBPACK_IMPORTED_MODULE_1__admin_pages_autosave_notification__["a" /* autosaveNotify */]()
+    var postUrl = "/design/update";
+    var demo = $(".demo");
+    var fields = {
+        //about me
+        aboutMeBackgroundImage:$("[name='about-me-background-image']"),
+        aboutMeBackgroundImageAlignment:$("[name='about-me-background-image-alignment']"),
+        aboutMeHeading:$("[name='about-me-heading']"),
+        aboutMeTextAlignment:$("[name='about-me-bio-alignment']"),
+        aboutMeTextBio:$("[name='about-me-bio']"),
+        //carousel
+        carouselAutoScroll:$("[name='carousel-autoscroll']"),
+        carouselIncludes:$("[name='carousel-includes']"),
+        carouselSpeed:$("[name='carousel-speed']"),
+        //contact me
+        contactMeBackgroundImage:$("[name='contact-me-background-image']"),
+        contactMeBackgroundImageAlignment:$("[name='contact-me-background-image-alignment']"),
+        //photo galleries
+        photoGaleryincludes:$("[name='photo-gallery-includes']"),
+        //theme
+        themeGeneralColor: $("#primary-color"),
+        themePrimaryColor: $("#theme-color"),
+        themeTextColor: $("#text-color")
+    }
+
+    console.log(fields)
+
+    //Selects
+    
+    $(".axis").select2();
+    $([
+        fields.photoGaleryincludes,
+        fields.carouselIncludes
+    ]).attr("multiple","multiple")
+
+    setTimeout(function(){
+        console.log(window.CyberianPrepopulate)        
+        $.get("/feed/collection",function(data){
+            var data = data.map(function(collection){
+                return {
+                    text:collection.name,
+                    id:collection.id
+                }
+            })
+            $(".collection-select").each(function(){
+                var prepopData = [];
+                if($(this).attr("name") === "carousel-includes" ){
+
+                    var toInclude = window.CyberianPrepopulate["carousel-includes"];
+
+                    toInclude.split(",").forEach(function(id){
+                        prepopData.push(data.find(item=>parseInt(item.id) === parseInt(id)))
+                    });
+                }
+                if($(this).attr("name") === "photo-gallery-includes" ){
+                    var toInclude = window.CyberianPrepopulate["photo-gallery-includes"];
+
+                    toInclude.split(",").forEach(function(id){
+                        prepopData.push(data.find(item=>parseInt(item.id) === parseInt(id)))
+                    });
+                }
+
+                $(this).select2({
+                    data:data,
+                    initSelection: function (element, callback) {
+                         //you can replace this by a second ajax call to get your initial data
+                        if(prepopData.filter(Boolean).length > 0){
+                            callback(prepopData);
+                        }
+                    }
+                });
+            })
+        })
+    })
+
+    
+    
+    //Colors: on load or change
+    $([
+        fields.themePrimaryColor,
+        fields.themeGeneralColor,
+        fields.themeTextColor
+    ])
+    .each(function(){
+        updateDemo.bind($(this))();
+        $(this).change(updateDemo)
+    })
+
+    function saveField(target){
+        //multiple values
+        if( Array.isArray( target.val() ) ){
+            return {
+                name:target.attr("name"),
+                value:target.val().join(",")
+            }
+        }
+        else{
+            return {
+                name:target.attr("name"),
+                value:target.val()
+            }
+        }
+    }
+
+    function updateDemo(e){
+        var id = $(this).attr("id");
+        if(id === "primary-color"){
+            demo.find("h1").css({
+                color: $(this).val()
+            })
+        }
+        else if(id === "theme-color"){
+            
+            demo.css({
+                background: $(this).val()
+            })
+            demo.find("p").css({
+                color: lumColor($(this).val())
+            })
+            fields.themeTextColor.val(lumColor($(this).val()));
+            fields.themeTextColor.trigger("change");
+        }
+
+        if(e){
+            var self = $(this);
+            $.post(postUrl,saveField(self),function(res){
+                console.log(self.attr("name")+" saved");
+            })
+        }
+    }
+
+    function lumColor(target){
+
+        var isReadable = __WEBPACK_IMPORTED_MODULE_0_tinycolor2__["isReadable"](target, "#ffffff",{level:"AA"});
+            
+        if(isReadable){
+            return "#ffffff";
+        }
+        else{
+            return "#000000";
+        }
+
+    }
+
+
+    // //set primary color
+    // function primary(){
+    //     $(".demo").find("h1").css({
+    //         color:$("#primary-color").val()
+    //     })
+    // }
+
+    // //setup demo
+    // function demoMake(){
+    //     $(".demo").css({
+    //         backgroundColor: $("#theme-color").val(),
+    //         color: $("#text-color").val()
+    //     })
+    //     primary()
+    // }
+
+    
+
+    // primary()
+    // autoColor.bind($("#primary-color"))();
+    // fields.themePrimaryColor.on("change",function(){
+    //     primary();
+    //     var self = $(this);
+    //     //POST
+    //     $.post(postUrl,saveField($(self)),function(res){
+    //         console.log($(self).attr("name")+" saved");
+    //     })
+    //     autosave.show();
+    // });
+    // fields.themeGeneralColor.on("change",function(){
+    //     var self = $(this);
+    //     autoColor(self);
+    //     //POST
+    //     $.post(postUrl,saveField($(self)),function(res){
+    //         console.log($(self).attr("name")+" saved");
+    //     })
+    //     autosave.show();
+    // });
+
+    // //set colors on load
+    // demoMake()
+
+
+    $("input, select, textarea").on("change",function(){
+        var self = $(this);
+        autosave.show()
+
+        //checkboxes
+        if(self.attr("type") === 'checkbox'){
+            $.post(postUrl,Object.assign(saveField(self),{value:self.is(":checked")}),function(res){
+                console.log(self.attr("name")+" saved");
+            })
+        }
+        //anything else
+        else{
+            $.post(postUrl,saveField(self),function(res){
+                console.log(self.attr("name")+" saved");
+            })
+        }
+    })
+
+
+}
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+
+/***/ }),
+/* 68 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_utils__ = __webpack_require__(16);
+
+
+
+const avatarTemplate = (avatar)=>{
+    if(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__common_utils__["a" /* isSVGAvatar */])(avatar)){
+        return "url('data:image/svg+xml;utf8,"+avatar+"')";
+    }
+    else{
+        return `${avatar}`;
+    }
+}
+
+const template = (userInstance)=> `
+<div class="sticky-placeholder">
+<nav id="admin-toolbar" class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        ${window.location.pathname!=="/"? '<li id="back-to-site" title="back to site"><a href="/"><span class="glyphicon glyphicon-menu-left"></span></a></li>':""}
+        <li><a href="/editor/collections">Collections</a></li>
+        <li><a href="/editor/design">Design</a></li>
+      </ul>
+
+      <!--USER-->
+      <ul class="nav navbar-nav navbar-right navbar-user">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle clearfix" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> 
+            <span class="toolbar-username">${userInstance.first_name} ${userInstance.last_name}</span>
+            <span class="toolbar-avatar"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li role="separator" class="divider"></li>
+            <li><a href="#logout">Log out</a></li>
+          </ul>
+        </li>
+      </ul>
+
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div class="progress">
+  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+    <span class="sr-only">60% Complete</span>
+  </div>
+</div>
+
+</div>
+
+`
+
+window.addEventListener("load", function(){
+    setTimeout(function(){
+        __WEBPACK_IMPORTED_MODULE_0_jquery__("#page-top").find(".sticky-placeholder").css({
+            height:__WEBPACK_IMPORTED_MODULE_0_jquery__("#page-top").find("#admin-toolbar").outerHeight()+"px",
+            position:"relative",
+            width:"100%"
+        })
+    },1)
+});
+
+__WEBPACK_IMPORTED_MODULE_0_jquery__(function(){
+    
+    if(__WEBPACK_IMPORTED_MODULE_0_jquery__("#page-top").length>0){
+        var userInstance = JSON.parse(localStorage.getItem("user"));
+
+        __WEBPACK_IMPORTED_MODULE_0_jquery__("#page-top").append(template(userInstance));
+
+
+        __WEBPACK_IMPORTED_MODULE_0_jquery__("#page-top").find(".toolbar-avatar").css({
+            backgroundImage: avatarTemplate(userInstance.avatar)
+        })
+        
+        //Actions
+        __WEBPACK_IMPORTED_MODULE_0_jquery__("[href='#logout']").click(function(e){
+            e.preventDefault();
+            
+            __WEBPACK_IMPORTED_MODULE_0_jquery__["post"]("/user/logout",function(){
+
+                window.location.href = "/";
+            })
+        })
+
+
+    }
+})
+
+/***/ }),
+/* 69 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7088,7 +8835,7 @@ __WEBPACK_IMPORTED_MODULE_0_jquery__["fn"].stick = function(options){
 }
 
 /***/ }),
-/* 67 */
+/* 70 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7147,13 +8894,13 @@ if(root.length > 0 && location.pathname !== "/editor/collections"){
 }
 
 /***/ }),
-/* 68 */
+/* 71 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mousetrap__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mousetrap__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mousetrap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_mousetrap__);
 
 
@@ -7320,35 +9067,35 @@ __WEBPACK_IMPORTED_MODULE_0_jquery__(function () {
 })
 
 /***/ }),
-/* 69 */,
-/* 70 */,
-/* 71 */
+/* 72 */,
+/* 73 */,
+/* 74 */
 /***/ (function(module, exports) {
 
 module.exports = function atoa (a, n) { return Array.prototype.slice.call(a, n); }
 
 
 /***/ }),
-/* 72 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(75);
+module.exports = __webpack_require__(78);
 
 
 /***/ }),
-/* 73 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(74);
+module.exports = __webpack_require__(77);
 
 
 /***/ }),
-/* 74 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayEach = __webpack_require__(77),
-    baseEach = __webpack_require__(81),
-    createForEach = __webpack_require__(91);
+var arrayEach = __webpack_require__(80),
+    baseEach = __webpack_require__(84),
+    createForEach = __webpack_require__(94);
 
 /**
  * Iterates over elements of `collection` invoking `iteratee` for each element.
@@ -7386,16 +9133,16 @@ module.exports = forEach;
 
 
 /***/ }),
-/* 75 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseIndexOf = __webpack_require__(84),
-    getLength = __webpack_require__(21),
-    isArray = __webpack_require__(16),
-    isIterateeCall = __webpack_require__(39),
+var baseIndexOf = __webpack_require__(87),
+    getLength = __webpack_require__(22),
+    isArray = __webpack_require__(18),
+    isIterateeCall = __webpack_require__(42),
     isLength = __webpack_require__(9),
-    isString = __webpack_require__(95),
-    values = __webpack_require__(99);
+    isString = __webpack_require__(98),
+    values = __webpack_require__(102);
 
 /* Native method references for those with the same name as other `lodash` methods. */
 var nativeMax = Math.max;
@@ -7449,7 +9196,7 @@ module.exports = includes;
 
 
 /***/ }),
-/* 76 */
+/* 79 */
 /***/ (function(module, exports) {
 
 /** Used as the `TypeError` message for "Functions" methods. */
@@ -7513,7 +9260,7 @@ module.exports = restParam;
 
 
 /***/ }),
-/* 77 */
+/* 80 */
 /***/ (function(module, exports) {
 
 /**
@@ -7541,10 +9288,10 @@ module.exports = arrayEach;
 
 
 /***/ }),
-/* 78 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var keys = __webpack_require__(17);
+var keys = __webpack_require__(19);
 
 /**
  * A specialized version of `_.assign` for customizing assigned values without
@@ -7579,11 +9326,11 @@ module.exports = assignWith;
 
 
 /***/ }),
-/* 79 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseCopy = __webpack_require__(80),
-    keys = __webpack_require__(17);
+var baseCopy = __webpack_require__(83),
+    keys = __webpack_require__(19);
 
 /**
  * The base implementation of `_.assign` without support for argument juggling,
@@ -7604,7 +9351,7 @@ module.exports = baseAssign;
 
 
 /***/ }),
-/* 80 */
+/* 83 */
 /***/ (function(module, exports) {
 
 /**
@@ -7633,11 +9380,11 @@ module.exports = baseCopy;
 
 
 /***/ }),
-/* 81 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseForOwn = __webpack_require__(83),
-    createBaseEach = __webpack_require__(89);
+var baseForOwn = __webpack_require__(86),
+    createBaseEach = __webpack_require__(92);
 
 /**
  * The base implementation of `_.forEach` without support for callback
@@ -7654,10 +9401,10 @@ module.exports = baseEach;
 
 
 /***/ }),
-/* 82 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var createBaseFor = __webpack_require__(90);
+var createBaseFor = __webpack_require__(93);
 
 /**
  * The base implementation of `baseForIn` and `baseForOwn` which iterates
@@ -7677,11 +9424,11 @@ module.exports = baseFor;
 
 
 /***/ }),
-/* 83 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseFor = __webpack_require__(82),
-    keys = __webpack_require__(17);
+var baseFor = __webpack_require__(85),
+    keys = __webpack_require__(19);
 
 /**
  * The base implementation of `_.forOwn` without support for callback
@@ -7700,10 +9447,10 @@ module.exports = baseForOwn;
 
 
 /***/ }),
-/* 84 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var indexOfNaN = __webpack_require__(92);
+var indexOfNaN = __webpack_require__(95);
 
 /**
  * The base implementation of `_.indexOf` without support for binary searches.
@@ -7733,7 +9480,7 @@ module.exports = baseIndexOf;
 
 
 /***/ }),
-/* 85 */
+/* 88 */
 /***/ (function(module, exports) {
 
 /**
@@ -7753,7 +9500,7 @@ module.exports = baseProperty;
 
 
 /***/ }),
-/* 86 */
+/* 89 */
 /***/ (function(module, exports) {
 
 /**
@@ -7772,7 +9519,7 @@ module.exports = baseToString;
 
 
 /***/ }),
-/* 87 */
+/* 90 */
 /***/ (function(module, exports) {
 
 /**
@@ -7800,12 +9547,12 @@ module.exports = baseValues;
 
 
 /***/ }),
-/* 88 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var bindCallback = __webpack_require__(37),
-    isIterateeCall = __webpack_require__(39),
-    restParam = __webpack_require__(76);
+var bindCallback = __webpack_require__(40),
+    isIterateeCall = __webpack_require__(42),
+    restParam = __webpack_require__(79);
 
 /**
  * Creates a `_.assign`, `_.defaults`, or `_.merge` function.
@@ -7847,12 +9594,12 @@ module.exports = createAssigner;
 
 
 /***/ }),
-/* 89 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getLength = __webpack_require__(21),
+var getLength = __webpack_require__(22),
     isLength = __webpack_require__(9),
-    toObject = __webpack_require__(40);
+    toObject = __webpack_require__(43);
 
 /**
  * Creates a `baseEach` or `baseEachRight` function.
@@ -7884,10 +9631,10 @@ module.exports = createBaseEach;
 
 
 /***/ }),
-/* 90 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var toObject = __webpack_require__(40);
+var toObject = __webpack_require__(43);
 
 /**
  * Creates a base function for `_.forIn` or `_.forInRight`.
@@ -7917,11 +9664,11 @@ module.exports = createBaseFor;
 
 
 /***/ }),
-/* 91 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var bindCallback = __webpack_require__(37),
-    isArray = __webpack_require__(16);
+var bindCallback = __webpack_require__(40),
+    isArray = __webpack_require__(18);
 
 /**
  * Creates a function for `_.forEach` or `_.forEachRight`.
@@ -7943,7 +9690,7 @@ module.exports = createForEach;
 
 
 /***/ }),
-/* 92 */
+/* 95 */
 /***/ (function(module, exports) {
 
 /**
@@ -7972,14 +9719,14 @@ module.exports = indexOfNaN;
 
 
 /***/ }),
-/* 93 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isArguments = __webpack_require__(41),
-    isArray = __webpack_require__(16),
-    isIndex = __webpack_require__(23),
+var isArguments = __webpack_require__(44),
+    isArray = __webpack_require__(18),
+    isIndex = __webpack_require__(24),
     isLength = __webpack_require__(9),
-    keysIn = __webpack_require__(98);
+    keysIn = __webpack_require__(101);
 
 /** Used for native method references. */
 var objectProto = Object.prototype;
@@ -8019,11 +9766,11 @@ module.exports = shimKeys;
 
 
 /***/ }),
-/* 94 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isFunction = __webpack_require__(42),
-    isObjectLike = __webpack_require__(15);
+var isFunction = __webpack_require__(45),
+    isObjectLike = __webpack_require__(17);
 
 /** Used to detect host constructors (Safari > 5). */
 var reIsHostCtor = /^\[object .+?Constructor\]$/;
@@ -8073,10 +9820,10 @@ module.exports = isNative;
 
 
 /***/ }),
-/* 95 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObjectLike = __webpack_require__(15);
+var isObjectLike = __webpack_require__(17);
 
 /** `Object#toString` result references. */
 var stringTag = '[object String]';
@@ -8114,12 +9861,12 @@ module.exports = isString;
 
 
 /***/ }),
-/* 96 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var assignWith = __webpack_require__(78),
-    baseAssign = __webpack_require__(79),
-    createAssigner = __webpack_require__(88);
+var assignWith = __webpack_require__(81),
+    baseAssign = __webpack_require__(82),
+    createAssigner = __webpack_require__(91);
 
 /**
  * Assigns own enumerable properties of source object(s) to the destination
@@ -8163,21 +9910,21 @@ module.exports = assign;
 
 
 /***/ }),
-/* 97 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(96);
+module.exports = __webpack_require__(99);
 
 
 /***/ }),
-/* 98 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isArguments = __webpack_require__(41),
-    isArray = __webpack_require__(16),
-    isIndex = __webpack_require__(23),
+var isArguments = __webpack_require__(44),
+    isArray = __webpack_require__(18),
+    isIndex = __webpack_require__(24),
     isLength = __webpack_require__(9),
-    isObject = __webpack_require__(10);
+    isObject = __webpack_require__(11);
 
 /** Used for native method references. */
 var objectProto = Object.prototype;
@@ -8240,11 +9987,11 @@ module.exports = keysIn;
 
 
 /***/ }),
-/* 99 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseValues = __webpack_require__(87),
-    keys = __webpack_require__(17);
+var baseValues = __webpack_require__(90),
+    keys = __webpack_require__(19);
 
 /**
  * Creates an array of the own enumerable property values of `object`.
@@ -8279,7 +10026,7 @@ module.exports = values;
 
 
 /***/ }),
-/* 100 */
+/* 103 */
 /***/ (function(module, exports) {
 
 /**
@@ -8305,7 +10052,7 @@ module.exports = identity;
 
 
 /***/ }),
-/* 101 */
+/* 104 */
 /***/ (function(module, exports) {
 
 /**
@@ -8330,10 +10077,10 @@ module.exports = noop;
 
 
 /***/ }),
-/* 102 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseToString = __webpack_require__(86);
+var baseToString = __webpack_require__(89);
 
 /** Used to generate unique IDs. */
 var idCounter = 0;
@@ -8363,27 +10110,27 @@ module.exports = uniqueId;
 
 
 /***/ }),
-/* 103 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var classNames = __webpack_require__(106);
+var classNames = __webpack_require__(109);
 var $ = __webpack_require__(0);
-__webpack_require__(135);
+__webpack_require__(138);
 
 // modular lodash requires
 var _ = function() {
   throw new Error('Custom lodash build for BootstrapMenu. lodash chaining is not included');
 };
 
-_.noop = __webpack_require__(101);
-_.each = __webpack_require__(73);
-_.contains = __webpack_require__(72);
-_.extend = __webpack_require__(97);
-_.uniqueId = __webpack_require__(102);
-_.isFunction = __webpack_require__(42);
+_.noop = __webpack_require__(104);
+_.each = __webpack_require__(76);
+_.contains = __webpack_require__(75);
+_.extend = __webpack_require__(100);
+_.uniqueId = __webpack_require__(105);
+_.isFunction = __webpack_require__(45);
 
 
 var defaultOptions = {
@@ -8801,7 +10548,7 @@ module.exports = BootstrapMenu;
 
 
 /***/ }),
-/* 104 */
+/* 107 */
 /***/ (function(module, exports) {
 
 (function ($) {
@@ -9470,7 +11217,7 @@ module.exports = BootstrapMenu;
 
 
 /***/ }),
-/* 105 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/*!
@@ -11854,7 +13601,7 @@ if (typeof jQuery === 'undefined') {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 106 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -11909,7 +13656,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 107 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -12078,13 +13825,13 @@ Emitter.prototype.hasListeners = function(event){
 
 
 /***/ }),
-/* 108 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var ticky = __webpack_require__(164);
+var ticky = __webpack_require__(166);
 
 module.exports = function debounce (fn, args, ctx) {
   if (!fn) { return; }
@@ -12095,14 +13842,14 @@ module.exports = function debounce (fn, args, ctx) {
 
 
 /***/ }),
-/* 109 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var atoa = __webpack_require__(71);
-var debounce = __webpack_require__(108);
+var atoa = __webpack_require__(74);
+var debounce = __webpack_require__(111);
 
 module.exports = function emitter (thing, options) {
   var opts = options || {};
@@ -12156,14 +13903,14 @@ module.exports = function emitter (thing, options) {
 
 
 /***/ }),
-/* 110 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 
-var customEvent = __webpack_require__(123);
-var eventmap = __webpack_require__(111);
+var customEvent = __webpack_require__(126);
+var eventmap = __webpack_require__(114);
 var doc = global.document;
 var addEvent = addEventEasy;
 var removeEvent = removeEventEasy;
@@ -12265,7 +14012,7 @@ function find (el, type, fn) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ }),
-/* 111 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12286,8 +14033,8 @@ module.exports = eventmap;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ }),
-/* 112 */,
-/* 113 */
+/* 115 */,
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -12295,21 +14042,21 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "/**\n * jQuery Wheel Color Picker\n * Base Stylesheet\n * \n * http://www.jar2.net/projects/jquery-wheelcolorpicker\n * \n * Copyright © 2011 Fajar Chandra. All rights reserved.\n * Released under MIT License.\n * http://www.opensource.org/licenses/mit-license.php\n * \n * Note: Width, height, left, and top properties are handled by the \n * plugin. Please do not change these values.\n */\n\n.jQWCP-wWidget {\n\tposition: absolute;\n\twidth: 420px;\n\theight: 180px;\n\tbackground: #eee;\n\tbox-shadow: 1px 1px 4px rgba(0,0,0,.5);\n\tborder-radius: 4px;\n\tborder: solid 1px #aaa;\n\tpadding: 10px;\n\tz-index: 1001;\n}\n\n.jQWCP-wWidget.jQWCP-block {\n\tposition: relative;\n\tborder-color: #aaa;\n\tbox-shadow: inset 1px 1px 1px #ccc;\n}\n\n.jQWCP-wWheel {\n\tbackground: url(" + __webpack_require__(169) + ") no-repeat center center;\n\tbackground-size: contain;\n\tposition: relative;\n\tfloat: left;\n\twidth: 180px;\n\theight: 180px;\n\tborder-radius: 50%;\n\tborder: solid 1px #aaa;\n\tmargin: -1px;\n\ttransition: border .15s;\n\tcursor: crosshair;\n}\n\n.jQWCP-wWheel:hover {\n\tborder-color: #666;\n}\n\n.jQWCP-wWheelOverlay {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\twidth: 100%;\n\theight: 100%;\n\tbackground: #000;\n\topacity: 0;\n\tborder-radius: 50%;\n}\n\n.jQWCP-wWheelCursor {\n\tbackground: url(" + __webpack_require__(167) + ") no-repeat center center;\n\twidth: 19px;\n\theight: 19px;\n\tmargin: -9px 0 0 -9px;\n\tposition: absolute;\n\ttop: 50%;\n\tleft: 50%;\n}\n\n.jQWCP-slider-wrapper,\n.jQWCP-wPreview {\n\tposition: relative;\n\twidth: 20px;\n\theight: 180px;\n\tfloat: left;\n\tmargin-left: 10px;\n}\n\n.jQWCP-slider,\n.jQWCP-wPreviewBox {\n\tposition: absolute;\n\twidth: 20px;\n\theight: 180px;\n\tleft: 0;\n\ttop: 0;\n\tborder: solid 1px #aaa;\n\tmargin: -1px;\n\tborder-radius: 4px;\n\ttransition: border .15s;\n}\n\n.jQWCP-slider {\n\tcursor: crosshair;\n}\n\n.jQWCP-slider-wrapper:hover .jQWCP-slider {\n\tborder-color: #666;\n}\n\n.jQWCP-scursor {\n\tposition: absolute;\n\tleft: 0;\n\ttop: 0;\n\tbackground: url(" + __webpack_require__(168) + ") no-repeat center center;\n\twidth: 26px;\n\theight: 19px;\n\tmargin: -9px 0 0 -3px;\n\tcursor: crosshair;\n}\n\n.jQWCP-wAlphaSlider {\n\tbackground: url(" + __webpack_require__(45) + ");\n}\n\n.jQWCP-wPreviewBox {\n\tbackground: url(" + __webpack_require__(45) + ");\n}\n\n#jQWCP-overlay {\n\tposition: fixed;\n\ttop: 0;\n\tleft: 0;\n\tbottom: 0;\n\tright: 0;\n\tz-index: 1000;\n}\n", ""]);
+exports.push([module.i, "/**\n * jQuery Wheel Color Picker\n * Base Stylesheet\n * \n * http://www.jar2.net/projects/jquery-wheelcolorpicker\n * \n * Copyright © 2011 Fajar Chandra. All rights reserved.\n * Released under MIT License.\n * http://www.opensource.org/licenses/mit-license.php\n * \n * Note: Width, height, left, and top properties are handled by the \n * plugin. Please do not change these values.\n */\n\n.jQWCP-wWidget {\n\tposition: absolute;\n\twidth: 420px;\n\theight: 180px;\n\tbackground: #eee;\n\tbox-shadow: 1px 1px 4px rgba(0,0,0,.5);\n\tborder-radius: 4px;\n\tborder: solid 1px #aaa;\n\tpadding: 10px;\n\tz-index: 1001;\n}\n\n.jQWCP-wWidget.jQWCP-block {\n\tposition: relative;\n\tborder-color: #aaa;\n\tbox-shadow: inset 1px 1px 1px #ccc;\n}\n\n.jQWCP-wWheel {\n\tbackground: url(" + __webpack_require__(171) + ") no-repeat center center;\n\tbackground-size: contain;\n\tposition: relative;\n\tfloat: left;\n\twidth: 180px;\n\theight: 180px;\n\tborder-radius: 50%;\n\tborder: solid 1px #aaa;\n\tmargin: -1px;\n\ttransition: border .15s;\n\tcursor: crosshair;\n}\n\n.jQWCP-wWheel:hover {\n\tborder-color: #666;\n}\n\n.jQWCP-wWheelOverlay {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\twidth: 100%;\n\theight: 100%;\n\tbackground: #000;\n\topacity: 0;\n\tborder-radius: 50%;\n}\n\n.jQWCP-wWheelCursor {\n\tbackground: url(" + __webpack_require__(169) + ") no-repeat center center;\n\twidth: 19px;\n\theight: 19px;\n\tmargin: -9px 0 0 -9px;\n\tposition: absolute;\n\ttop: 50%;\n\tleft: 50%;\n}\n\n.jQWCP-slider-wrapper,\n.jQWCP-wPreview {\n\tposition: relative;\n\twidth: 20px;\n\theight: 180px;\n\tfloat: left;\n\tmargin-left: 10px;\n}\n\n.jQWCP-slider,\n.jQWCP-wPreviewBox {\n\tposition: absolute;\n\twidth: 20px;\n\theight: 180px;\n\tleft: 0;\n\ttop: 0;\n\tborder: solid 1px #aaa;\n\tmargin: -1px;\n\tborder-radius: 4px;\n\ttransition: border .15s;\n}\n\n.jQWCP-slider {\n\tcursor: crosshair;\n}\n\n.jQWCP-slider-wrapper:hover .jQWCP-slider {\n\tborder-color: #666;\n}\n\n.jQWCP-scursor {\n\tposition: absolute;\n\tleft: 0;\n\ttop: 0;\n\tbackground: url(" + __webpack_require__(170) + ") no-repeat center center;\n\twidth: 26px;\n\theight: 19px;\n\tmargin: -9px 0 0 -3px;\n\tcursor: crosshair;\n}\n\n.jQWCP-wAlphaSlider {\n\tbackground: url(" + __webpack_require__(48) + ");\n}\n\n.jQWCP-wPreviewBox {\n\tbackground: url(" + __webpack_require__(48) + ");\n}\n\n#jQWCP-overlay {\n\tposition: fixed;\n\ttop: 0;\n\tleft: 0;\n\tbottom: 0;\n\tright: 0;\n\tz-index: 1000;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 114 */,
-/* 115 */,
-/* 116 */,
 /* 117 */,
 /* 118 */,
 /* 119 */,
 /* 120 */,
 /* 121 */,
-/* 122 */
+/* 122 */,
+/* 123 */,
+/* 124 */,
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -12323,7 +14070,7 @@ exports.push([module.i, ".select2-container{box-sizing:border-box;display:inline
 
 
 /***/ }),
-/* 123 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -12378,7 +14125,7 @@ function CustomEvent (type, params) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ }),
-/* 124 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12418,15 +14165,15 @@ module.exports = {
 
 
 /***/ }),
-/* 125 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 
-var emitter = __webpack_require__(109);
-var crossvent = __webpack_require__(110);
-var classes = __webpack_require__(124);
+var emitter = __webpack_require__(112);
+var crossvent = __webpack_require__(113);
+var classes = __webpack_require__(127);
 var doc = document;
 var documentElement = doc.documentElement;
 
@@ -13034,13 +14781,13 @@ module.exports = dragula;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ }),
-/* 126 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var request = __webpack_require__(30);
-var Promise = __webpack_require__(28).Promise;
-var getBaseURL = __webpack_require__(27);
-var httpHeaderSafeJson = __webpack_require__(43);
+var request = __webpack_require__(32);
+var Promise = __webpack_require__(29).Promise;
+var getBaseURL = __webpack_require__(28);
+var httpHeaderSafeJson = __webpack_require__(46);
 
 var buildCustomError;
 var downloadRequest;
@@ -13137,14 +14884,14 @@ module.exports = downloadRequest;
 
 
 /***/ }),
-/* 127 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var REQUEST_CONSTANTS = __webpack_require__(131);
+var REQUEST_CONSTANTS = __webpack_require__(134);
 var DropboxBase;
 
 // Polyfill Object.assign() for older browsers
-__webpack_require__(130);
+__webpack_require__(133);
 
 /**
  * @private
@@ -13322,7 +15069,7 @@ DropboxBase.prototype.setRpcRequest = function (newRpcRequest) {
 
 DropboxBase.prototype.getRpcRequest = function () {
   if (DropboxBase.prototype.rpcRequest === undefined) {
-    DropboxBase.prototype.rpcRequest = __webpack_require__(133);
+    DropboxBase.prototype.rpcRequest = __webpack_require__(136);
   }
 
   return DropboxBase.prototype.rpcRequest;
@@ -13334,7 +15081,7 @@ DropboxBase.prototype.setDownloadRequest = function (newDownloadRequest) {
 
 DropboxBase.prototype.getDownloadRequest = function () {
   if (DropboxBase.prototype.downloadRequest === undefined) {
-    DropboxBase.prototype.downloadRequest = __webpack_require__(126);
+    DropboxBase.prototype.downloadRequest = __webpack_require__(129);
   }
 
   return DropboxBase.prototype.downloadRequest;
@@ -13346,7 +15093,7 @@ DropboxBase.prototype.setUploadRequest = function (newUploadRequest) {
 
 DropboxBase.prototype.getUploadRequest = function () {
   if (DropboxBase.prototype.uploadRequest === undefined) {
-    DropboxBase.prototype.uploadRequest = __webpack_require__(134);
+    DropboxBase.prototype.uploadRequest = __webpack_require__(137);
   }
 
   return DropboxBase.prototype.uploadRequest;
@@ -13356,11 +15103,11 @@ module.exports = DropboxBase;
 
 
 /***/ }),
-/* 128 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var DropboxBase = __webpack_require__(127);
-var routes = __webpack_require__(132);
+var DropboxBase = __webpack_require__(130);
+var routes = __webpack_require__(135);
 var Dropbox;
 
 /**
@@ -13395,16 +15142,16 @@ module.exports = Dropbox;
 
 
 /***/ }),
-/* 129 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Dropbox = __webpack_require__(128);
+var Dropbox = __webpack_require__(131);
 
 module.exports = Dropbox;
 
 
 /***/ }),
-/* 130 */
+/* 133 */
 /***/ (function(module, exports) {
 
 // Polyfill object.assign for legacy browsers
@@ -13439,7 +15186,7 @@ if (typeof Object.assign !== 'function') {
 
 
 /***/ }),
-/* 131 */
+/* 134 */
 /***/ (function(module, exports) {
 
 var REQUEST_CONSTANTS = {
@@ -13452,7 +15199,7 @@ module.exports = REQUEST_CONSTANTS;
 
 
 /***/ }),
-/* 132 */
+/* 135 */
 /***/ (function(module, exports) {
 
 // Auto-generated by Stone, do not modify.
@@ -14737,12 +16484,12 @@ module.exports = routes;
 
 
 /***/ }),
-/* 133 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var request = __webpack_require__(30);
-var Promise = __webpack_require__(28).Promise;
-var getBaseURL = __webpack_require__(27);
+var request = __webpack_require__(32);
+var Promise = __webpack_require__(29).Promise;
+var getBaseURL = __webpack_require__(28);
 
 // This doesn't match what was spec'd in paper doc yet
 var buildCustomError = function (error, response) {
@@ -14820,13 +16567,13 @@ module.exports = rpcRequest;
 
 
 /***/ }),
-/* 134 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var request = __webpack_require__(30);
-var Promise = __webpack_require__(28).Promise;
-var getBaseURL = __webpack_require__(27);
-var httpHeaderSafeJson = __webpack_require__(43);
+var request = __webpack_require__(32);
+var Promise = __webpack_require__(29).Promise;
+var getBaseURL = __webpack_require__(28);
+var httpHeaderSafeJson = __webpack_require__(46);
 
 // This doesn't match what was spec'd in paper doc yet
 var buildCustomError = function (error, response) {
@@ -14891,7 +16638,7 @@ module.exports = uploadRequest;
 
 
 /***/ }),
-/* 135 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -14915,7 +16662,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 	if ( true ) {
 
 		// AMD. Register as an anonymous module.
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(0), __webpack_require__(136) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(0), __webpack_require__(139) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -15398,7 +17145,7 @@ return $.ui.position;
 
 
 /***/ }),
-/* 136 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;( function( factory ) {
@@ -15424,7 +17171,7 @@ return $.ui.version = "1.12.1";
 
 
 /***/ }),
-/* 137 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/**
@@ -15444,7 +17191,7 @@ return $.ui.version = "1.12.1";
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 138 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -25704,1790 +27451,17 @@ return jQuery;
 
 
 /***/ }),
-/* 139 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
- * jshashes - https://github.com/h2non/jshashes
- * Released under the "New BSD" license
- *
- * Algorithms specification:
- *
- * MD5 - http://www.ietf.org/rfc/rfc1321.txt
- * RIPEMD-160 - http://homes.esat.kuleuven.be/~bosselae/ripemd160.html
- * SHA1   - http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf
- * SHA256 - http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf
- * SHA512 - http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf
- * HMAC - http://www.ietf.org/rfc/rfc2104.txt
- */
-(function() {
-  var Hashes;
-
-  function utf8Encode(str) {
-    var x, y, output = '',
-      i = -1,
-      l;
-
-    if (str && str.length) {
-      l = str.length;
-      while ((i += 1) < l) {
-        /* Decode utf-16 surrogate pairs */
-        x = str.charCodeAt(i);
-        y = i + 1 < l ? str.charCodeAt(i + 1) : 0;
-        if (0xD800 <= x && x <= 0xDBFF && 0xDC00 <= y && y <= 0xDFFF) {
-          x = 0x10000 + ((x & 0x03FF) << 10) + (y & 0x03FF);
-          i += 1;
-        }
-        /* Encode output as utf-8 */
-        if (x <= 0x7F) {
-          output += String.fromCharCode(x);
-        } else if (x <= 0x7FF) {
-          output += String.fromCharCode(0xC0 | ((x >>> 6) & 0x1F),
-            0x80 | (x & 0x3F));
-        } else if (x <= 0xFFFF) {
-          output += String.fromCharCode(0xE0 | ((x >>> 12) & 0x0F),
-            0x80 | ((x >>> 6) & 0x3F),
-            0x80 | (x & 0x3F));
-        } else if (x <= 0x1FFFFF) {
-          output += String.fromCharCode(0xF0 | ((x >>> 18) & 0x07),
-            0x80 | ((x >>> 12) & 0x3F),
-            0x80 | ((x >>> 6) & 0x3F),
-            0x80 | (x & 0x3F));
-        }
-      }
-    }
-    return output;
-  }
-
-  function utf8Decode(str) {
-    var i, ac, c1, c2, c3, arr = [],
-      l;
-    i = ac = c1 = c2 = c3 = 0;
-
-    if (str && str.length) {
-      l = str.length;
-      str += '';
-
-      while (i < l) {
-        c1 = str.charCodeAt(i);
-        ac += 1;
-        if (c1 < 128) {
-          arr[ac] = String.fromCharCode(c1);
-          i += 1;
-        } else if (c1 > 191 && c1 < 224) {
-          c2 = str.charCodeAt(i + 1);
-          arr[ac] = String.fromCharCode(((c1 & 31) << 6) | (c2 & 63));
-          i += 2;
-        } else {
-          c2 = str.charCodeAt(i + 1);
-          c3 = str.charCodeAt(i + 2);
-          arr[ac] = String.fromCharCode(((c1 & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
-          i += 3;
-        }
-      }
-    }
-    return arr.join('');
-  }
-
-  /**
-   * Add integers, wrapping at 2^32. This uses 16-bit operations internally
-   * to work around bugs in some JS interpreters.
-   */
-
-  function safe_add(x, y) {
-    var lsw = (x & 0xFFFF) + (y & 0xFFFF),
-      msw = (x >> 16) + (y >> 16) + (lsw >> 16);
-    return (msw << 16) | (lsw & 0xFFFF);
-  }
-
-  /**
-   * Bitwise rotate a 32-bit number to the left.
-   */
-
-  function bit_rol(num, cnt) {
-    return (num << cnt) | (num >>> (32 - cnt));
-  }
-
-  /**
-   * Convert a raw string to a hex string
-   */
-
-  function rstr2hex(input, hexcase) {
-    var hex_tab = hexcase ? '0123456789ABCDEF' : '0123456789abcdef',
-      output = '',
-      x, i = 0,
-      l = input.length;
-    for (; i < l; i += 1) {
-      x = input.charCodeAt(i);
-      output += hex_tab.charAt((x >>> 4) & 0x0F) + hex_tab.charAt(x & 0x0F);
-    }
-    return output;
-  }
-
-  /**
-   * Encode a string as utf-16
-   */
-
-  function str2rstr_utf16le(input) {
-    var i, l = input.length,
-      output = '';
-    for (i = 0; i < l; i += 1) {
-      output += String.fromCharCode(input.charCodeAt(i) & 0xFF, (input.charCodeAt(i) >>> 8) & 0xFF);
-    }
-    return output;
-  }
-
-  function str2rstr_utf16be(input) {
-    var i, l = input.length,
-      output = '';
-    for (i = 0; i < l; i += 1) {
-      output += String.fromCharCode((input.charCodeAt(i) >>> 8) & 0xFF, input.charCodeAt(i) & 0xFF);
-    }
-    return output;
-  }
-
-  /**
-   * Convert an array of big-endian words to a string
-   */
-
-  function binb2rstr(input) {
-    var i, l = input.length * 32,
-      output = '';
-    for (i = 0; i < l; i += 8) {
-      output += String.fromCharCode((input[i >> 5] >>> (24 - i % 32)) & 0xFF);
-    }
-    return output;
-  }
-
-  /**
-   * Convert an array of little-endian words to a string
-   */
-
-  function binl2rstr(input) {
-    var i, l = input.length * 32,
-      output = '';
-    for (i = 0; i < l; i += 8) {
-      output += String.fromCharCode((input[i >> 5] >>> (i % 32)) & 0xFF);
-    }
-    return output;
-  }
-
-  /**
-   * Convert a raw string to an array of little-endian words
-   * Characters >255 have their high-byte silently ignored.
-   */
-
-  function rstr2binl(input) {
-    var i, l = input.length * 8,
-      output = Array(input.length >> 2),
-      lo = output.length;
-    for (i = 0; i < lo; i += 1) {
-      output[i] = 0;
-    }
-    for (i = 0; i < l; i += 8) {
-      output[i >> 5] |= (input.charCodeAt(i / 8) & 0xFF) << (i % 32);
-    }
-    return output;
-  }
-
-  /**
-   * Convert a raw string to an array of big-endian words
-   * Characters >255 have their high-byte silently ignored.
-   */
-
-  function rstr2binb(input) {
-    var i, l = input.length * 8,
-      output = Array(input.length >> 2),
-      lo = output.length;
-    for (i = 0; i < lo; i += 1) {
-      output[i] = 0;
-    }
-    for (i = 0; i < l; i += 8) {
-      output[i >> 5] |= (input.charCodeAt(i / 8) & 0xFF) << (24 - i % 32);
-    }
-    return output;
-  }
-
-  /**
-   * Convert a raw string to an arbitrary string encoding
-   */
-
-  function rstr2any(input, encoding) {
-    var divisor = encoding.length,
-      remainders = Array(),
-      i, q, x, ld, quotient, dividend, output, full_length;
-
-    /* Convert to an array of 16-bit big-endian values, forming the dividend */
-    dividend = Array(Math.ceil(input.length / 2));
-    ld = dividend.length;
-    for (i = 0; i < ld; i += 1) {
-      dividend[i] = (input.charCodeAt(i * 2) << 8) | input.charCodeAt(i * 2 + 1);
-    }
-
-    /**
-     * Repeatedly perform a long division. The binary array forms the dividend,
-     * the length of the encoding is the divisor. Once computed, the quotient
-     * forms the dividend for the next step. We stop when the dividend is zerHashes.
-     * All remainders are stored for later use.
-     */
-    while (dividend.length > 0) {
-      quotient = Array();
-      x = 0;
-      for (i = 0; i < dividend.length; i += 1) {
-        x = (x << 16) + dividend[i];
-        q = Math.floor(x / divisor);
-        x -= q * divisor;
-        if (quotient.length > 0 || q > 0) {
-          quotient[quotient.length] = q;
-        }
-      }
-      remainders[remainders.length] = x;
-      dividend = quotient;
-    }
-
-    /* Convert the remainders to the output string */
-    output = '';
-    for (i = remainders.length - 1; i >= 0; i--) {
-      output += encoding.charAt(remainders[i]);
-    }
-
-    /* Append leading zero equivalents */
-    full_length = Math.ceil(input.length * 8 / (Math.log(encoding.length) / Math.log(2)));
-    for (i = output.length; i < full_length; i += 1) {
-      output = encoding[0] + output;
-    }
-    return output;
-  }
-
-  /**
-   * Convert a raw string to a base-64 string
-   */
-
-  function rstr2b64(input, b64pad) {
-    var tab = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
-      output = '',
-      len = input.length,
-      i, j, triplet;
-    b64pad = b64pad || '=';
-    for (i = 0; i < len; i += 3) {
-      triplet = (input.charCodeAt(i) << 16) | (i + 1 < len ? input.charCodeAt(i + 1) << 8 : 0) | (i + 2 < len ? input.charCodeAt(i + 2) : 0);
-      for (j = 0; j < 4; j += 1) {
-        if (i * 8 + j * 6 > input.length * 8) {
-          output += b64pad;
-        } else {
-          output += tab.charAt((triplet >>> 6 * (3 - j)) & 0x3F);
-        }
-      }
-    }
-    return output;
-  }
-
-  Hashes = {
-    /**
-     * @property {String} version
-     * @readonly
-     */
-    VERSION: '1.0.6',
-    /**
-     * @member Hashes
-     * @class Base64
-     * @constructor
-     */
-    Base64: function() {
-      // private properties
-      var tab = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
-        pad = '=', // default pad according with the RFC standard
-        url = false, // URL encoding support @todo
-        utf8 = true; // by default enable UTF-8 support encoding
-
-      // public method for encoding
-      this.encode = function(input) {
-        var i, j, triplet,
-          output = '',
-          len = input.length;
-
-        pad = pad || '=';
-        input = (utf8) ? utf8Encode(input) : input;
-
-        for (i = 0; i < len; i += 3) {
-          triplet = (input.charCodeAt(i) << 16) | (i + 1 < len ? input.charCodeAt(i + 1) << 8 : 0) | (i + 2 < len ? input.charCodeAt(i + 2) : 0);
-          for (j = 0; j < 4; j += 1) {
-            if (i * 8 + j * 6 > len * 8) {
-              output += pad;
-            } else {
-              output += tab.charAt((triplet >>> 6 * (3 - j)) & 0x3F);
-            }
-          }
-        }
-        return output;
-      };
-
-      // public method for decoding
-      this.decode = function(input) {
-        // var b64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-        var i, o1, o2, o3, h1, h2, h3, h4, bits, ac,
-          dec = '',
-          arr = [];
-        if (!input) {
-          return input;
-        }
-
-        i = ac = 0;
-        input = input.replace(new RegExp('\\' + pad, 'gi'), ''); // use '='
-        //input += '';
-
-        do { // unpack four hexets into three octets using index points in b64
-          h1 = tab.indexOf(input.charAt(i += 1));
-          h2 = tab.indexOf(input.charAt(i += 1));
-          h3 = tab.indexOf(input.charAt(i += 1));
-          h4 = tab.indexOf(input.charAt(i += 1));
-
-          bits = h1 << 18 | h2 << 12 | h3 << 6 | h4;
-
-          o1 = bits >> 16 & 0xff;
-          o2 = bits >> 8 & 0xff;
-          o3 = bits & 0xff;
-          ac += 1;
-
-          if (h3 === 64) {
-            arr[ac] = String.fromCharCode(o1);
-          } else if (h4 === 64) {
-            arr[ac] = String.fromCharCode(o1, o2);
-          } else {
-            arr[ac] = String.fromCharCode(o1, o2, o3);
-          }
-        } while (i < input.length);
-
-        dec = arr.join('');
-        dec = (utf8) ? utf8Decode(dec) : dec;
-
-        return dec;
-      };
-
-      // set custom pad string
-      this.setPad = function(str) {
-        pad = str || pad;
-        return this;
-      };
-      // set custom tab string characters
-      this.setTab = function(str) {
-        tab = str || tab;
-        return this;
-      };
-      this.setUTF8 = function(bool) {
-        if (typeof bool === 'boolean') {
-          utf8 = bool;
-        }
-        return this;
-      };
-    },
-
-    /**
-     * CRC-32 calculation
-     * @member Hashes
-     * @method CRC32
-     * @static
-     * @param {String} str Input String
-     * @return {String}
-     */
-    CRC32: function(str) {
-      var crc = 0,
-        x = 0,
-        y = 0,
-        table, i, iTop;
-      str = utf8Encode(str);
-
-      table = [
-        '00000000 77073096 EE0E612C 990951BA 076DC419 706AF48F E963A535 9E6495A3 0EDB8832 ',
-        '79DCB8A4 E0D5E91E 97D2D988 09B64C2B 7EB17CBD E7B82D07 90BF1D91 1DB71064 6AB020F2 F3B97148 ',
-        '84BE41DE 1ADAD47D 6DDDE4EB F4D4B551 83D385C7 136C9856 646BA8C0 FD62F97A 8A65C9EC 14015C4F ',
-        '63066CD9 FA0F3D63 8D080DF5 3B6E20C8 4C69105E D56041E4 A2677172 3C03E4D1 4B04D447 D20D85FD ',
-        'A50AB56B 35B5A8FA 42B2986C DBBBC9D6 ACBCF940 32D86CE3 45DF5C75 DCD60DCF ABD13D59 26D930AC ',
-        '51DE003A C8D75180 BFD06116 21B4F4B5 56B3C423 CFBA9599 B8BDA50F 2802B89E 5F058808 C60CD9B2 ',
-        'B10BE924 2F6F7C87 58684C11 C1611DAB B6662D3D 76DC4190 01DB7106 98D220BC EFD5102A 71B18589 ',
-        '06B6B51F 9FBFE4A5 E8B8D433 7807C9A2 0F00F934 9609A88E E10E9818 7F6A0DBB 086D3D2D 91646C97 ',
-        'E6635C01 6B6B51F4 1C6C6162 856530D8 F262004E 6C0695ED 1B01A57B 8208F4C1 F50FC457 65B0D9C6 ',
-        '12B7E950 8BBEB8EA FCB9887C 62DD1DDF 15DA2D49 8CD37CF3 FBD44C65 4DB26158 3AB551CE A3BC0074 ',
-        'D4BB30E2 4ADFA541 3DD895D7 A4D1C46D D3D6F4FB 4369E96A 346ED9FC AD678846 DA60B8D0 44042D73 ',
-        '33031DE5 AA0A4C5F DD0D7CC9 5005713C 270241AA BE0B1010 C90C2086 5768B525 206F85B3 B966D409 ',
-        'CE61E49F 5EDEF90E 29D9C998 B0D09822 C7D7A8B4 59B33D17 2EB40D81 B7BD5C3B C0BA6CAD EDB88320 ',
-        '9ABFB3B6 03B6E20C 74B1D29A EAD54739 9DD277AF 04DB2615 73DC1683 E3630B12 94643B84 0D6D6A3E ',
-        '7A6A5AA8 E40ECF0B 9309FF9D 0A00AE27 7D079EB1 F00F9344 8708A3D2 1E01F268 6906C2FE F762575D ',
-        '806567CB 196C3671 6E6B06E7 FED41B76 89D32BE0 10DA7A5A 67DD4ACC F9B9DF6F 8EBEEFF9 17B7BE43 ',
-        '60B08ED5 D6D6A3E8 A1D1937E 38D8C2C4 4FDFF252 D1BB67F1 A6BC5767 3FB506DD 48B2364B D80D2BDA ',
-        'AF0A1B4C 36034AF6 41047A60 DF60EFC3 A867DF55 316E8EEF 4669BE79 CB61B38C BC66831A 256FD2A0 ',
-        '5268E236 CC0C7795 BB0B4703 220216B9 5505262F C5BA3BBE B2BD0B28 2BB45A92 5CB36A04 C2D7FFA7 ',
-        'B5D0CF31 2CD99E8B 5BDEAE1D 9B64C2B0 EC63F226 756AA39C 026D930A 9C0906A9 EB0E363F 72076785 ',
-        '05005713 95BF4A82 E2B87A14 7BB12BAE 0CB61B38 92D28E9B E5D5BE0D 7CDCEFB7 0BDBDF21 86D3D2D4 ',
-        'F1D4E242 68DDB3F8 1FDA836E 81BE16CD F6B9265B 6FB077E1 18B74777 88085AE6 FF0F6A70 66063BCA ',
-        '11010B5C 8F659EFF F862AE69 616BFFD3 166CCF45 A00AE278 D70DD2EE 4E048354 3903B3C2 A7672661 ',
-        'D06016F7 4969474D 3E6E77DB AED16A4A D9D65ADC 40DF0B66 37D83BF0 A9BCAE53 DEBB9EC5 47B2CF7F ',
-        '30B5FFE9 BDBDF21C CABAC28A 53B39330 24B4A3A6 BAD03605 CDD70693 54DE5729 23D967BF B3667A2E ',
-        'C4614AB8 5D681B02 2A6F2B94 B40BBE37 C30C8EA1 5A05DF1B 2D02EF8D'
-      ].join('');
-
-      crc = crc ^ (-1);
-      for (i = 0, iTop = str.length; i < iTop; i += 1) {
-        y = (crc ^ str.charCodeAt(i)) & 0xFF;
-        x = '0x' + table.substr(y * 9, 8);
-        crc = (crc >>> 8) ^ x;
-      }
-      // always return a positive number (that's what >>> 0 does)
-      return (crc ^ (-1)) >>> 0;
-    },
-    /**
-     * @member Hashes
-     * @class MD5
-     * @constructor
-     * @param {Object} [config]
-     *
-     * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
-     * Digest Algorithm, as defined in RFC 1321.
-     * Version 2.2 Copyright (C) Paul Johnston 1999 - 2009
-     * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
-     * See <http://pajhome.org.uk/crypt/md5> for more infHashes.
-     */
-    MD5: function(options) {
-      /**
-       * Private config properties. You may need to tweak these to be compatible with
-       * the server-side, but the defaults work in most cases.
-       * See {@link Hashes.MD5#method-setUpperCase} and {@link Hashes.SHA1#method-setUpperCase}
-       */
-      var hexcase = (options && typeof options.uppercase === 'boolean') ? options.uppercase : false, // hexadecimal output case format. false - lowercase; true - uppercase
-        b64pad = (options && typeof options.pad === 'string') ? options.pad : '=', // base-64 pad character. Defaults to '=' for strict RFC compliance
-        utf8 = (options && typeof options.utf8 === 'boolean') ? options.utf8 : true; // enable/disable utf8 encoding
-
-      // privileged (public) methods
-      this.hex = function(s) {
-        return rstr2hex(rstr(s, utf8), hexcase);
-      };
-      this.b64 = function(s) {
-        return rstr2b64(rstr(s), b64pad);
-      };
-      this.any = function(s, e) {
-        return rstr2any(rstr(s, utf8), e);
-      };
-      this.raw = function(s) {
-        return rstr(s, utf8);
-      };
-      this.hex_hmac = function(k, d) {
-        return rstr2hex(rstr_hmac(k, d), hexcase);
-      };
-      this.b64_hmac = function(k, d) {
-        return rstr2b64(rstr_hmac(k, d), b64pad);
-      };
-      this.any_hmac = function(k, d, e) {
-        return rstr2any(rstr_hmac(k, d), e);
-      };
-      /**
-       * Perform a simple self-test to see if the VM is working
-       * @return {String} Hexadecimal hash sample
-       */
-      this.vm_test = function() {
-        return hex('abc').toLowerCase() === '900150983cd24fb0d6963f7d28e17f72';
-      };
-      /**
-       * Enable/disable uppercase hexadecimal returned string
-       * @param {Boolean}
-       * @return {Object} this
-       */
-      this.setUpperCase = function(a) {
-        if (typeof a === 'boolean') {
-          hexcase = a;
-        }
-        return this;
-      };
-      /**
-       * Defines a base64 pad string
-       * @param {String} Pad
-       * @return {Object} this
-       */
-      this.setPad = function(a) {
-        b64pad = a || b64pad;
-        return this;
-      };
-      /**
-       * Defines a base64 pad string
-       * @param {Boolean}
-       * @return {Object} [this]
-       */
-      this.setUTF8 = function(a) {
-        if (typeof a === 'boolean') {
-          utf8 = a;
-        }
-        return this;
-      };
-
-      // private methods
-
-      /**
-       * Calculate the MD5 of a raw string
-       */
-
-      function rstr(s) {
-        s = (utf8) ? utf8Encode(s) : s;
-        return binl2rstr(binl(rstr2binl(s), s.length * 8));
-      }
-
-      /**
-       * Calculate the HMAC-MD5, of a key and some data (raw strings)
-       */
-
-      function rstr_hmac(key, data) {
-        var bkey, ipad, opad, hash, i;
-
-        key = (utf8) ? utf8Encode(key) : key;
-        data = (utf8) ? utf8Encode(data) : data;
-        bkey = rstr2binl(key);
-        if (bkey.length > 16) {
-          bkey = binl(bkey, key.length * 8);
-        }
-
-        ipad = Array(16), opad = Array(16);
-        for (i = 0; i < 16; i += 1) {
-          ipad[i] = bkey[i] ^ 0x36363636;
-          opad[i] = bkey[i] ^ 0x5C5C5C5C;
-        }
-        hash = binl(ipad.concat(rstr2binl(data)), 512 + data.length * 8);
-        return binl2rstr(binl(opad.concat(hash), 512 + 128));
-      }
-
-      /**
-       * Calculate the MD5 of an array of little-endian words, and a bit length.
-       */
-
-      function binl(x, len) {
-        var i, olda, oldb, oldc, oldd,
-          a = 1732584193,
-          b = -271733879,
-          c = -1732584194,
-          d = 271733878;
-
-        /* append padding */
-        x[len >> 5] |= 0x80 << ((len) % 32);
-        x[(((len + 64) >>> 9) << 4) + 14] = len;
-
-        for (i = 0; i < x.length; i += 16) {
-          olda = a;
-          oldb = b;
-          oldc = c;
-          oldd = d;
-
-          a = md5_ff(a, b, c, d, x[i + 0], 7, -680876936);
-          d = md5_ff(d, a, b, c, x[i + 1], 12, -389564586);
-          c = md5_ff(c, d, a, b, x[i + 2], 17, 606105819);
-          b = md5_ff(b, c, d, a, x[i + 3], 22, -1044525330);
-          a = md5_ff(a, b, c, d, x[i + 4], 7, -176418897);
-          d = md5_ff(d, a, b, c, x[i + 5], 12, 1200080426);
-          c = md5_ff(c, d, a, b, x[i + 6], 17, -1473231341);
-          b = md5_ff(b, c, d, a, x[i + 7], 22, -45705983);
-          a = md5_ff(a, b, c, d, x[i + 8], 7, 1770035416);
-          d = md5_ff(d, a, b, c, x[i + 9], 12, -1958414417);
-          c = md5_ff(c, d, a, b, x[i + 10], 17, -42063);
-          b = md5_ff(b, c, d, a, x[i + 11], 22, -1990404162);
-          a = md5_ff(a, b, c, d, x[i + 12], 7, 1804603682);
-          d = md5_ff(d, a, b, c, x[i + 13], 12, -40341101);
-          c = md5_ff(c, d, a, b, x[i + 14], 17, -1502002290);
-          b = md5_ff(b, c, d, a, x[i + 15], 22, 1236535329);
-
-          a = md5_gg(a, b, c, d, x[i + 1], 5, -165796510);
-          d = md5_gg(d, a, b, c, x[i + 6], 9, -1069501632);
-          c = md5_gg(c, d, a, b, x[i + 11], 14, 643717713);
-          b = md5_gg(b, c, d, a, x[i + 0], 20, -373897302);
-          a = md5_gg(a, b, c, d, x[i + 5], 5, -701558691);
-          d = md5_gg(d, a, b, c, x[i + 10], 9, 38016083);
-          c = md5_gg(c, d, a, b, x[i + 15], 14, -660478335);
-          b = md5_gg(b, c, d, a, x[i + 4], 20, -405537848);
-          a = md5_gg(a, b, c, d, x[i + 9], 5, 568446438);
-          d = md5_gg(d, a, b, c, x[i + 14], 9, -1019803690);
-          c = md5_gg(c, d, a, b, x[i + 3], 14, -187363961);
-          b = md5_gg(b, c, d, a, x[i + 8], 20, 1163531501);
-          a = md5_gg(a, b, c, d, x[i + 13], 5, -1444681467);
-          d = md5_gg(d, a, b, c, x[i + 2], 9, -51403784);
-          c = md5_gg(c, d, a, b, x[i + 7], 14, 1735328473);
-          b = md5_gg(b, c, d, a, x[i + 12], 20, -1926607734);
-
-          a = md5_hh(a, b, c, d, x[i + 5], 4, -378558);
-          d = md5_hh(d, a, b, c, x[i + 8], 11, -2022574463);
-          c = md5_hh(c, d, a, b, x[i + 11], 16, 1839030562);
-          b = md5_hh(b, c, d, a, x[i + 14], 23, -35309556);
-          a = md5_hh(a, b, c, d, x[i + 1], 4, -1530992060);
-          d = md5_hh(d, a, b, c, x[i + 4], 11, 1272893353);
-          c = md5_hh(c, d, a, b, x[i + 7], 16, -155497632);
-          b = md5_hh(b, c, d, a, x[i + 10], 23, -1094730640);
-          a = md5_hh(a, b, c, d, x[i + 13], 4, 681279174);
-          d = md5_hh(d, a, b, c, x[i + 0], 11, -358537222);
-          c = md5_hh(c, d, a, b, x[i + 3], 16, -722521979);
-          b = md5_hh(b, c, d, a, x[i + 6], 23, 76029189);
-          a = md5_hh(a, b, c, d, x[i + 9], 4, -640364487);
-          d = md5_hh(d, a, b, c, x[i + 12], 11, -421815835);
-          c = md5_hh(c, d, a, b, x[i + 15], 16, 530742520);
-          b = md5_hh(b, c, d, a, x[i + 2], 23, -995338651);
-
-          a = md5_ii(a, b, c, d, x[i + 0], 6, -198630844);
-          d = md5_ii(d, a, b, c, x[i + 7], 10, 1126891415);
-          c = md5_ii(c, d, a, b, x[i + 14], 15, -1416354905);
-          b = md5_ii(b, c, d, a, x[i + 5], 21, -57434055);
-          a = md5_ii(a, b, c, d, x[i + 12], 6, 1700485571);
-          d = md5_ii(d, a, b, c, x[i + 3], 10, -1894986606);
-          c = md5_ii(c, d, a, b, x[i + 10], 15, -1051523);
-          b = md5_ii(b, c, d, a, x[i + 1], 21, -2054922799);
-          a = md5_ii(a, b, c, d, x[i + 8], 6, 1873313359);
-          d = md5_ii(d, a, b, c, x[i + 15], 10, -30611744);
-          c = md5_ii(c, d, a, b, x[i + 6], 15, -1560198380);
-          b = md5_ii(b, c, d, a, x[i + 13], 21, 1309151649);
-          a = md5_ii(a, b, c, d, x[i + 4], 6, -145523070);
-          d = md5_ii(d, a, b, c, x[i + 11], 10, -1120210379);
-          c = md5_ii(c, d, a, b, x[i + 2], 15, 718787259);
-          b = md5_ii(b, c, d, a, x[i + 9], 21, -343485551);
-
-          a = safe_add(a, olda);
-          b = safe_add(b, oldb);
-          c = safe_add(c, oldc);
-          d = safe_add(d, oldd);
-        }
-        return Array(a, b, c, d);
-      }
-
-      /**
-       * These functions implement the four basic operations the algorithm uses.
-       */
-
-      function md5_cmn(q, a, b, x, s, t) {
-        return safe_add(bit_rol(safe_add(safe_add(a, q), safe_add(x, t)), s), b);
-      }
-
-      function md5_ff(a, b, c, d, x, s, t) {
-        return md5_cmn((b & c) | ((~b) & d), a, b, x, s, t);
-      }
-
-      function md5_gg(a, b, c, d, x, s, t) {
-        return md5_cmn((b & d) | (c & (~d)), a, b, x, s, t);
-      }
-
-      function md5_hh(a, b, c, d, x, s, t) {
-        return md5_cmn(b ^ c ^ d, a, b, x, s, t);
-      }
-
-      function md5_ii(a, b, c, d, x, s, t) {
-        return md5_cmn(c ^ (b | (~d)), a, b, x, s, t);
-      }
-    },
-    /**
-     * @member Hashes
-     * @class Hashes.SHA1
-     * @param {Object} [config]
-     * @constructor
-     *
-     * A JavaScript implementation of the Secure Hash Algorithm, SHA-1, as defined in FIPS 180-1
-     * Version 2.2 Copyright Paul Johnston 2000 - 2009.
-     * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
-     * See http://pajhome.org.uk/crypt/md5 for details.
-     */
-    SHA1: function(options) {
-      /**
-       * Private config properties. You may need to tweak these to be compatible with
-       * the server-side, but the defaults work in most cases.
-       * See {@link Hashes.MD5#method-setUpperCase} and {@link Hashes.SHA1#method-setUpperCase}
-       */
-      var hexcase = (options && typeof options.uppercase === 'boolean') ? options.uppercase : false, // hexadecimal output case format. false - lowercase; true - uppercase
-        b64pad = (options && typeof options.pad === 'string') ? options.pad : '=', // base-64 pad character. Defaults to '=' for strict RFC compliance
-        utf8 = (options && typeof options.utf8 === 'boolean') ? options.utf8 : true; // enable/disable utf8 encoding
-
-      // public methods
-      this.hex = function(s) {
-        return rstr2hex(rstr(s, utf8), hexcase);
-      };
-      this.b64 = function(s) {
-        return rstr2b64(rstr(s, utf8), b64pad);
-      };
-      this.any = function(s, e) {
-        return rstr2any(rstr(s, utf8), e);
-      };
-      this.raw = function(s) {
-        return rstr(s, utf8);
-      };
-      this.hex_hmac = function(k, d) {
-        return rstr2hex(rstr_hmac(k, d));
-      };
-      this.b64_hmac = function(k, d) {
-        return rstr2b64(rstr_hmac(k, d), b64pad);
-      };
-      this.any_hmac = function(k, d, e) {
-        return rstr2any(rstr_hmac(k, d), e);
-      };
-      /**
-       * Perform a simple self-test to see if the VM is working
-       * @return {String} Hexadecimal hash sample
-       * @public
-       */
-      this.vm_test = function() {
-        return hex('abc').toLowerCase() === '900150983cd24fb0d6963f7d28e17f72';
-      };
-      /**
-       * @description Enable/disable uppercase hexadecimal returned string
-       * @param {boolean}
-       * @return {Object} this
-       * @public
-       */
-      this.setUpperCase = function(a) {
-        if (typeof a === 'boolean') {
-          hexcase = a;
-        }
-        return this;
-      };
-      /**
-       * @description Defines a base64 pad string
-       * @param {string} Pad
-       * @return {Object} this
-       * @public
-       */
-      this.setPad = function(a) {
-        b64pad = a || b64pad;
-        return this;
-      };
-      /**
-       * @description Defines a base64 pad string
-       * @param {boolean}
-       * @return {Object} this
-       * @public
-       */
-      this.setUTF8 = function(a) {
-        if (typeof a === 'boolean') {
-          utf8 = a;
-        }
-        return this;
-      };
-
-      // private methods
-
-      /**
-       * Calculate the SHA-512 of a raw string
-       */
-
-      function rstr(s) {
-        s = (utf8) ? utf8Encode(s) : s;
-        return binb2rstr(binb(rstr2binb(s), s.length * 8));
-      }
-
-      /**
-       * Calculate the HMAC-SHA1 of a key and some data (raw strings)
-       */
-
-      function rstr_hmac(key, data) {
-        var bkey, ipad, opad, i, hash;
-        key = (utf8) ? utf8Encode(key) : key;
-        data = (utf8) ? utf8Encode(data) : data;
-        bkey = rstr2binb(key);
-
-        if (bkey.length > 16) {
-          bkey = binb(bkey, key.length * 8);
-        }
-        ipad = Array(16), opad = Array(16);
-        for (i = 0; i < 16; i += 1) {
-          ipad[i] = bkey[i] ^ 0x36363636;
-          opad[i] = bkey[i] ^ 0x5C5C5C5C;
-        }
-        hash = binb(ipad.concat(rstr2binb(data)), 512 + data.length * 8);
-        return binb2rstr(binb(opad.concat(hash), 512 + 160));
-      }
-
-      /**
-       * Calculate the SHA-1 of an array of big-endian words, and a bit length
-       */
-
-      function binb(x, len) {
-        var i, j, t, olda, oldb, oldc, oldd, olde,
-          w = Array(80),
-          a = 1732584193,
-          b = -271733879,
-          c = -1732584194,
-          d = 271733878,
-          e = -1009589776;
-
-        /* append padding */
-        x[len >> 5] |= 0x80 << (24 - len % 32);
-        x[((len + 64 >> 9) << 4) + 15] = len;
-
-        for (i = 0; i < x.length; i += 16) {
-          olda = a;
-          oldb = b;
-          oldc = c;
-          oldd = d;
-          olde = e;
-
-          for (j = 0; j < 80; j += 1) {
-            if (j < 16) {
-              w[j] = x[i + j];
-            } else {
-              w[j] = bit_rol(w[j - 3] ^ w[j - 8] ^ w[j - 14] ^ w[j - 16], 1);
-            }
-            t = safe_add(safe_add(bit_rol(a, 5), sha1_ft(j, b, c, d)),
-              safe_add(safe_add(e, w[j]), sha1_kt(j)));
-            e = d;
-            d = c;
-            c = bit_rol(b, 30);
-            b = a;
-            a = t;
-          }
-
-          a = safe_add(a, olda);
-          b = safe_add(b, oldb);
-          c = safe_add(c, oldc);
-          d = safe_add(d, oldd);
-          e = safe_add(e, olde);
-        }
-        return Array(a, b, c, d, e);
-      }
-
-      /**
-       * Perform the appropriate triplet combination function for the current
-       * iteration
-       */
-
-      function sha1_ft(t, b, c, d) {
-        if (t < 20) {
-          return (b & c) | ((~b) & d);
-        }
-        if (t < 40) {
-          return b ^ c ^ d;
-        }
-        if (t < 60) {
-          return (b & c) | (b & d) | (c & d);
-        }
-        return b ^ c ^ d;
-      }
-
-      /**
-       * Determine the appropriate additive constant for the current iteration
-       */
-
-      function sha1_kt(t) {
-        return (t < 20) ? 1518500249 : (t < 40) ? 1859775393 :
-          (t < 60) ? -1894007588 : -899497514;
-      }
-    },
-    /**
-     * @class Hashes.SHA256
-     * @param {config}
-     *
-     * A JavaScript implementation of the Secure Hash Algorithm, SHA-256, as defined in FIPS 180-2
-     * Version 2.2 Copyright Angel Marin, Paul Johnston 2000 - 2009.
-     * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
-     * See http://pajhome.org.uk/crypt/md5 for details.
-     * Also http://anmar.eu.org/projects/jssha2/
-     */
-    SHA256: function(options) {
-      /**
-       * Private properties configuration variables. You may need to tweak these to be compatible with
-       * the server-side, but the defaults work in most cases.
-       * @see this.setUpperCase() method
-       * @see this.setPad() method
-       */
-      var hexcase = (options && typeof options.uppercase === 'boolean') ? options.uppercase : false, // hexadecimal output case format. false - lowercase; true - uppercase  */
-        b64pad = (options && typeof options.pad === 'string') ? options.pad : '=',
-        /* base-64 pad character. Default '=' for strict RFC compliance   */
-        utf8 = (options && typeof options.utf8 === 'boolean') ? options.utf8 : true,
-        /* enable/disable utf8 encoding */
-        sha256_K;
-
-      /* privileged (public) methods */
-      this.hex = function(s) {
-        return rstr2hex(rstr(s, utf8));
-      };
-      this.b64 = function(s) {
-        return rstr2b64(rstr(s, utf8), b64pad);
-      };
-      this.any = function(s, e) {
-        return rstr2any(rstr(s, utf8), e);
-      };
-      this.raw = function(s) {
-        return rstr(s, utf8);
-      };
-      this.hex_hmac = function(k, d) {
-        return rstr2hex(rstr_hmac(k, d));
-      };
-      this.b64_hmac = function(k, d) {
-        return rstr2b64(rstr_hmac(k, d), b64pad);
-      };
-      this.any_hmac = function(k, d, e) {
-        return rstr2any(rstr_hmac(k, d), e);
-      };
-      /**
-       * Perform a simple self-test to see if the VM is working
-       * @return {String} Hexadecimal hash sample
-       * @public
-       */
-      this.vm_test = function() {
-        return hex('abc').toLowerCase() === '900150983cd24fb0d6963f7d28e17f72';
-      };
-      /**
-       * Enable/disable uppercase hexadecimal returned string
-       * @param {boolean}
-       * @return {Object} this
-       * @public
-       */
-      this.setUpperCase = function(a) {
-        if (typeof a === 'boolean') {
-          hexcase = a;
-        }
-        return this;
-      };
-      /**
-       * @description Defines a base64 pad string
-       * @param {string} Pad
-       * @return {Object} this
-       * @public
-       */
-      this.setPad = function(a) {
-        b64pad = a || b64pad;
-        return this;
-      };
-      /**
-       * Defines a base64 pad string
-       * @param {boolean}
-       * @return {Object} this
-       * @public
-       */
-      this.setUTF8 = function(a) {
-        if (typeof a === 'boolean') {
-          utf8 = a;
-        }
-        return this;
-      };
-
-      // private methods
-
-      /**
-       * Calculate the SHA-512 of a raw string
-       */
-
-      function rstr(s, utf8) {
-        s = (utf8) ? utf8Encode(s) : s;
-        return binb2rstr(binb(rstr2binb(s), s.length * 8));
-      }
-
-      /**
-       * Calculate the HMAC-sha256 of a key and some data (raw strings)
-       */
-
-      function rstr_hmac(key, data) {
-        key = (utf8) ? utf8Encode(key) : key;
-        data = (utf8) ? utf8Encode(data) : data;
-        var hash, i = 0,
-          bkey = rstr2binb(key),
-          ipad = Array(16),
-          opad = Array(16);
-
-        if (bkey.length > 16) {
-          bkey = binb(bkey, key.length * 8);
-        }
-
-        for (; i < 16; i += 1) {
-          ipad[i] = bkey[i] ^ 0x36363636;
-          opad[i] = bkey[i] ^ 0x5C5C5C5C;
-        }
-
-        hash = binb(ipad.concat(rstr2binb(data)), 512 + data.length * 8);
-        return binb2rstr(binb(opad.concat(hash), 512 + 256));
-      }
-
-      /*
-       * Main sha256 function, with its support functions
-       */
-
-      function sha256_S(X, n) {
-        return (X >>> n) | (X << (32 - n));
-      }
-
-      function sha256_R(X, n) {
-        return (X >>> n);
-      }
-
-      function sha256_Ch(x, y, z) {
-        return ((x & y) ^ ((~x) & z));
-      }
-
-      function sha256_Maj(x, y, z) {
-        return ((x & y) ^ (x & z) ^ (y & z));
-      }
-
-      function sha256_Sigma0256(x) {
-        return (sha256_S(x, 2) ^ sha256_S(x, 13) ^ sha256_S(x, 22));
-      }
-
-      function sha256_Sigma1256(x) {
-        return (sha256_S(x, 6) ^ sha256_S(x, 11) ^ sha256_S(x, 25));
-      }
-
-      function sha256_Gamma0256(x) {
-        return (sha256_S(x, 7) ^ sha256_S(x, 18) ^ sha256_R(x, 3));
-      }
-
-      function sha256_Gamma1256(x) {
-        return (sha256_S(x, 17) ^ sha256_S(x, 19) ^ sha256_R(x, 10));
-      }
-
-      function sha256_Sigma0512(x) {
-        return (sha256_S(x, 28) ^ sha256_S(x, 34) ^ sha256_S(x, 39));
-      }
-
-      function sha256_Sigma1512(x) {
-        return (sha256_S(x, 14) ^ sha256_S(x, 18) ^ sha256_S(x, 41));
-      }
-
-      function sha256_Gamma0512(x) {
-        return (sha256_S(x, 1) ^ sha256_S(x, 8) ^ sha256_R(x, 7));
-      }
-
-      function sha256_Gamma1512(x) {
-        return (sha256_S(x, 19) ^ sha256_S(x, 61) ^ sha256_R(x, 6));
-      }
-
-      sha256_K = [
-        1116352408, 1899447441, -1245643825, -373957723, 961987163, 1508970993, -1841331548, -1424204075, -670586216, 310598401, 607225278, 1426881987,
-        1925078388, -2132889090, -1680079193, -1046744716, -459576895, -272742522,
-        264347078, 604807628, 770255983, 1249150122, 1555081692, 1996064986, -1740746414, -1473132947, -1341970488, -1084653625, -958395405, -710438585,
-        113926993, 338241895, 666307205, 773529912, 1294757372, 1396182291,
-        1695183700, 1986661051, -2117940946, -1838011259, -1564481375, -1474664885, -1035236496, -949202525, -778901479, -694614492, -200395387, 275423344,
-        430227734, 506948616, 659060556, 883997877, 958139571, 1322822218,
-        1537002063, 1747873779, 1955562222, 2024104815, -2067236844, -1933114872, -1866530822, -1538233109, -1090935817, -965641998
-      ];
-
-      function binb(m, l) {
-        var HASH = [1779033703, -1150833019, 1013904242, -1521486534,
-          1359893119, -1694144372, 528734635, 1541459225
-        ];
-        var W = new Array(64);
-        var a, b, c, d, e, f, g, h;
-        var i, j, T1, T2;
-
-        /* append padding */
-        m[l >> 5] |= 0x80 << (24 - l % 32);
-        m[((l + 64 >> 9) << 4) + 15] = l;
-
-        for (i = 0; i < m.length; i += 16) {
-          a = HASH[0];
-          b = HASH[1];
-          c = HASH[2];
-          d = HASH[3];
-          e = HASH[4];
-          f = HASH[5];
-          g = HASH[6];
-          h = HASH[7];
-
-          for (j = 0; j < 64; j += 1) {
-            if (j < 16) {
-              W[j] = m[j + i];
-            } else {
-              W[j] = safe_add(safe_add(safe_add(sha256_Gamma1256(W[j - 2]), W[j - 7]),
-                sha256_Gamma0256(W[j - 15])), W[j - 16]);
-            }
-
-            T1 = safe_add(safe_add(safe_add(safe_add(h, sha256_Sigma1256(e)), sha256_Ch(e, f, g)),
-              sha256_K[j]), W[j]);
-            T2 = safe_add(sha256_Sigma0256(a), sha256_Maj(a, b, c));
-            h = g;
-            g = f;
-            f = e;
-            e = safe_add(d, T1);
-            d = c;
-            c = b;
-            b = a;
-            a = safe_add(T1, T2);
-          }
-
-          HASH[0] = safe_add(a, HASH[0]);
-          HASH[1] = safe_add(b, HASH[1]);
-          HASH[2] = safe_add(c, HASH[2]);
-          HASH[3] = safe_add(d, HASH[3]);
-          HASH[4] = safe_add(e, HASH[4]);
-          HASH[5] = safe_add(f, HASH[5]);
-          HASH[6] = safe_add(g, HASH[6]);
-          HASH[7] = safe_add(h, HASH[7]);
-        }
-        return HASH;
-      }
-
-    },
-
-    /**
-     * @class Hashes.SHA512
-     * @param {config}
-     *
-     * A JavaScript implementation of the Secure Hash Algorithm, SHA-512, as defined in FIPS 180-2
-     * Version 2.2 Copyright Anonymous Contributor, Paul Johnston 2000 - 2009.
-     * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
-     * See http://pajhome.org.uk/crypt/md5 for details.
-     */
-    SHA512: function(options) {
-      /**
-       * Private properties configuration variables. You may need to tweak these to be compatible with
-       * the server-side, but the defaults work in most cases.
-       * @see this.setUpperCase() method
-       * @see this.setPad() method
-       */
-      var hexcase = (options && typeof options.uppercase === 'boolean') ? options.uppercase : false,
-        /* hexadecimal output case format. false - lowercase; true - uppercase  */
-        b64pad = (options && typeof options.pad === 'string') ? options.pad : '=',
-        /* base-64 pad character. Default '=' for strict RFC compliance   */
-        utf8 = (options && typeof options.utf8 === 'boolean') ? options.utf8 : true,
-        /* enable/disable utf8 encoding */
-        sha512_k;
-
-      /* privileged (public) methods */
-      this.hex = function(s) {
-        return rstr2hex(rstr(s));
-      };
-      this.b64 = function(s) {
-        return rstr2b64(rstr(s), b64pad);
-      };
-      this.any = function(s, e) {
-        return rstr2any(rstr(s), e);
-      };
-      this.raw = function(s) {
-        return rstr(s, utf8);
-      };
-      this.hex_hmac = function(k, d) {
-        return rstr2hex(rstr_hmac(k, d));
-      };
-      this.b64_hmac = function(k, d) {
-        return rstr2b64(rstr_hmac(k, d), b64pad);
-      };
-      this.any_hmac = function(k, d, e) {
-        return rstr2any(rstr_hmac(k, d), e);
-      };
-      /**
-       * Perform a simple self-test to see if the VM is working
-       * @return {String} Hexadecimal hash sample
-       * @public
-       */
-      this.vm_test = function() {
-        return hex('abc').toLowerCase() === '900150983cd24fb0d6963f7d28e17f72';
-      };
-      /**
-       * @description Enable/disable uppercase hexadecimal returned string
-       * @param {boolean}
-       * @return {Object} this
-       * @public
-       */
-      this.setUpperCase = function(a) {
-        if (typeof a === 'boolean') {
-          hexcase = a;
-        }
-        return this;
-      };
-      /**
-       * @description Defines a base64 pad string
-       * @param {string} Pad
-       * @return {Object} this
-       * @public
-       */
-      this.setPad = function(a) {
-        b64pad = a || b64pad;
-        return this;
-      };
-      /**
-       * @description Defines a base64 pad string
-       * @param {boolean}
-       * @return {Object} this
-       * @public
-       */
-      this.setUTF8 = function(a) {
-        if (typeof a === 'boolean') {
-          utf8 = a;
-        }
-        return this;
-      };
-
-      /* private methods */
-
-      /**
-       * Calculate the SHA-512 of a raw string
-       */
-
-      function rstr(s) {
-        s = (utf8) ? utf8Encode(s) : s;
-        return binb2rstr(binb(rstr2binb(s), s.length * 8));
-      }
-      /*
-       * Calculate the HMAC-SHA-512 of a key and some data (raw strings)
-       */
-
-      function rstr_hmac(key, data) {
-        key = (utf8) ? utf8Encode(key) : key;
-        data = (utf8) ? utf8Encode(data) : data;
-
-        var hash, i = 0,
-          bkey = rstr2binb(key),
-          ipad = Array(32),
-          opad = Array(32);
-
-        if (bkey.length > 32) {
-          bkey = binb(bkey, key.length * 8);
-        }
-
-        for (; i < 32; i += 1) {
-          ipad[i] = bkey[i] ^ 0x36363636;
-          opad[i] = bkey[i] ^ 0x5C5C5C5C;
-        }
-
-        hash = binb(ipad.concat(rstr2binb(data)), 1024 + data.length * 8);
-        return binb2rstr(binb(opad.concat(hash), 1024 + 512));
-      }
-
-      /**
-       * Calculate the SHA-512 of an array of big-endian dwords, and a bit length
-       */
-
-      function binb(x, len) {
-        var j, i, l,
-          W = new Array(80),
-          hash = new Array(16),
-          //Initial hash values
-          H = [
-            new int64(0x6a09e667, -205731576),
-            new int64(-1150833019, -2067093701),
-            new int64(0x3c6ef372, -23791573),
-            new int64(-1521486534, 0x5f1d36f1),
-            new int64(0x510e527f, -1377402159),
-            new int64(-1694144372, 0x2b3e6c1f),
-            new int64(0x1f83d9ab, -79577749),
-            new int64(0x5be0cd19, 0x137e2179)
-          ],
-          T1 = new int64(0, 0),
-          T2 = new int64(0, 0),
-          a = new int64(0, 0),
-          b = new int64(0, 0),
-          c = new int64(0, 0),
-          d = new int64(0, 0),
-          e = new int64(0, 0),
-          f = new int64(0, 0),
-          g = new int64(0, 0),
-          h = new int64(0, 0),
-          //Temporary variables not specified by the document
-          s0 = new int64(0, 0),
-          s1 = new int64(0, 0),
-          Ch = new int64(0, 0),
-          Maj = new int64(0, 0),
-          r1 = new int64(0, 0),
-          r2 = new int64(0, 0),
-          r3 = new int64(0, 0);
-
-        if (sha512_k === undefined) {
-          //SHA512 constants
-          sha512_k = [
-            new int64(0x428a2f98, -685199838), new int64(0x71374491, 0x23ef65cd),
-            new int64(-1245643825, -330482897), new int64(-373957723, -2121671748),
-            new int64(0x3956c25b, -213338824), new int64(0x59f111f1, -1241133031),
-            new int64(-1841331548, -1357295717), new int64(-1424204075, -630357736),
-            new int64(-670586216, -1560083902), new int64(0x12835b01, 0x45706fbe),
-            new int64(0x243185be, 0x4ee4b28c), new int64(0x550c7dc3, -704662302),
-            new int64(0x72be5d74, -226784913), new int64(-2132889090, 0x3b1696b1),
-            new int64(-1680079193, 0x25c71235), new int64(-1046744716, -815192428),
-            new int64(-459576895, -1628353838), new int64(-272742522, 0x384f25e3),
-            new int64(0xfc19dc6, -1953704523), new int64(0x240ca1cc, 0x77ac9c65),
-            new int64(0x2de92c6f, 0x592b0275), new int64(0x4a7484aa, 0x6ea6e483),
-            new int64(0x5cb0a9dc, -1119749164), new int64(0x76f988da, -2096016459),
-            new int64(-1740746414, -295247957), new int64(-1473132947, 0x2db43210),
-            new int64(-1341970488, -1728372417), new int64(-1084653625, -1091629340),
-            new int64(-958395405, 0x3da88fc2), new int64(-710438585, -1828018395),
-            new int64(0x6ca6351, -536640913), new int64(0x14292967, 0xa0e6e70),
-            new int64(0x27b70a85, 0x46d22ffc), new int64(0x2e1b2138, 0x5c26c926),
-            new int64(0x4d2c6dfc, 0x5ac42aed), new int64(0x53380d13, -1651133473),
-            new int64(0x650a7354, -1951439906), new int64(0x766a0abb, 0x3c77b2a8),
-            new int64(-2117940946, 0x47edaee6), new int64(-1838011259, 0x1482353b),
-            new int64(-1564481375, 0x4cf10364), new int64(-1474664885, -1136513023),
-            new int64(-1035236496, -789014639), new int64(-949202525, 0x654be30),
-            new int64(-778901479, -688958952), new int64(-694614492, 0x5565a910),
-            new int64(-200395387, 0x5771202a), new int64(0x106aa070, 0x32bbd1b8),
-            new int64(0x19a4c116, -1194143544), new int64(0x1e376c08, 0x5141ab53),
-            new int64(0x2748774c, -544281703), new int64(0x34b0bcb5, -509917016),
-            new int64(0x391c0cb3, -976659869), new int64(0x4ed8aa4a, -482243893),
-            new int64(0x5b9cca4f, 0x7763e373), new int64(0x682e6ff3, -692930397),
-            new int64(0x748f82ee, 0x5defb2fc), new int64(0x78a5636f, 0x43172f60),
-            new int64(-2067236844, -1578062990), new int64(-1933114872, 0x1a6439ec),
-            new int64(-1866530822, 0x23631e28), new int64(-1538233109, -561857047),
-            new int64(-1090935817, -1295615723), new int64(-965641998, -479046869),
-            new int64(-903397682, -366583396), new int64(-779700025, 0x21c0c207),
-            new int64(-354779690, -840897762), new int64(-176337025, -294727304),
-            new int64(0x6f067aa, 0x72176fba), new int64(0xa637dc5, -1563912026),
-            new int64(0x113f9804, -1090974290), new int64(0x1b710b35, 0x131c471b),
-            new int64(0x28db77f5, 0x23047d84), new int64(0x32caab7b, 0x40c72493),
-            new int64(0x3c9ebe0a, 0x15c9bebc), new int64(0x431d67c4, -1676669620),
-            new int64(0x4cc5d4be, -885112138), new int64(0x597f299c, -60457430),
-            new int64(0x5fcb6fab, 0x3ad6faec), new int64(0x6c44198c, 0x4a475817)
-          ];
-        }
-
-        for (i = 0; i < 80; i += 1) {
-          W[i] = new int64(0, 0);
-        }
-
-        // append padding to the source string. The format is described in the FIPS.
-        x[len >> 5] |= 0x80 << (24 - (len & 0x1f));
-        x[((len + 128 >> 10) << 5) + 31] = len;
-        l = x.length;
-        for (i = 0; i < l; i += 32) { //32 dwords is the block size
-          int64copy(a, H[0]);
-          int64copy(b, H[1]);
-          int64copy(c, H[2]);
-          int64copy(d, H[3]);
-          int64copy(e, H[4]);
-          int64copy(f, H[5]);
-          int64copy(g, H[6]);
-          int64copy(h, H[7]);
-
-          for (j = 0; j < 16; j += 1) {
-            W[j].h = x[i + 2 * j];
-            W[j].l = x[i + 2 * j + 1];
-          }
-
-          for (j = 16; j < 80; j += 1) {
-            //sigma1
-            int64rrot(r1, W[j - 2], 19);
-            int64revrrot(r2, W[j - 2], 29);
-            int64shr(r3, W[j - 2], 6);
-            s1.l = r1.l ^ r2.l ^ r3.l;
-            s1.h = r1.h ^ r2.h ^ r3.h;
-            //sigma0
-            int64rrot(r1, W[j - 15], 1);
-            int64rrot(r2, W[j - 15], 8);
-            int64shr(r3, W[j - 15], 7);
-            s0.l = r1.l ^ r2.l ^ r3.l;
-            s0.h = r1.h ^ r2.h ^ r3.h;
-
-            int64add4(W[j], s1, W[j - 7], s0, W[j - 16]);
-          }
-
-          for (j = 0; j < 80; j += 1) {
-            //Ch
-            Ch.l = (e.l & f.l) ^ (~e.l & g.l);
-            Ch.h = (e.h & f.h) ^ (~e.h & g.h);
-
-            //Sigma1
-            int64rrot(r1, e, 14);
-            int64rrot(r2, e, 18);
-            int64revrrot(r3, e, 9);
-            s1.l = r1.l ^ r2.l ^ r3.l;
-            s1.h = r1.h ^ r2.h ^ r3.h;
-
-            //Sigma0
-            int64rrot(r1, a, 28);
-            int64revrrot(r2, a, 2);
-            int64revrrot(r3, a, 7);
-            s0.l = r1.l ^ r2.l ^ r3.l;
-            s0.h = r1.h ^ r2.h ^ r3.h;
-
-            //Maj
-            Maj.l = (a.l & b.l) ^ (a.l & c.l) ^ (b.l & c.l);
-            Maj.h = (a.h & b.h) ^ (a.h & c.h) ^ (b.h & c.h);
-
-            int64add5(T1, h, s1, Ch, sha512_k[j], W[j]);
-            int64add(T2, s0, Maj);
-
-            int64copy(h, g);
-            int64copy(g, f);
-            int64copy(f, e);
-            int64add(e, d, T1);
-            int64copy(d, c);
-            int64copy(c, b);
-            int64copy(b, a);
-            int64add(a, T1, T2);
-          }
-          int64add(H[0], H[0], a);
-          int64add(H[1], H[1], b);
-          int64add(H[2], H[2], c);
-          int64add(H[3], H[3], d);
-          int64add(H[4], H[4], e);
-          int64add(H[5], H[5], f);
-          int64add(H[6], H[6], g);
-          int64add(H[7], H[7], h);
-        }
-
-        //represent the hash as an array of 32-bit dwords
-        for (i = 0; i < 8; i += 1) {
-          hash[2 * i] = H[i].h;
-          hash[2 * i + 1] = H[i].l;
-        }
-        return hash;
-      }
-
-      //A constructor for 64-bit numbers
-
-      function int64(h, l) {
-        this.h = h;
-        this.l = l;
-        //this.toString = int64toString;
-      }
-
-      //Copies src into dst, assuming both are 64-bit numbers
-
-      function int64copy(dst, src) {
-        dst.h = src.h;
-        dst.l = src.l;
-      }
-
-      //Right-rotates a 64-bit number by shift
-      //Won't handle cases of shift>=32
-      //The function revrrot() is for that
-
-      function int64rrot(dst, x, shift) {
-        dst.l = (x.l >>> shift) | (x.h << (32 - shift));
-        dst.h = (x.h >>> shift) | (x.l << (32 - shift));
-      }
-
-      //Reverses the dwords of the source and then rotates right by shift.
-      //This is equivalent to rotation by 32+shift
-
-      function int64revrrot(dst, x, shift) {
-        dst.l = (x.h >>> shift) | (x.l << (32 - shift));
-        dst.h = (x.l >>> shift) | (x.h << (32 - shift));
-      }
-
-      //Bitwise-shifts right a 64-bit number by shift
-      //Won't handle shift>=32, but it's never needed in SHA512
-
-      function int64shr(dst, x, shift) {
-        dst.l = (x.l >>> shift) | (x.h << (32 - shift));
-        dst.h = (x.h >>> shift);
-      }
-
-      //Adds two 64-bit numbers
-      //Like the original implementation, does not rely on 32-bit operations
-
-      function int64add(dst, x, y) {
-        var w0 = (x.l & 0xffff) + (y.l & 0xffff);
-        var w1 = (x.l >>> 16) + (y.l >>> 16) + (w0 >>> 16);
-        var w2 = (x.h & 0xffff) + (y.h & 0xffff) + (w1 >>> 16);
-        var w3 = (x.h >>> 16) + (y.h >>> 16) + (w2 >>> 16);
-        dst.l = (w0 & 0xffff) | (w1 << 16);
-        dst.h = (w2 & 0xffff) | (w3 << 16);
-      }
-
-      //Same, except with 4 addends. Works faster than adding them one by one.
-
-      function int64add4(dst, a, b, c, d) {
-        var w0 = (a.l & 0xffff) + (b.l & 0xffff) + (c.l & 0xffff) + (d.l & 0xffff);
-        var w1 = (a.l >>> 16) + (b.l >>> 16) + (c.l >>> 16) + (d.l >>> 16) + (w0 >>> 16);
-        var w2 = (a.h & 0xffff) + (b.h & 0xffff) + (c.h & 0xffff) + (d.h & 0xffff) + (w1 >>> 16);
-        var w3 = (a.h >>> 16) + (b.h >>> 16) + (c.h >>> 16) + (d.h >>> 16) + (w2 >>> 16);
-        dst.l = (w0 & 0xffff) | (w1 << 16);
-        dst.h = (w2 & 0xffff) | (w3 << 16);
-      }
-
-      //Same, except with 5 addends
-
-      function int64add5(dst, a, b, c, d, e) {
-        var w0 = (a.l & 0xffff) + (b.l & 0xffff) + (c.l & 0xffff) + (d.l & 0xffff) + (e.l & 0xffff),
-          w1 = (a.l >>> 16) + (b.l >>> 16) + (c.l >>> 16) + (d.l >>> 16) + (e.l >>> 16) + (w0 >>> 16),
-          w2 = (a.h & 0xffff) + (b.h & 0xffff) + (c.h & 0xffff) + (d.h & 0xffff) + (e.h & 0xffff) + (w1 >>> 16),
-          w3 = (a.h >>> 16) + (b.h >>> 16) + (c.h >>> 16) + (d.h >>> 16) + (e.h >>> 16) + (w2 >>> 16);
-        dst.l = (w0 & 0xffff) | (w1 << 16);
-        dst.h = (w2 & 0xffff) | (w3 << 16);
-      }
-    },
-    /**
-     * @class Hashes.RMD160
-     * @constructor
-     * @param {Object} [config]
-     *
-     * A JavaScript implementation of the RIPEMD-160 Algorithm
-     * Version 2.2 Copyright Jeremy Lin, Paul Johnston 2000 - 2009.
-     * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
-     * See http://pajhome.org.uk/crypt/md5 for details.
-     * Also http://www.ocf.berkeley.edu/~jjlin/jsotp/
-     */
-    RMD160: function(options) {
-      /**
-       * Private properties configuration variables. You may need to tweak these to be compatible with
-       * the server-side, but the defaults work in most cases.
-       * @see this.setUpperCase() method
-       * @see this.setPad() method
-       */
-      var hexcase = (options && typeof options.uppercase === 'boolean') ? options.uppercase : false,
-        /* hexadecimal output case format. false - lowercase; true - uppercase  */
-        b64pad = (options && typeof options.pad === 'string') ? options.pa : '=',
-        /* base-64 pad character. Default '=' for strict RFC compliance   */
-        utf8 = (options && typeof options.utf8 === 'boolean') ? options.utf8 : true,
-        /* enable/disable utf8 encoding */
-        rmd160_r1 = [
-          0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-          7, 4, 13, 1, 10, 6, 15, 3, 12, 0, 9, 5, 2, 14, 11, 8,
-          3, 10, 14, 4, 9, 15, 8, 1, 2, 7, 0, 6, 13, 11, 5, 12,
-          1, 9, 11, 10, 0, 8, 12, 4, 13, 3, 7, 15, 14, 5, 6, 2,
-          4, 0, 5, 9, 7, 12, 2, 10, 14, 1, 3, 8, 11, 6, 15, 13
-        ],
-        rmd160_r2 = [
-          5, 14, 7, 0, 9, 2, 11, 4, 13, 6, 15, 8, 1, 10, 3, 12,
-          6, 11, 3, 7, 0, 13, 5, 10, 14, 15, 8, 12, 4, 9, 1, 2,
-          15, 5, 1, 3, 7, 14, 6, 9, 11, 8, 12, 2, 10, 0, 4, 13,
-          8, 6, 4, 1, 3, 11, 15, 0, 5, 12, 2, 13, 9, 7, 10, 14,
-          12, 15, 10, 4, 1, 5, 8, 7, 6, 2, 13, 14, 0, 3, 9, 11
-        ],
-        rmd160_s1 = [
-          11, 14, 15, 12, 5, 8, 7, 9, 11, 13, 14, 15, 6, 7, 9, 8,
-          7, 6, 8, 13, 11, 9, 7, 15, 7, 12, 15, 9, 11, 7, 13, 12,
-          11, 13, 6, 7, 14, 9, 13, 15, 14, 8, 13, 6, 5, 12, 7, 5,
-          11, 12, 14, 15, 14, 15, 9, 8, 9, 14, 5, 6, 8, 6, 5, 12,
-          9, 15, 5, 11, 6, 8, 13, 12, 5, 12, 13, 14, 11, 8, 5, 6
-        ],
-        rmd160_s2 = [
-          8, 9, 9, 11, 13, 15, 15, 5, 7, 7, 8, 11, 14, 14, 12, 6,
-          9, 13, 15, 7, 12, 8, 9, 11, 7, 7, 12, 7, 6, 15, 13, 11,
-          9, 7, 15, 11, 8, 6, 6, 14, 12, 13, 5, 14, 13, 13, 7, 5,
-          15, 5, 8, 11, 14, 14, 6, 14, 6, 9, 12, 9, 12, 5, 15, 8,
-          8, 5, 12, 9, 12, 5, 14, 6, 8, 13, 6, 5, 15, 13, 11, 11
-        ];
-
-      /* privileged (public) methods */
-      this.hex = function(s) {
-        return rstr2hex(rstr(s, utf8));
-      };
-      this.b64 = function(s) {
-        return rstr2b64(rstr(s, utf8), b64pad);
-      };
-      this.any = function(s, e) {
-        return rstr2any(rstr(s, utf8), e);
-      };
-      this.raw = function(s) {
-        return rstr(s, utf8);
-      };
-      this.hex_hmac = function(k, d) {
-        return rstr2hex(rstr_hmac(k, d));
-      };
-      this.b64_hmac = function(k, d) {
-        return rstr2b64(rstr_hmac(k, d), b64pad);
-      };
-      this.any_hmac = function(k, d, e) {
-        return rstr2any(rstr_hmac(k, d), e);
-      };
-      /**
-       * Perform a simple self-test to see if the VM is working
-       * @return {String} Hexadecimal hash sample
-       * @public
-       */
-      this.vm_test = function() {
-        return hex('abc').toLowerCase() === '900150983cd24fb0d6963f7d28e17f72';
-      };
-      /**
-       * @description Enable/disable uppercase hexadecimal returned string
-       * @param {boolean}
-       * @return {Object} this
-       * @public
-       */
-      this.setUpperCase = function(a) {
-        if (typeof a === 'boolean') {
-          hexcase = a;
-        }
-        return this;
-      };
-      /**
-       * @description Defines a base64 pad string
-       * @param {string} Pad
-       * @return {Object} this
-       * @public
-       */
-      this.setPad = function(a) {
-        if (typeof a !== 'undefined') {
-          b64pad = a;
-        }
-        return this;
-      };
-      /**
-       * @description Defines a base64 pad string
-       * @param {boolean}
-       * @return {Object} this
-       * @public
-       */
-      this.setUTF8 = function(a) {
-        if (typeof a === 'boolean') {
-          utf8 = a;
-        }
-        return this;
-      };
-
-      /* private methods */
-
-      /**
-       * Calculate the rmd160 of a raw string
-       */
-
-      function rstr(s) {
-        s = (utf8) ? utf8Encode(s) : s;
-        return binl2rstr(binl(rstr2binl(s), s.length * 8));
-      }
-
-      /**
-       * Calculate the HMAC-rmd160 of a key and some data (raw strings)
-       */
-
-      function rstr_hmac(key, data) {
-        key = (utf8) ? utf8Encode(key) : key;
-        data = (utf8) ? utf8Encode(data) : data;
-        var i, hash,
-          bkey = rstr2binl(key),
-          ipad = Array(16),
-          opad = Array(16);
-
-        if (bkey.length > 16) {
-          bkey = binl(bkey, key.length * 8);
-        }
-
-        for (i = 0; i < 16; i += 1) {
-          ipad[i] = bkey[i] ^ 0x36363636;
-          opad[i] = bkey[i] ^ 0x5C5C5C5C;
-        }
-        hash = binl(ipad.concat(rstr2binl(data)), 512 + data.length * 8);
-        return binl2rstr(binl(opad.concat(hash), 512 + 160));
-      }
-
-      /**
-       * Convert an array of little-endian words to a string
-       */
-
-      function binl2rstr(input) {
-        var i, output = '',
-          l = input.length * 32;
-        for (i = 0; i < l; i += 8) {
-          output += String.fromCharCode((input[i >> 5] >>> (i % 32)) & 0xFF);
-        }
-        return output;
-      }
-
-      /**
-       * Calculate the RIPE-MD160 of an array of little-endian words, and a bit length.
-       */
-
-      function binl(x, len) {
-        var T, j, i, l,
-          h0 = 0x67452301,
-          h1 = 0xefcdab89,
-          h2 = 0x98badcfe,
-          h3 = 0x10325476,
-          h4 = 0xc3d2e1f0,
-          A1, B1, C1, D1, E1,
-          A2, B2, C2, D2, E2;
-
-        /* append padding */
-        x[len >> 5] |= 0x80 << (len % 32);
-        x[(((len + 64) >>> 9) << 4) + 14] = len;
-        l = x.length;
-
-        for (i = 0; i < l; i += 16) {
-          A1 = A2 = h0;
-          B1 = B2 = h1;
-          C1 = C2 = h2;
-          D1 = D2 = h3;
-          E1 = E2 = h4;
-          for (j = 0; j <= 79; j += 1) {
-            T = safe_add(A1, rmd160_f(j, B1, C1, D1));
-            T = safe_add(T, x[i + rmd160_r1[j]]);
-            T = safe_add(T, rmd160_K1(j));
-            T = safe_add(bit_rol(T, rmd160_s1[j]), E1);
-            A1 = E1;
-            E1 = D1;
-            D1 = bit_rol(C1, 10);
-            C1 = B1;
-            B1 = T;
-            T = safe_add(A2, rmd160_f(79 - j, B2, C2, D2));
-            T = safe_add(T, x[i + rmd160_r2[j]]);
-            T = safe_add(T, rmd160_K2(j));
-            T = safe_add(bit_rol(T, rmd160_s2[j]), E2);
-            A2 = E2;
-            E2 = D2;
-            D2 = bit_rol(C2, 10);
-            C2 = B2;
-            B2 = T;
-          }
-
-          T = safe_add(h1, safe_add(C1, D2));
-          h1 = safe_add(h2, safe_add(D1, E2));
-          h2 = safe_add(h3, safe_add(E1, A2));
-          h3 = safe_add(h4, safe_add(A1, B2));
-          h4 = safe_add(h0, safe_add(B1, C2));
-          h0 = T;
-        }
-        return [h0, h1, h2, h3, h4];
-      }
-
-      // specific algorithm methods
-
-      function rmd160_f(j, x, y, z) {
-        return (0 <= j && j <= 15) ? (x ^ y ^ z) :
-          (16 <= j && j <= 31) ? (x & y) | (~x & z) :
-          (32 <= j && j <= 47) ? (x | ~y) ^ z :
-          (48 <= j && j <= 63) ? (x & z) | (y & ~z) :
-          (64 <= j && j <= 79) ? x ^ (y | ~z) :
-          'rmd160_f: j out of range';
-      }
-
-      function rmd160_K1(j) {
-        return (0 <= j && j <= 15) ? 0x00000000 :
-          (16 <= j && j <= 31) ? 0x5a827999 :
-          (32 <= j && j <= 47) ? 0x6ed9eba1 :
-          (48 <= j && j <= 63) ? 0x8f1bbcdc :
-          (64 <= j && j <= 79) ? 0xa953fd4e :
-          'rmd160_K1: j out of range';
-      }
-
-      function rmd160_K2(j) {
-        return (0 <= j && j <= 15) ? 0x50a28be6 :
-          (16 <= j && j <= 31) ? 0x5c4dd124 :
-          (32 <= j && j <= 47) ? 0x6d703ef3 :
-          (48 <= j && j <= 63) ? 0x7a6d76e9 :
-          (64 <= j && j <= 79) ? 0x00000000 :
-          'rmd160_K2: j out of range';
-      }
-    }
-  };
-
-  // exposes Hashes
-  (function(window, undefined) {
-    var freeExports = false;
-    if (true) {
-      freeExports = exports;
-      if (exports && typeof global === 'object' && global && global === global.global) {
-        window = global;
-      }
-    }
-
-    if (true) {
-      // define as an anonymous module, so, through path mapping, it can be aliased
-      !(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
-        return Hashes;
-      }.call(exports, __webpack_require__, exports, module),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-    } else if (freeExports) {
-      // in Node.js or RingoJS v0.8.0+
-      if (typeof module === 'object' && module && module.exports === freeExports) {
-        module.exports = Hashes;
-      }
-      // in Narwhal or RingoJS v0.7.0-
-      else {
-        freeExports.Hashes = Hashes;
-      }
-    } else {
-      // in a browser or Rhino
-      window.Hashes = Hashes;
-    }
-  }(this));
-}()); // IIFE
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
-
-/***/ }),
-/* 140 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(143);
+module.exports = __webpack_require__(145);
 
 
 /***/ }),
-/* 141 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27565,7 +27539,7 @@ module.exports = EventManager;
 
 
 /***/ }),
-/* 142 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27585,15 +27559,15 @@ module.exports = (function () {
 
 
 /***/ }),
-/* 143 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var destroy = __webpack_require__(145);
-var initialize = __webpack_require__(153);
-var update = __webpack_require__(154);
+var destroy = __webpack_require__(147);
+var initialize = __webpack_require__(155);
+var update = __webpack_require__(156);
 
 module.exports = {
   initialize: initialize,
@@ -27603,7 +27577,7 @@ module.exports = {
 
 
 /***/ }),
-/* 144 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27627,7 +27601,7 @@ module.exports = {
 
 
 /***/ }),
-/* 145 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27656,7 +27630,7 @@ module.exports = function (element) {
 
 
 /***/ }),
-/* 146 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27702,7 +27676,7 @@ module.exports = function (element) {
 
 
 /***/ }),
-/* 147 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27812,7 +27786,7 @@ module.exports = function (element) {
 
 
 /***/ }),
-/* 148 */
+/* 150 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27973,7 +27947,7 @@ module.exports = function (element) {
 
 
 /***/ }),
-/* 149 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28128,7 +28102,7 @@ module.exports = function (element) {
 
 
 /***/ }),
-/* 150 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28150,7 +28124,7 @@ module.exports = function (element) {
 
 
 /***/ }),
-/* 151 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28272,7 +28246,7 @@ module.exports = function (element) {
 
 
 /***/ }),
-/* 152 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28460,27 +28434,27 @@ module.exports = function (element) {
 
 
 /***/ }),
-/* 153 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var _ = __webpack_require__(4);
-var cls = __webpack_require__(18);
+var cls = __webpack_require__(20);
 var instances = __webpack_require__(3);
 var updateGeometry = __webpack_require__(5);
 
 // Handlers
 var handlers = {
-  'click-rail': __webpack_require__(146),
-  'drag-scrollbar': __webpack_require__(147),
-  'keyboard': __webpack_require__(148),
-  'wheel': __webpack_require__(149),
-  'touch': __webpack_require__(152),
-  'selection': __webpack_require__(151)
+  'click-rail': __webpack_require__(148),
+  'drag-scrollbar': __webpack_require__(149),
+  'keyboard': __webpack_require__(150),
+  'wheel': __webpack_require__(151),
+  'touch': __webpack_require__(154),
+  'selection': __webpack_require__(153)
 };
-var nativeScrollHandler = __webpack_require__(150);
+var nativeScrollHandler = __webpack_require__(152);
 
 module.exports = function (element, userSettings) {
   userSettings = typeof userSettings === 'object' ? userSettings : {};
@@ -28504,7 +28478,7 @@ module.exports = function (element, userSettings) {
 
 
 /***/ }),
-/* 154 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28548,7 +28522,7 @@ module.exports = function (element) {
 
 
 /***/ }),
-/* 155 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! Select2 4.0.3 | https://github.com/select2/select2/blob/master/LICENSE.md */!function(a){ true?!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(0)], __WEBPACK_AMD_DEFINE_FACTORY__ = (a),
@@ -28560,7 +28534,7 @@ if(this.$element.prop("multiple"))this.current(function(d){var e=[];a=[a],a.push
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 156 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -28750,16 +28724,16 @@ if(this.$element.prop("multiple"))this.current(function(d){var e=[];a=[a],a.push
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(44)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(47)))
 
 /***/ }),
-/* 157 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(113);
+var content = __webpack_require__(116);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -28784,13 +28758,13 @@ if(false) {
 }
 
 /***/ }),
-/* 158 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(122);
+var content = __webpack_require__(125);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -28815,7 +28789,7 @@ if(false) {
 }
 
 /***/ }),
-/* 159 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -28825,7 +28799,7 @@ if(false) {
  * @return {Boolean}
  * @api private
  */
-var isObject = __webpack_require__(31);
+var isObject = __webpack_require__(33);
 
 function isFunction(fn) {
   var tag = isObject(fn) ? Object.prototype.toString.call(fn) : '';
@@ -28836,13 +28810,13 @@ module.exports = isFunction;
 
 
 /***/ }),
-/* 160 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
  * Module of mixed-in functions shared between node and client code
  */
-var isObject = __webpack_require__(31);
+var isObject = __webpack_require__(33);
 
 /**
  * Expose `RequestBase`.
@@ -29433,7 +29407,7 @@ RequestBase.prototype._setTimeouts = function() {
 
 
 /***/ }),
-/* 161 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -29441,7 +29415,7 @@ RequestBase.prototype._setTimeouts = function() {
  * Module dependencies.
  */
 
-var utils = __webpack_require__(163);
+var utils = __webpack_require__(165);
 
 /**
  * Expose `ResponseBase`.
@@ -29572,7 +29546,7 @@ ResponseBase.prototype._setStatusProperties = function(status){
 
 
 /***/ }),
-/* 162 */
+/* 164 */
 /***/ (function(module, exports) {
 
 var ERROR_CODES = [
@@ -29601,7 +29575,7 @@ module.exports = function shouldRetry(err, res) {
 
 
 /***/ }),
-/* 163 */
+/* 165 */
 /***/ (function(module, exports) {
 
 
@@ -29674,7 +29648,7 @@ exports.cleanHeader = function(header, shouldStripCookie){
 };
 
 /***/ }),
-/* 164 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {var si = typeof setImmediate === 'function', tick;
@@ -29685,10 +29659,10 @@ if (si) {
 }
 
 module.exports = tick;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(165).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(167).setImmediate))
 
 /***/ }),
-/* 165 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var apply = Function.prototype.apply;
@@ -29741,13 +29715,13 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(156);
+__webpack_require__(158);
 exports.setImmediate = setImmediate;
 exports.clearImmediate = clearImmediate;
 
 
 /***/ }),
-/* 166 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;// TinyColor v1.4.1
@@ -30949,29 +30923,66 @@ else {
 
 
 /***/ }),
-/* 167 */
+/* 169 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/png;base64,bW9kdWxlLmV4cG9ydHMgPSAiZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFCTUFBQUFUQ0FZQUFBQnlVRGJNQUFBQUJtSkxSMFFBL3dEL0FQK2d2YWVUQUFBQUNYQklXWE1BQUEzWEFBQU4xd0ZDS0p0NEFBQUFCM1JKVFVVSDNRWVNCd1lnZjE5ZUxnQUFBWWxKUkVGVU9NdmRVN0ZxQWtFVUhFVlRKSlZvSUYxTUtvdDA1Z2VzZ2xWYVEvSUpucFZGU24vQU5vV2xwWTJGcFlwWENRZUNjQ0FxNFpyQXN1REdOSGZ1THFKNWFVNjRoTk5MaWtESXdCUzdENFo1NzgwRC9pcGlFZlc0VHdCNDkva3pMQmFMTTZWVVEyczkyVzYzeW5YZHVSQ2kyV3ExTGdMaTBmQTg3MmF6MmJ4UkNKUlM3bUF3dUFlUStKYWpuZEI4UG44MkRLT2V5K1h1YXJYYW8rTTRVeUlpS2FWWExwZXZJeDBxcFJvN0lRQzNBRklBam55bUdHTmpJaUxMc3ZvQVRnNE9XMnM5SVNJeURLUHVDd1VYRkxOdHUwaEV4RGxuQUxKZjNRVWY4V1F5ZVFrQTNXNTNCRUFDb0VDZFpyUFpDQURTNmZRcGdNd2hNVWdwWHdDZ1ZDcWRoMWt2RkFwWEFMQmNMa1hVL09OQ2lDWVJrZU00MDdBMnRkWURJaUxUTklkaGJYNUN1OTNPS3FWY0lpTEcyTmkyN1dLbjA4a0lJUW83SVNtbGw4L25LMUVMQUlCNHI5ZDdrRko2WVRsYnJWYXJhclg2Qk9EYjRVMVVLcFc4WlZsOXpqbGJyOWRyemprelRYUG9POHJ1QzIzc3dFMGUreHZMK0grdlB1VytHLzM5US85LytBRGtOQWxuRFlUZ2NnQUFBQUJKUlU1RXJrSmdnZz09Ig=="
 
 /***/ }),
-/* 168 */
+/* 170 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/png;base64,bW9kdWxlLmV4cG9ydHMgPSAiZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFCb0FBQUFUQ0FZQUFBQ09SUjBHQUFBQUJtSkxSMFFBL3dEL0FQK2d2YWVUQUFBQUNYQklXWE1BQUEzWEFBQU4xd0ZDS0p0NEFBQUFCM1JKVFVVSDNRWVNDQlVHeCtIZGZBQUFBZVJKUkVGVU9NdmRsYitMMDJBWXh6KzVLcFhqRHM5QlNuVTRFVzRwcDV0Yk9lbmlvdGhOU2dicGNFdi9BTE9VTGkzK0hUcmRsaTNjZHB0TGxvTnc0T0ZTbWlNRWFTQ2xEU1E1MHVSeFNVVWlhdTRLSGZ6Q003MHZ6K2Y1K2I2d0lTbTNQUHVUcEt3ekJkZ0M3Z0IzZ2NvTklDbVFBRXNnK3h0MHl6Q01mZC8zUDRWaGVKbGxXU0lsbFdWWkVnVEJOOGR4VGdhRHdUTmdPdy80ZDhoa01ubWJKSWt2YXlxTzQ3bXU2OGZBYmhHbUdJYXh2NEtNeCtPdm1xWU5hN1ZhRzJnQkwvOWw5WHI5MVdnMCttRGI5a1VPVzZpcWVwUm45ck05RmQvM1A2OGd3R3ZnQUhnSTdBSDNTOWhlZnYvQWRkMXpFUkhMc2s2QlI3LzJ1UnFHNGFXSWlLWnB3eHhTelNPNXFWVjFYZStJaUhpZVp3T04zQmNBTzJtYVJpSWlqVWJqWFI2WmN0dDE2ZlY2VDBWRWtpUzVCbDRBTzZ5YUZZYmhGVUNuMDNteTdtSjJ1OTBHd0d3MisxNDhxenFPY3lJaVl0djJ4YnFsV3l3V1gwUkVUTk04SzVhdTB1LzNuOGR4UEJjUmNWMzNYTmYxVHF2VmVseDJHTnJ0ZHMwMHpUY3JTQlJGUWJQWmZGOGNCZ1hZMW5YOU9JN2p4YnA3RkVWUk1Cd09Qd0tIeGZGZTlXcFhWZFVqeTdKT1BjK3owelJkbG5XZXB1bHlPcDFlbWFaNWxtZHlXRnhZcFFDN2w1ZmpRWDZ4V25JQ0JiZ0dBbUFHeklFNGYvTTIrNmh1N0p2NC8vUURreC9ONXBJeHdTUUFBQUFBU1VWT1JLNUNZSUk9Ig=="
 
 /***/ }),
-/* 169 */
+/* 171 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/jpeg;base64,bW9kdWxlLmV4cG9ydHMgPSBfX3dlYnBhY2tfcHVibGljX3BhdGhfXyArICI2MmU2OTRhZTczODAxNjA3NjNkMTM0NTY1NTdlYzc3NC5qcGciOw=="
 
 /***/ }),
-/* 170 */,
-/* 171 */
+/* 172 */,
+/* 173 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
+
+/***/ }),
+/* 174 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {/* harmony export (immutable) */ __webpack_exports__["a"] = postSimpleSaveMode;
+/* unused harmony export postSaveMode */
+var url;
+var data;
+
+function postSimpleSaveMode(){
+    url = "/save/collection";
+    data = {
+        name: $("#quick-add-collection").val(),
+        description: "",
+        tags: "",
+        photoContents: "[]",
+        enabled: true
+    };
+
+    return data;
+}
+
+function postSaveMode(collection){
+    url = "/save/collection";
+    data = {
+        name: $("#collection-name").val(),
+        description: $("#collection-description").val(),
+        tags: $("#collection-tags").val(),
+        photoContents: JSON.stringify(collection),
+        enabled: true
+    };
+
+    return data;
+}
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ })
 /******/ ]);
